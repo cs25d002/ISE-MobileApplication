@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "838890390964",
+    "project_id": "vewha-2d3a2",
+    "storage_bucket": "vewha-2d3a2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838890390964:android:1f625e152497dd2caadee1",
+        "android_client_info": {
+          "package_name": "com.example.vewha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
