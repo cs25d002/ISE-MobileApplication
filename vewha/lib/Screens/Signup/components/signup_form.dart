@@ -44,7 +44,7 @@ class SignUpForm extends StatelessWidget {
           ),
           const SizedBox(height: defaultPadding / 2),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {}, // add functionality to sign up
             child: Text("Sign Up".toUpperCase()),
           ),
           const SizedBox(height: defaultPadding),

@@ -44,7 +44,7 @@ class LoginForm extends StatelessWidget {
           ),
           const SizedBox(height: defaultPadding),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {}, // add functionality to log in
             child: Text(
               "Login".toUpperCase(),
             ),

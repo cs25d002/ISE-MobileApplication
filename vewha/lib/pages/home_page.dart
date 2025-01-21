@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -40,24 +40,24 @@ class _HomePageState extends State<HomePage> {
 
                   //profile picture
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.deepPurple[100],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(Icons.person),
+                    child: const Icon(Icons.person),
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
 
             //card--> how do u feel?
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(color: Colors.pink[100]),
                 child: Row(children: [
                   //animation pic
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.deepPurple,
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     width: 25,
                   ),
 
@@ -76,14 +76,14 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'How do you feel?',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        Text('Fill out your medical card right now'),
+                        const Text('Fill out your medical card right now'),
                         Container(
-                          child: Center(
+                          child: const Center(
                             child: Text('Get Started'),
                           ),
                         ),
