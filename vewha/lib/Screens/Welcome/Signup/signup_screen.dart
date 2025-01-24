@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/constants.dart';
 import 'package:flutter_auth/responsive.dart';
-import '../../components/background.dart';
-import 'components/sign_up_top_image.dart';
-import 'components/signup_form.dart';
+import '../../../components/background.dart';
+import 'sign_up_top_image.dart';
+import 'signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -13,16 +13,14 @@ class SignUpScreen extends StatelessWidget {
     return const Background(
       child: SingleChildScrollView(
         child: Responsive(
-          
           mobile: MobileSignupScreen(), // page set up for mobile applications
-          
-          desktop: Row( // page setup for desktop applications
+
+          desktop: Row(
+            // page setup for desktop applications
             children: [
-              
               Expanded(
                 child: SignUpScreenTopImage(),
               ),
-              
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -36,9 +34,7 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ),
               )
-
             ],
-
           ),
         ),
       ),
@@ -55,10 +51,9 @@ class MobileSignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      
       children: <Widget>[
         SignUpScreenTopImage(),
-        
+
         Row(
           children: [
             Spacer(),
@@ -69,10 +64,9 @@ class MobileSignupScreen extends StatelessWidget {
             Spacer(),
           ],
         ),
-        
+
         // const SocalSignUp()
       ],
-
     );
   }
 }

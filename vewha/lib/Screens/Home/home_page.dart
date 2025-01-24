@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'KavyaSri,',
+                        'KavyaSri,', // Get username for firebase
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
@@ -72,20 +72,18 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   //how do u feel + get started button
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'How do you feel?',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        const Text('Fill out your medical card right now'),
-                        Container(
-                          child: const Center(
-                            child: Text('Get Started'),
-                          ),
+                        Text('Fill out your medical card right now'),
+                        Center(
+                          child: Text('Get Started'),
                         ),
                       ],
                     ),

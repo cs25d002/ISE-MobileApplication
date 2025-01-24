@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/responsive.dart';
 
-import '../../components/background.dart';
-import 'components/login_form.dart';
-import 'components/login_screen_top_image.dart';
+import '../../../components/background.dart';
+import 'login_form.dart';
+import 'login_screen_top_image.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
