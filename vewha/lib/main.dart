@@ -1,33 +1,23 @@
-// import 'package:flutter/material.dart';
-// import 'package:vewha/pages/home_page.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-// // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'VEWHA',
-//       home: HomePage(),
-//     );
-//   }
-// }
-
+// FireBase Refernces
 import 'package:firebase_core/firebase_core.dart';
+
+// Flutter References
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/constants.dart';
 
 // wait till firebase is inittialized before rendering front end
-void main() async {
+void main() async { // try finding dynamic fet app details instead of manually setting
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ", // "api_key:current_key here",
+      appId: "1:838890390964:android:1f625e152497dd2caadee1",// "mobilesdk_app_id here",
+      messagingSenderId: "838890390964", // "project_number id here",
+      projectId: "vewha-2d3a2", // "project id here",
+    ),
+  );
+
   runApp(const MyApp());
 }
 
