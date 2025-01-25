@@ -66,10 +66,9 @@ class _LogInState extends State<LoginForm> {
                 hintText: "Your email",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.person),
+                  child: Icon(Icons.mark_email_read),
                 ),
               ),
-
             ),
           ),
 

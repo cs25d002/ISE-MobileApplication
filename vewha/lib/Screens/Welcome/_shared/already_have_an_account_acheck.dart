@@ -4,18 +4,19 @@ import 'package:flutter_auth/Components/constants.dart';
 import 'socal_sign_up.dart';
 
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
-  final bool login;
+  final bool login, social;
   final Function? press;
   const AlreadyHaveAnAccountCheck({
     Key? key,
     this.login = true, // navigation based on bool val for "is this login page?"
+    this.social = true, // to show social icon for diff login ways
     required this.press,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(children: 
-    [ const SocalSignUp(),
+    [ social ? const SocalSignUp() : const SizedBox.shrink(),
       const SizedBox(height: pad_norm),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,

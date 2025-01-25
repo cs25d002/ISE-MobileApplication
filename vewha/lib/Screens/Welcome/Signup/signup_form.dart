@@ -91,7 +91,7 @@ class _SignUpState extends State<SignUpForm> {
                 hintText: "Your name",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.person),
+                  child: Icon(Icons.person_add),
                 ),
               ),
 
@@ -115,7 +115,7 @@ class _SignUpState extends State<SignUpForm> {
                 hintText: "Your email",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.email),
+                  child: Icon(Icons.email_rounded),
                 ),
               ),
 
@@ -137,7 +137,7 @@ class _SignUpState extends State<SignUpForm> {
                 hintText: "Your password",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.lock),
+                  child: Icon(Icons.lock_open_sharp),
                 ),
               ),
 
