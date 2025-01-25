@@ -16,7 +16,7 @@ class WelcomeImage extends StatelessWidget {
           "WELCOME TO EDU",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: defaultPadding * 2),
+        const SizedBox(height: pad_norm * 2),
         Row(
           children: [
             const Spacer(),
@@ -29,7 +29,7 @@ class WelcomeImage extends StatelessWidget {
             const Spacer(),
           ],
         ),
-        const SizedBox(height: defaultPadding * 2),
+        const SizedBox(height: pad_norm * 2),
       ],
     );
   }

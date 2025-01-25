@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             iconColor: kPrimaryColor,
             prefixIconColor: kPrimaryColor,
             contentPadding: EdgeInsets.symmetric(
-                horizontal: defaultPadding, vertical: defaultPadding),
+                horizontal: pad_norm, vertical: pad_norm),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30)),
               borderSide: BorderSide.none,

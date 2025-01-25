@@ -16,7 +16,7 @@ class LoginScreenTopImage extends StatelessWidget {
           "Login".toUpperCase(),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: defaultPadding * 2),
+        const SizedBox(height: pad_norm * 2),
         Row(
           children: [
             const Spacer(),
@@ -27,7 +27,7 @@ class LoginScreenTopImage extends StatelessWidget {
             const Spacer(),
           ],
         ),
-        const SizedBox(height: defaultPadding * 2),
+        const SizedBox(height: pad_norm * 2),
       ],
     );
   }

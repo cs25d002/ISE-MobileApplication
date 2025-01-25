@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/constants.dart';
 
+import 'socal_sign_up.dart';
+
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final bool login;
   final Function? press;
@@ -12,7 +14,9 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(children: 
+    [ const SocalSignUp(),
+      const SizedBox(height: pad_norm),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -27,11 +31,9 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
               style: const TextStyle(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.bold,
-              ),
-            ),
+              ),),
           )
-        ],
-      )
+        ],)
     ]);
   }
 }

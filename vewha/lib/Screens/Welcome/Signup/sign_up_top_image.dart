@@ -16,7 +16,7 @@ class SignUpScreenTopImage extends StatelessWidget {
           "Sign Up".toUpperCase(),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: defaultPadding),
+        const SizedBox(height: pad_norm),
         Row(
           children: [
             const Spacer(),
@@ -27,7 +27,7 @@ class SignUpScreenTopImage extends StatelessWidget {
             const Spacer(),
           ],
         ),
-        const SizedBox(height: defaultPadding),
+        const SizedBox(height: pad_norm),
       ],
     );
   }

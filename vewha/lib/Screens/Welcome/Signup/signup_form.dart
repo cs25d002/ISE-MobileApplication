@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 // module refs
 import '../../../constants.dart';
-import '../../../components/already_have_an_account_acheck.dart';
+import '../components/already_have_an_account_acheck.dart';
 // page refs
 import '../Login/login_screen.dart';
 import '../../Home/home_page.dart';
@@ -29,7 +29,7 @@ class _SignUpState extends State<SignUpForm> {
         namecontroller.text != "" &&
         mailcontroller.text != "") {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -38,9 +38,9 @@ class _SignUpState extends State<SignUpForm> {
           style: TextStyle(fontSize: 20.0),
         )));
 
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Home()));
-      } on FirebaseAuthException catch (e) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+      } 
+      on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: Colors.orangeAccent,
@@ -48,7 +48,8 @@ class _SignUpState extends State<SignUpForm> {
                 "Password Provided is too Weak",
                 style: TextStyle(fontSize: 18.0),
               )));
-        } else if (e.code == "email-already-in-use") {
+        } 
+        else if (e.code == "email-already-in-use") {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: Colors.orangeAccent,
               content: Text(
@@ -65,9 +66,10 @@ class _SignUpState extends State<SignUpForm> {
     return Form(
       key: _formkey,
       child: Column(
-        children: [
+        children: 
+        [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: miniPadding),
+            padding: const EdgeInsets.symmetric(vertical: pad_small),
             child: TextFormField(
               validator: (value) {
                 if (value == null || value.isEmpty) return "Please Enter Name";
@@ -78,21 +80,23 @@ class _SignUpState extends State<SignUpForm> {
               textInputAction: TextInputAction.next,
               cursorColor: kPrimaryColor,
               onSaved: (email) {},
+
               decoration: const InputDecoration(
                 hintText: "Your name",
                 prefixIcon: Padding(
-                  padding: EdgeInsets.all(defaultPadding),
+                  padding: EdgeInsets.all(pad_norm),
                   child: Icon(Icons.person),
                 ),
               ),
+
             ),
           ),
+
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: miniPadding),
+            padding: const EdgeInsets.symmetric(vertical: pad_small),
             child: TextFormField(
               validator: (value) {
-                if (value == null || value.isEmpty)
-                  return 'Please Enter E-mail';
+                if (value == null || value.isEmpty) return 'Please Enter E-mail';
                 return null;
               },
               controller: mailcontroller,
@@ -100,37 +104,41 @@ class _SignUpState extends State<SignUpForm> {
               textInputAction: TextInputAction.next,
               cursorColor: kPrimaryColor,
               onSaved: (email) {},
+
               decoration: const InputDecoration(
                 hintText: "Your email",
                 prefixIcon: Padding(
-                  padding: EdgeInsets.all(defaultPadding),
+                  padding: EdgeInsets.all(pad_norm),
                   child: Icon(Icons.person),
                 ),
               ),
+
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: miniPadding),
+            padding: const EdgeInsets.symmetric(vertical: pad_small),
             child: TextFormField(
               validator: (value) {
-                if (value == null || value.isEmpty)
-                  return 'Please Enter Password';
+                if (value == null || value.isEmpty) return 'Please Enter Password';
                 return null;
               },
               controller: passwordcontroller,
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
+
               decoration: const InputDecoration(
                 hintText: "Your password",
                 prefixIcon: Padding(
-                  padding: EdgeInsets.all(defaultPadding),
+                  padding: EdgeInsets.all(pad_norm),
                   child: Icon(Icons.lock),
                 ),
               ),
+
             ),
           ),
-          const SizedBox(height: defaultPadding),
+
+          const SizedBox(height: pad_norm),
           ElevatedButton(
             onPressed: () // add functionality to sign up
                 {
@@ -145,20 +153,18 @@ class _SignUpState extends State<SignUpForm> {
             },
             child: Text("Sign Up".toUpperCase()),
           ),
-          const SizedBox(height: miniPadding),
+          const SizedBox(height: pad_small),
+
           AlreadyHaveAnAccountCheck(
-            login: false,
+            login: false, // this is a sign-up screen, this set boolean to false
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
                     return const LoginScreen();
-                  },
-                ),
-              );
-            },
-          ),
+                  },),
+              );},),
         ],
       ),
     );
