@@ -12,7 +12,7 @@ class AuthMethods {
     return await auth.currentUser;
   }
 
-  signInWithGoogle(BuildContext context) async {
+  static signInWithGoogle(BuildContext context) async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
