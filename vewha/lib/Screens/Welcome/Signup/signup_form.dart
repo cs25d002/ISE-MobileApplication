@@ -1,7 +1,6 @@
 // dependencies
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 // module refs
 import '../../../constants.dart';
 import '../components/already_have_an_account_acheck.dart';
@@ -141,7 +140,7 @@ class _SignUpState extends State<SignUpForm> {
           const SizedBox(height: pad_norm),
           ElevatedButton(
             onPressed: () // add functionality to sign up
-                {
+            {
               if (_formkey.currentState!.validate()) {
                 setState(() {
                   email = mailcontroller.text;

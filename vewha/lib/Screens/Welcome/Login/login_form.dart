@@ -1,9 +1,11 @@
+// dependencies
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-// local references
+// local refs
 import '../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
+import 'forgot_password.dart';
+// page refs
 import '../Signup/signup_screen.dart';
 import '../../Home/home_page.dart';
 
@@ -122,7 +124,9 @@ class _LogInState extends State<LoginForm> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: pad_tiny),
             child: GestureDetector(
-              onTap: () {}, // add functionaltiy to request reset password
+              onTap: () {  // add functionaltiy to request reset password
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const ForgotPassword()));
+              },
               child: 
                 const Text( " Forgot Password ? ",
                   style: TextStyle(color: kPrimaryColor,
