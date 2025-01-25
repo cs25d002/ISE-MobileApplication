@@ -1,7 +1,9 @@
+// dependencies
 import 'package:flutter/material.dart';
-
+// local refs
 import 'or_divider.dart';
 import 'social_icon.dart';
+import '../../../Services/auth.dart';
 
 class SocalSignUp extends StatelessWidget {
   const SocalSignUp({
@@ -18,7 +20,7 @@ class SocalSignUp extends StatelessWidget {
           children: <Widget>[
             SocalIcon(
               iconSrc: "icons/social/google.svg",
-              press: () {},
+              press: () => AuthMethods.signInWithGoogle(context),
             ),
             SocalIcon(
               iconSrc: "icons/social/facebook.svg",

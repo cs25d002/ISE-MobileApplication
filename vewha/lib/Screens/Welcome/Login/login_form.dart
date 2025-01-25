@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // local refs
-import '../components/already_have_an_account_acheck.dart';
-import '../../../constants.dart';
+import '../_shared/already_have_an_account_acheck.dart';
+import '../../../Components/constants.dart';
 import 'forgot_password.dart';
 // page refs
 import '../Signup/signup_screen.dart';
@@ -32,22 +32,13 @@ class _LogInState extends State<LoginForm> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     } 
     on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.orangeAccent,
-            content: Text(
-              "No User Found for that Email",
-              style: TextStyle(fontSize: 18.0),
-            )));
-      } 
-      else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.orangeAccent,
-            content: Text(
-              "Wrong Password Provided by User",
-              style: TextStyle(fontSize: 18.0),
-            )));
-      }
+      // disable email enumeration protection (recently added) inorder to use error codes like user already exist
+      // https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.orangeAccent,
+          content: Text("${e.code}:${e.message}", // show other types of error
+            style: const TextStyle(fontSize: 18.0),
+          )));
     }
   }
 

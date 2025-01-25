@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 // Flutter References
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
-import 'package:flutter_auth/constants.dart';
+import 'package:flutter_auth/Components/constants.dart';
 
 // wait till firebase is inittialized before rendering front end
 void main() async { // try finding dynamic fet app details instead of manually setting

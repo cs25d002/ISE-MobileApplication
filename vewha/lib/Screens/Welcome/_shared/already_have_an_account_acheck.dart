@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/constants.dart';
+import 'package:flutter_auth/Components/constants.dart';
 
 import 'socal_sign_up.dart';
 

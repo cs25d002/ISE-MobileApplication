@@ -12,7 +12,12 @@
           "package_name": "com.example.vewha"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "838890390964-ne5bb5rh098b95mn9k8t390m5msb4a1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838890390964-ne5bb5rh098b95mn9k8t390m5msb4a1h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
