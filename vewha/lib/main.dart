@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 // Flutter References
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Screens/Welcome/splash_screen.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Components/constants.dart';
 
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      home: const WelcomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
