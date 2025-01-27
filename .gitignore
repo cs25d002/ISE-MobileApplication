@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 vewha/macos/Flutter/GeneratedPluginRegistrant.swift
 vewha/windows/flutter/generated_plugin_registrant.cc
 vewha/windows/flutter/generated_plugins.cmake
+=======
+vewha/macos/*
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835

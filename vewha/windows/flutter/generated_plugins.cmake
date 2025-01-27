@@ -4,6 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
+<<<<<<< HEAD
+=======
+  file_selector_windows
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
   firebase_auth
   firebase_core
 )

@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // module refs
-import '../../../constants.dart';
-import '../components/already_have_an_account_acheck.dart';
+import '../../../Components/constants.dart';
+import '../_shared/already_have_an_account_acheck.dart';
 // page refs
 import '../Login/login_screen.dart';
 import '../../Home/home_page.dart';
@@ -37,8 +37,13 @@ class _SignUpState extends State<SignUpForm> {
           style: TextStyle(fontSize: 20.0),
         )));
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
-      } 
+        Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GreetingPage(email: email),
+      ),
+    );
+    } 
       on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -55,6 +60,13 @@ class _SignUpState extends State<SignUpForm> {
                 "Account Already exists",
                 style: TextStyle(fontSize: 18.0),
               )));
+        }
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.orangeAccent,
+          content: Text("${e.code}:${e.message}", // show other types of error
+            style: const TextStyle(fontSize: 18.0),
+          )));
         }
       }
     }
@@ -84,7 +96,7 @@ class _SignUpState extends State<SignUpForm> {
                 hintText: "Your name",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.person),
+                  child: Icon(Icons.person_add),
                 ),
               ),
 
@@ -108,7 +120,7 @@ class _SignUpState extends State<SignUpForm> {
                 hintText: "Your email",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.person),
+                  child: Icon(Icons.email_rounded),
                 ),
               ),
 
@@ -130,7 +142,7 @@ class _SignUpState extends State<SignUpForm> {
                 hintText: "Your password",
                 prefixIcon: Padding(
                   padding: EdgeInsets.all(pad_norm),
-                  child: Icon(Icons.lock),
+                  child: Icon(Icons.lock_open_sharp),
                 ),
               ),
 

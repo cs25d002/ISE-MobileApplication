@@ -1,6 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import '../../../Components/constants.dart';
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
 import '../Signup/signup_screen.dart';
+import '../_shared/already_have_an_account_acheck.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -17,7 +22,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   resetPassword() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+<<<<<<< HEAD
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+=======
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
         content: Text(
           "Password Reset Email has been sent!",
           style: TextStyle(fontSize: 20.0),
@@ -25,7 +34,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ));
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
+<<<<<<< HEAD
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+=======
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
           content: Text(
             "No user found for that email.",
             style: TextStyle(fontSize: 20.0),
@@ -49,7 +62,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             left: 0,
             right: 0,
             child: Image.asset(
+<<<<<<< HEAD
               'assets/images/main_bottom.png', // Replace with your bottom image path
+=======
+              'images/blocks/main_bottom.png', // Replace with your bottom image path
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
               fit: BoxFit.cover,
               height: 70,
             ),
@@ -109,15 +126,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget buildForm(BuildContext context, double screenWidth) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+<<<<<<< HEAD
       children: [
         const Text(
           "Password Recovery",
           style: TextStyle(
             fontSize: 26,
+=======
+      children: 
+      [
+        const Text(
+          "Password Recovery",
+          style: TextStyle(
+            fontSize: 30,
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
+<<<<<<< HEAD
         const SizedBox(height: 10),
         const Text(
           "Enter your email to reset your password",
@@ -128,11 +155,26 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ),
         ),
         const SizedBox(height: 30),
+=======
+
+        const SizedBox(height: pad_big),
+        const Text(
+          "Enter your email",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: pad_big),
+
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
         Form(
           key: _formkey,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.grey[200],
+<<<<<<< HEAD
               borderRadius: BorderRadius.circular(30),
             ),
             child: TextFormField(
@@ -210,3 +252,78 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 }
+=======
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(width: 5, color: kPrimaryColor),
+            ),
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'Please Enter E-mail';
+                return null;
+              },
+              controller: mailcontroller,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              textAlign: TextAlign.center,
+              cursorColor: kPrimaryColor,
+              onSaved: (email) {},
+              
+              decoration: const InputDecoration(
+                hintText: "Your email",
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(pad_norm),
+                  child: Icon(Icons.mark_email_unread_sharp),
+                ),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.all(pad_norm),
+                  child: Icon(Icons.lock_reset_outlined),
+                ),
+              ),
+              
+            ),),
+        ),
+
+        const SizedBox(height: pad_norm),
+        Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(width: 5, color: Colors.blueGrey),
+            ),
+            child:ElevatedButton(
+            onPressed: () { // add functionality to make reset passwork api call
+              if (_formkey.currentState!.validate()) {
+                setState(() { email=mailcontroller.text; }); 
+              }
+              resetPassword();
+            },
+            child: const Text(
+                "Send Email",
+                style: TextStyle(
+                  color: kPrimaryLightColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),),
+        ),),
+        const SizedBox(height: pad_small),
+
+        AlreadyHaveAnAccountCheck(
+          login: false, social:false, // to revert back to login page
+          press: () { Navigator.pop(context); },
+        ),
+        const SizedBox(height: pad_big),
+        
+        AlreadyHaveAnAccountCheck(
+            //login: false, // this is a subpage of login screen => true (default)
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const SignUpScreen();
+                  },),
+              );},),
+      ],
+    );
+  }
+}
+>>>>>>> a42de36bf9b6396daebb1932c391b5db53222835
