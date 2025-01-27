@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     });
   }
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 6, 13),
+      backgroundColor: const Color.fromARGB(255, 130, 125, 201),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,19 +61,26 @@ class _SplashScreenState extends State<SplashScreen>
               },
               child: Image.asset(
                 'assets/images/logo.png',
-                width: 250,
-                height: 250,
+                width: 450,
+                height: 550,
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              "Vewha",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Visual Enhanced Well-Being and Health Assistant",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
+
             const SizedBox(height: 10),
             /* const Text(
               "Visual Enhanced Well-being Assistant",

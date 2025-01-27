@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'add_patient.dart';
 class GreetingPage extends StatelessWidget {
   final String email;
 
@@ -21,7 +21,7 @@ class GreetingPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/doctor.png', // Path to your image
+                'assets/images/doctor.jpg', // Path to your image
                 height: 100,
                 width: 100,
               ),
@@ -44,12 +44,13 @@ class GreetingPage extends StatelessWidget {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to Add Patient page or logic
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Add Patient Clicked')),
+                  // Navigate to AddPatientPage
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddPatientPage()),
                   );
-                },
-                child: const Text('Add Patient'),
+               },
+                child: const Text(' Add Patient'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(

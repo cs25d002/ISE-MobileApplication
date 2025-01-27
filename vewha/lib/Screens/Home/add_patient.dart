@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:uuid/uuid.dart'; // For unique ID generation
 
 class AddPatientPage extends StatefulWidget {
   @override
@@ -12,13 +12,12 @@ class _AddPatientPageState extends State<AddPatientPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
+  final _weightController = TextEditingController();
   final _bloodPressureController = TextEditingController();
   final _healthHistoryController = TextEditingController();
-  File? _image;
-  File? _prescriptionImage;
+  File? _patientPicture;
   String? _selectedSex;
-  DateTime? _appointmentDate;
-  TimeOfDay? _appointmentTime;
+  String? _patientId;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -27,44 +26,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  // Prescription Image Picker function
-  Future<void> _pickPrescriptionImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _prescriptionImage = File(pickedFile.path);
-      });
-    }
-  }
-
-  // Date and Time Picker for appointment
-  Future<void> _pickDateAndTime() async {
-    DateTime selectedDate = await DatePicker.showDatePicker(
-      context,
-      showTitleActions: true,
-      minTime: DateTime.now(),
-      onConfirm: (date) {
-        setState(() {
-          _appointmentDate = date;
-        });
-      },
-      currentTime: DateTime.now(),
-      locale: LocaleType.en,
-    ) ?? DateTime.now();
-
-    TimeOfDay? selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (selectedTime != null) {
-      setState(() {
-        _appointmentTime = selectedTime;
+        _patientPicture = File(pickedFile.path);
       });
     }
   }
@@ -72,17 +34,36 @@ class _AddPatientPageState extends State<AddPatientPage> {
   // Handle form submission
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Process the form data here
-      print("Form submitted with data: ");
-      print("Name: ${_nameController.text}");
-      print("Age: ${_ageController.text}");
-      print("Sex: $_selectedSex");
-      print("Blood Pressure: ${_bloodPressureController.text}");
-      print("Health History: ${_healthHistoryController.text}");
-      if (_image != null) print("Picture: ${_image?.path}");
-      if (_prescriptionImage != null) print("Prescription: ${_prescriptionImage?.path}");
-      print("Appointment Date: $_appointmentDate");
-      print("Appointment Time: $_appointmentTime");
+      // Generate a unique patient ID
+      final uuid = Uuid();
+      setState(() {
+        _patientId = uuid.v4();
+      });
+
+      // Mock save to Firebase (replace with actual Firebase logic)
+      final patientData = {
+        "patientId": _patientId,
+        "name": _nameController.text,
+        "age": _ageController.text,
+        "sex": _selectedSex,
+        "weight": _weightController.text,
+        "bloodPressure": _bloodPressureController.text,
+        "healthHistory": _healthHistoryController.text,
+        "picturePath": _patientPicture?.path,
+      };
+
+      print("Patient data saved: $patientData");
+
+      // Navigate to success or reset form
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Patient added successfully! PID: $_patientId")),
+      );
+
+      _formKey.currentState?.reset();
+      setState(() {
+        _patientPicture = null;
+        _selectedSex = null;
+      });
     }
   }
 
@@ -98,7 +79,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
-              // Name
+              // Patient Name
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: 'Patient Name'),
@@ -109,6 +90,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               // Age
               TextFormField(
                 controller: _ageController,
@@ -121,6 +103,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               // Sex
               DropdownButtonFormField<String>(
                 value: _selectedSex,
@@ -143,6 +126,20 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
+              // Weight
+              TextFormField(
+                controller: _weightController,
+                decoration: InputDecoration(labelText: 'Weight'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the weight';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
               // Blood Pressure
               TextFormField(
                 controller: _bloodPressureController,
@@ -154,6 +151,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               // Previous Health History
               TextFormField(
                 controller: _healthHistoryController,
@@ -165,43 +163,53 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               // Picture Upload
               TextButton(
                 onPressed: () {
-                  _pickImage(ImageSource.gallery);
+                  _pickImage(ImageSource.camera);
                 },
-                child: Text(_image == null ? 'Add Picture' : 'Change Picture'),
+                child: Text(_patientPicture == null
+                    ? 'Take Patient Picture'
+                    : 'Change Patient Picture'),
               ),
-              _image != null ? Image.file(_image!) : Container(),
-              // Prescription Image
-              TextButton(
-                onPressed: () {
-                  _pickPrescriptionImage(ImageSource.gallery);
-                },
-                child: Text(_prescriptionImage == null
-                    ? 'Add Prescription Image'
-                    : 'Change Prescription Image'),
-              ),
-              _prescriptionImage != null
-                  ? Image.file(_prescriptionImage!)
+              _patientPicture != null
+                  ? Image.file(_patientPicture!, height: 150)
                   : Container(),
-              // Appointment Date and Time Picker
-              TextButton(
-                onPressed: _pickDateAndTime,
-                child: Text('Select Appointment Date & Time'),
-              ),
-              if (_appointmentDate != null)
-                Text('Date: ${_appointmentDate!.toLocal()}'),
-              if (_appointmentTime != null)
-                Text('Time: ${_appointmentTime!.format(context)}'),
+                  const SizedBox(height: 20),
               // Submit Button
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('Submit'),
               ),
+              if (_patientId != null) Text('Generated PID: $_patientId'),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_add),
+              label: 'Add Patient',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search Patient',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: 'Appointments',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Messages',
+            ),
+          ],
+        onTap: (index) {
+          // Handle navigation between sections
+          print("Navigated to section: $index");
+        },
       ),
     );
   }
