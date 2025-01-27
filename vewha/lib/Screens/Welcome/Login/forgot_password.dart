@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../Components/constants.dart';
 import '../Signup/signup_screen.dart';
 import '../_shared/already_have_an_account_acheck.dart';
+import 'package:lottie/lottie.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -65,8 +66,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     Expanded(
                       flex: 1,
                       child: Center(
-                        child: Image.asset(
-                          'assets/images/forgot_pswd.webp',
+                        child: Lottie.asset(
+                          'assets/animations/forgot.json',
                           width: 400,
                           fit: BoxFit.contain,
                         ),
@@ -89,8 +90,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/images/forgot_pswd.webp',
+                        Lottie.asset(
+                          'assets/animations/forgot.json',
                           height: 250,
                           fit: BoxFit.contain,
                         ),
