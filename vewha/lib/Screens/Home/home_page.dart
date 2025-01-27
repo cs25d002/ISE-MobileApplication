@@ -13,13 +13,19 @@ class GreetingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Welcome'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: const Color.fromARGB(255, 121, 68, 255),
       ),
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                'assets/images/doctor.png', // Path to your image
+                height: 100,
+                width: 100,
+              ),
+              const SizedBox(height: 20),
               Text(
                 'Hello Dr. $username', // Use extracted username
                 style: const TextStyle(
@@ -54,6 +60,26 @@ class GreetingPage extends StatelessWidget {
                   );
                 },
                 child: const Text('Search for Patient'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Search Patient page or logic
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Appointments')),
+                  );
+                },
+                child: const Text('Appointments'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Search Patient page or logic
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Messages')),
+                  );
+                },
+                child: const Text('Messages'),
               ),
             ],
           ),
