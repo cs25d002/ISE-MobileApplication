@@ -1,6 +1,5 @@
 // FireBase Refernces
 import 'package:firebase_core/firebase_core.dart';
-
 // Flutter References
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Welcome/splash_screen.dart';
@@ -9,6 +8,8 @@ import 'package:flutter_auth/Components/constants.dart';
 // wait till firebase is inittialized before rendering front end
 void main() async { // try finding dynamic fet app details instead of manually setting
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase with values from the .env file
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ", // "api_key:current_key here",
@@ -17,7 +18,8 @@ void main() async { // try finding dynamic fet app details instead of manually s
       projectId: "vewha-2d3a2", // "project id here",
     ),
   );
-
+  
+  //Run the app
   runApp(const MyApp());
 }
 

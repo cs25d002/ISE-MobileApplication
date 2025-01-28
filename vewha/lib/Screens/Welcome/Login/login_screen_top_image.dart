@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:lottie/lottie.dart';
 import '../../../Components/constants.dart';
 
 class LoginScreenTopImage extends StatelessWidget {
@@ -22,7 +22,7 @@ class LoginScreenTopImage extends StatelessWidget {
             const Spacer(),
             Expanded(
               flex: 8,
-              child: SvgPicture.asset("assets/icons/login.svg"),
+              child: Lottie.asset("assets/animations/loginin.json"),
             ),
             const Spacer(),
           ],

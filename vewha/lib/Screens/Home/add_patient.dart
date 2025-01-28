@@ -188,18 +188,8 @@ class _AddPatientPageState extends State<AddPatientPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChatBotPage()),
-          );
-        },
-        child: Icon(Icons.chat),
-        tooltip: "AI Chatbot",
-      ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.person_add),
             label: 'Add Patient',
@@ -217,9 +207,23 @@ class _AddPatientPageState extends State<AddPatientPage> {
             label: 'Messages',
           ),
         ],
+        selectedItemColor:
+            Theme.of(context).primaryColor, // Uses theme's primary color
+        unselectedItemColor:
+            Theme.of(context).disabledColor, // Uses theme's disabled color
+        backgroundColor: Theme.of(context)
+            .scaffoldBackgroundColor, // Matches app's background
         onTap: (index) {
-          // Handle navigation between sections
-          print("Navigated to section: $index");
+          if (index == 3) {
+            // Navigate to ChatPage when "Messages" icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatbotPage()),
+            );
+          } else {
+            // Handle other navigation logic here
+            print("Navigated to section: $index");
+          }
         },
       ),
     );

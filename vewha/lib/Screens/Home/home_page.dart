@@ -80,7 +80,7 @@ class GreetingPage extends StatelessWidget {
                   // Navigate to Search Patient page or logic
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatBotPage()),
+                    MaterialPageRoute(builder: (context) => ChatbotPage()),
                   );
                 },
                 child: Text("AI Chatbot"),
