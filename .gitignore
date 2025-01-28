@@ -1,6 +1,0 @@
-# add generated plugins files here
-vewha/windows/flutter/generated_plugins.cmake
-vewha/windows/flutter/generated_plugin_registrant.cc
-vewha/macos/Flutter/GeneratedPluginRegistrant.swift
-vewha/linux/flutter/generated_plugins.cmake
-vewha/linux/flutter/generated_plugin_registrant.cc
