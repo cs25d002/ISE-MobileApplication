@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:uuid/uuid.dart'; // For unique ID generation
+import 'package:flutter_auth/chatbot/chatbot_page.dart';
 
 class AddPatientPage extends StatefulWidget {
   @override
@@ -176,7 +177,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               _patientPicture != null
                   ? Image.file(_patientPicture!, height: 150)
                   : Container(),
-                  const SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Submit Button
               ElevatedButton(
                 onPressed: _submitForm,
@@ -187,25 +188,35 @@ class _AddPatientPageState extends State<AddPatientPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ChatBotPage()),
+          );
+        },
+        child: Icon(Icons.chat),
+        tooltip: "AI Chatbot",
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_add),
-              label: 'Add Patient',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search Patient',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Appointments',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              label: 'Messages',
-            ),
-          ],
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_add),
+            label: 'Add Patient',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search Patient',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Appointments',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'Messages',
+          ),
+        ],
         onTap: (index) {
           // Handle navigation between sections
           print("Navigated to section: $index");

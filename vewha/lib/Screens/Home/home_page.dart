@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'add_patient.dart';
+import 'package:flutter_auth/chatbot/chatbot_page.dart';
+
 class GreetingPage extends StatelessWidget {
   final String email;
 
@@ -49,7 +51,7 @@ class GreetingPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => AddPatientPage()),
                   );
-               },
+                },
                 child: const Text(' Add Patient'),
               ),
               const SizedBox(height: 20),
@@ -76,11 +78,12 @@ class GreetingPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Navigate to Search Patient page or logic
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Messages')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatBotPage()),
                   );
                 },
-                child: const Text('Messages'),
+                child: Text("AI Chatbot"),
               ),
             ],
           ),
@@ -89,4 +92,3 @@ class GreetingPage extends StatelessWidget {
     );
   }
 }
-
