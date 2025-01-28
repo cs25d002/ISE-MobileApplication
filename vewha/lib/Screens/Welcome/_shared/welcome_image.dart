@@ -13,7 +13,7 @@ class WelcomeImage extends StatelessWidget {
     return Column(
       children: [
         const Text(
-          "WELCOME TO EDU",
+          "WELCOME TO VEWHA",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: pad_norm * 2),

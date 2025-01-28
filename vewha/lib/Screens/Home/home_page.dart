@@ -1,103 +1,92 @@
 import 'package:flutter/material.dart';
+import 'add_patient.dart';
+import 'package:flutter_auth/chatbot/chatbot_page.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class GreetingPage extends StatelessWidget {
+  final String email;
 
-  @override
-  State<Home> createState() => _HomeState();
-}
+  const GreetingPage({Key? key, required this.email}) : super(key: key);
 
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    // Extract the username (part before '@')
+    String username = email.split('@')[0];
+
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      appBar: AppBar(
+        title: const Text('Welcome'),
+        backgroundColor: const Color.fromARGB(255, 121, 68, 255),
+      ),
       body: SafeArea(
-        child: Column(
-          children: [
-            //app bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Hello,',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'KavyaSri,', // Get username for firebase
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-
-                  //profile picture
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple[100],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.person),
-                  ),
-                ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/doctor.jpg', // Path to your image
+                height: 100,
+                width: 100,
               ),
-            ),
-
-            const SizedBox(height: 25),
-
-            //card--> how do u feel?
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(color: Colors.pink[100]),
-                child: Row(children: [
-                  //animation pic
-                  Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.deepPurple,
-                  ),
-
-                  const SizedBox(
-                    width: 25,
-                  ),
-
-                  //how do u feel + get started button
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'How do you feel?',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Text('Fill out your medical card right now'),
-                        Center(
-                          child: Text('Get Started'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]),
+              const SizedBox(height: 20),
+              Text(
+                'Hello Dr. $username', // Use extracted username
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-
-            //search bar
-
-            //horizontal listview -> categories dentist,surgeon etc..
-
-            //doctor list
-          ],
+              const SizedBox(height: 10),
+              const Text(
+                'Great day, huh?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to AddPatientPage
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddPatientPage()),
+                  );
+                },
+                child: const Text(' Add Patient'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Search Patient page or logic
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Search for Patient Clicked')),
+                  );
+                },
+                child: const Text('Search for Patient'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Search Patient page or logic
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Appointments')),
+                  );
+                },
+                child: const Text('Appointments'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Search Patient page or logic
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatBotPage()),
+                  );
+                },
+                child: Text("AI Chatbot"),
+              ),
+            ],
+          ),
         ),
       ),
     );
