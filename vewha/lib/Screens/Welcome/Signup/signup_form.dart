@@ -37,8 +37,13 @@ class _SignUpState extends State<SignUpForm> {
           style: TextStyle(fontSize: 20.0),
         )));
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
-      } 
+        Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GreetingPage(email: email),
+      ),
+    );
+    } 
       on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
