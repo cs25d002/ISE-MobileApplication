@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Components/responsive.dart';
 
-import '../../../Components/background.dart';
+import '../_shared/background.dart';
 import 'login_form.dart';
 import 'login_screen_top_image.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../Components/background.dart';
+import '_shared/background.dart';
 import '../../Components/responsive.dart';
 import '_shared/login_signup_btn.dart';
 import '_shared/welcome_image.dart';

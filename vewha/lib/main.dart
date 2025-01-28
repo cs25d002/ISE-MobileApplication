@@ -55,7 +55,8 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      home: const WelcomeScreen(),
+      
+      home: const WelcomeScreen(), // need to modify to keep login pages on top of HOME if user creds not found locally
     );
   }
 }

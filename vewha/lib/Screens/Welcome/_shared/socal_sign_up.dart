@@ -19,19 +19,19 @@ class SocalSignUp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SocalIcon(
-              iconSrc: "icons/social/google.svg",
+              iconSrc: "assets/images/social/google.svg",
               press: () => AuthMethods.signInWithGoogle(context),
             ),
             SocalIcon(
-              iconSrc: "icons/social/facebook.svg",
+              iconSrc: "assets/images/social/facebook.svg",
               press: () {},
             ),
             SocalIcon(
-              iconSrc: "icons/social/twitter.svg",
+              iconSrc: "assets/images/social/twitter.svg",
               press: () {},
             ),
             SocalIcon(
-              iconSrc: "icons/social/apple.svg",
+              iconSrc: "assets/images/social/apple.svg",
               press: () {},
             ),
           ],
