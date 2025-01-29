@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/chatbot/chatbot_page.dart';
+import 'package:lottie/lottie.dart';
 import 'add_patient.dart';
 
 class GreetingPage extends StatelessWidget {
@@ -22,8 +23,8 @@ class GreetingPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/home/doctor.jpg', // Path to your image
+              Lottie.asset(
+                'assets/animations/doctorProfile.json', // Path to your image
                 height: 100,
                 width: 100,
               ),
