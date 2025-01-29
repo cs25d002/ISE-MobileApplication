@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/chatbot/chatbot_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:uuid/uuid.dart'; // For unique ID generation
@@ -189,7 +190,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-<<<<<<< HEAD
           BottomNavigationBarItem(
             icon: Icon(Icons.person_add),
             label: 'Add Patient',
@@ -213,25 +213,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
             Theme.of(context).disabledColor, // Uses theme's disabled color
         backgroundColor: Theme.of(context)
             .scaffoldBackgroundColor, // Matches app's background
-=======
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_add),
-              label: 'Add Patient',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search Patient',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Appointments',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              label: 'Messages',
-            ),
-          ],
->>>>>>> 4bc2208eb7f0e9415d16953afa89e8c312dde051
         onTap: (index) {
           if (index == 3) {
             // Navigate to ChatPage when "Messages" icon is clicked
