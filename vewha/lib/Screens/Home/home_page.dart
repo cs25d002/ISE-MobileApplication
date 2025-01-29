@@ -25,8 +25,8 @@ class GreetingPage extends StatelessWidget {
             children: [
               Lottie.asset(
                 'assets/animations/doctorProfile.json', // Path to your image
-                height: 100,
-                width: 100,
+                height: 300,
+                width: 300,
               ),
               const SizedBox(height: 20),
               Text(
