@@ -85,7 +85,7 @@ class GreetingPage extends StatelessWidget {
                     //   const SnackBar(content: Text('Messages')),
                   );
                 },
-                child: const Text('Messages'),
+                child: const Text('AI Chatbot'),
               ),
             ],
           ),

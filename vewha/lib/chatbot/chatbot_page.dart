@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Components/constants.dart'; // Ensure your constants file is imported for theme consistency
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart'as http;
 import 'dart:convert';
 
 class ChatbotPage extends StatefulWidget {
