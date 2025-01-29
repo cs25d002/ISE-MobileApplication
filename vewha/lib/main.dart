@@ -7,19 +7,22 @@ import 'package:flutter_auth/Components/constants.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 
 // wait till firebase is inittialized before rendering front end
-void main() async { // try finding dynamic fet app details instead of manually setting
+void main() async {
+  // try finding dynamic fet app details instead of manually setting
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Firebase with values from the .env file
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      apiKey: "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ", // "api_key:current_key here",
-      appId: "1:838890390964:android:1f625e152497dd2caadee1",// "mobilesdk_app_id here",
+      apiKey:
+          "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ", // "api_key:current_key here",
+      appId:
+          "1:838890390964:android:1f625e152497dd2caadee1", // "mobilesdk_app_id here",
       messagingSenderId: "838890390964", // "project_number id here",
       projectId: "vewha-2d3a2", // "project id here",
     ),
   );
-  
+
   //Run the app
   runApp(const MyApp());
 }
@@ -51,15 +54,16 @@ class MyApp extends StatelessWidget {
             fillColor: kPrimaryLightColor,
             iconColor: kPrimaryColor,
             prefixIconColor: kPrimaryColor,
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: pad_norm, vertical: pad_norm),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: pad_norm, vertical: pad_norm),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30)),
               borderSide: BorderSide.none,
             ),
           )),
-      home: const WelcomeScreen(), // using current spash screen crashes
-      //home: const SplashScreen(), // need to modify to keep login pages on top of HOME if user creds not found locally
+      // home: const WelcomeScreen(), // using current spash screen crashes
+      home:
+          const SplashScreen(), // need to modify to keep login pages on top of HOME if user creds not found locally
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Components/constants.dart'; // Ensure your constants file is imported for theme consistency
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ChatbotPage extends StatefulWidget {
@@ -12,11 +12,13 @@ class ChatbotPage extends StatefulWidget {
 
 class _ChatbotPageState extends State<ChatbotPage> {
   final TextEditingController _controller = TextEditingController();
-  final List<Map<String, String>> _messages = []; // Store messages as a list of maps
+  final List<Map<String, String>> _messages =
+      []; // Store messages as a list of maps
   bool _isLoading = false;
 
   // Chatbot API details
-  final String chatbotApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAVKWaxaSJdDG_sNSvPacxJHV8aPJNMRkg";
+  final String chatbotApiUrl =
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAVKWaxaSJdDG_sNSvPacxJHV8aPJNMRkg";
 
   Future<void> _sendMessage() async {
     final userInput = _controller.text;
@@ -34,9 +36,13 @@ class _ChatbotPageState extends State<ChatbotPage> {
         Uri.parse(chatbotApiUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "contents": [{
-            "parts": [{"text": userInput}]
-          }]
+          "contents": [
+            {
+              "parts": [
+                {"text": userInput}
+              ]
+            }
+          ]
         }),
       );
 
@@ -46,14 +52,18 @@ class _ChatbotPageState extends State<ChatbotPage> {
         final data = jsonDecode(response.body);
         print("Parsed Data: $data"); // Debugging log
 
-        final botResponse = data['candidates'][0]['content']['parts'][0]['text']; // Updated path
+        final botResponse = data['candidates'][0]['content']['parts'][0]
+            ['text']; // Updated path
 
         setState(() {
           _messages.add({"bot": botResponse});
         });
       } else {
         setState(() {
-          _messages.add({"bot": "Error: Unable to fetch response. Status code: ${response.statusCode}"});
+          _messages.add({
+            "bot":
+                "Error: Unable to fetch response. Status code: ${response.statusCode}"
+          });
         });
       }
     } catch (e) {
@@ -86,8 +96,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
                 height: MediaQuery.of(context).size.height * 0.75,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/chatbot_background.png'), // Replace with your image
-                    fit: BoxFit.contain, // Ensures the image fits without stretching
+                    image: AssetImage(
+                        'assets/images/blocks/chatbot_background.png'), // Replace with your image
+                    fit: BoxFit
+                        .contain, // Ensures the image fits without stretching
                   ),
                 ),
               ),
@@ -108,19 +120,25 @@ class _ChatbotPageState extends State<ChatbotPage> {
                       final isUser = message.containsKey("user");
 
                       return Align(
-                        alignment:
-                            isUser ? Alignment.centerRight : Alignment.centerLeft,
+                        alignment: isUser
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 5.0),
                           padding: const EdgeInsets.all(12.0),
                           decoration: BoxDecoration(
-                            color: isUser ? kPrimaryColor : Color.fromARGB(255, 184, 171, 207),
+                            color: isUser
+                                ? kPrimaryColor
+                                : Color.fromARGB(255, 184, 171, 207),
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           child: Text(
                             isUser ? message['user']! : message['bot']!,
                             style: TextStyle(
-                              color: isUser ? Colors.white : Colors.black, // White for user, Black for bot
+                              color: isUser
+                                  ? Colors.white
+                                  : Colors
+                                      .black, // White for user, Black for bot
                               fontWeight: FontWeight.w500,
                             ),
                           ),
