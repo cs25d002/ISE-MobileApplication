@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'add_patient.dart';
+
 class GreetingPage extends StatelessWidget {
   final String email;
 
@@ -49,7 +50,7 @@ class GreetingPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => AddPatientPage()),
                   );
-               },
+                },
                 child: const Text(' Add Patient'),
               ),
               const SizedBox(height: 20),
@@ -79,8 +80,8 @@ class GreetingPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ChatbotPage()),
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(content: Text('Messages')),
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(content: Text('Messages')),
                   );
                 },
                 child: const Text('Messages'),
@@ -92,4 +93,3 @@ class GreetingPage extends StatelessWidget {
     );
   }
 }
-
