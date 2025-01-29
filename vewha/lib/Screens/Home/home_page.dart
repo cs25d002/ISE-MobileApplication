@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'add_patient.dart';
-import 'package:flutter_auth/chatbot/chatbot_page.dart';
-
 class GreetingPage extends StatelessWidget {
   final String email;
 
@@ -23,7 +21,7 @@ class GreetingPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/doctor.jpg', // Path to your image
+                'assets/images/home/doctor.jpg', // Path to your image
                 height: 100,
                 width: 100,
               ),
@@ -51,7 +49,7 @@ class GreetingPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => AddPatientPage()),
                   );
-                },
+               },
                 child: const Text(' Add Patient'),
               ),
               const SizedBox(height: 20),
@@ -81,9 +79,11 @@ class GreetingPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ChatbotPage()),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Messages')),
                   );
                 },
-                child: Text("AI Chatbot"),
+                child: const Text('Messages'),
               ),
             ],
           ),
@@ -92,3 +92,4 @@ class GreetingPage extends StatelessWidget {
     );
   }
 }
+

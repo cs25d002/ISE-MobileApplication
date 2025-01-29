@@ -85,7 +85,7 @@ class _LogInState extends State<LoginForm> {
               },
               controller: passwordcontroller,
               textInputAction: TextInputAction.done,
-              obscureText: true,
+              obscureText: true, // need to add eye-icon to show/hide password
               cursorColor: kPrimaryColor,
               
               decoration: const InputDecoration(

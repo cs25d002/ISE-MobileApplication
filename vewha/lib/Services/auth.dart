@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
 // local refs
+import 'database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 //import 'package:the_apple_sign_in/the_apple_sign_in.dart';
+import '../Screens/Home/home_page.dart';
 import 'dart:developer';
 
 class AuthMethods {

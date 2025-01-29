@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:uuid/uuid.dart'; // For unique ID generation
-import 'package:flutter_auth/chatbot/chatbot_page.dart';
 
 class AddPatientPage extends StatefulWidget {
   @override
@@ -72,7 +71,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Patient'),
+        title: const Text('Add Patient'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,7 +82,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               // Patient Name
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Patient Name'),
+                decoration: const InputDecoration(labelText: 'Patient Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name';
@@ -144,7 +143,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               // Blood Pressure
               TextFormField(
                 controller: _bloodPressureController,
-                decoration: InputDecoration(labelText: 'Blood Pressure'),
+                decoration: const InputDecoration(labelText: 'Blood Pressure'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter blood pressure';
@@ -156,7 +155,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               // Previous Health History
               TextFormField(
                 controller: _healthHistoryController,
-                decoration: InputDecoration(labelText: 'Health History'),
+                decoration: const InputDecoration(labelText: 'Health History'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter health history';
@@ -177,7 +176,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               _patientPicture != null
                   ? Image.file(_patientPicture!, height: 150)
                   : Container(),
-              const SizedBox(height: 20),
+                  const SizedBox(height: 20),
               // Submit Button
               ElevatedButton(
                 onPressed: _submitForm,
@@ -190,6 +189,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
+<<<<<<< HEAD
           BottomNavigationBarItem(
             icon: Icon(Icons.person_add),
             label: 'Add Patient',
@@ -213,6 +213,25 @@ class _AddPatientPageState extends State<AddPatientPage> {
             Theme.of(context).disabledColor, // Uses theme's disabled color
         backgroundColor: Theme.of(context)
             .scaffoldBackgroundColor, // Matches app's background
+=======
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_add),
+              label: 'Add Patient',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search Patient',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: 'Appointments',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Messages',
+            ),
+          ],
+>>>>>>> 4bc2208eb7f0e9415d16953afa89e8c312dde051
         onTap: (index) {
           if (index == 3) {
             // Navigate to ChatPage when "Messages" icon is clicked

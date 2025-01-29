@@ -1,4 +1,5 @@
 buildscript {
+    //ext.kotlin_version = '2.1.0' // (if Flutter ver < 3.19) warning fix: update newer version of the Kotlin Gradle plugin. 
     repositories {
         google()
         mavenCentral()

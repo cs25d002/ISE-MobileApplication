@@ -30,8 +30,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Navigate to the HomeScreen after a delay
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
+      Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     });
@@ -60,14 +59,14 @@ class _SplashScreenState extends State<SplashScreen>
                 );
               },
               child: Image.asset(
-                'assets/images/logo.png',
+                'assets/images/login/logo.png',
                 width: 450,
                 height: 550,
               ),
             ),
             const SizedBox(height: 20),
             RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 children: [
                   TextSpan(
                     text: "Visual Enhanced Well-Being and Health Assistant",

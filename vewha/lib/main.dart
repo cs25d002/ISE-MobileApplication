@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Welcome/splash_screen.dart';
 import 'package:flutter_auth/Components/constants.dart';
+import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 
 // wait till firebase is inittialized before rendering front end
 void main() async { // try finding dynamic fet app details instead of manually setting
@@ -57,7 +58,8 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      home: const SplashScreen(),
+      home: const WelcomeScreen(), // using current spash screen crashes
+      //home: const SplashScreen(), // need to modify to keep login pages on top of HOME if user creds not found locally
     );
   }
 }

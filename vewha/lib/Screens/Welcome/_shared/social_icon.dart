@@ -16,21 +16,33 @@ class SocalIcon extends StatelessWidget {
     return GestureDetector(
       onTap: press as void Function()?,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        padding: const EdgeInsets.all(20),
+        // Outer Decoration
         decoration: BoxDecoration(
           border: Border.all(
             width: 2,
-            color: kPrimaryLightColor,
+            color: Colors.black,
           ),
           shape: BoxShape.circle,
         ),
-        child: SvgPicture.asset(
-          iconSrc!,
-          height: 20,
-          width: 20,
-        ),
-      ),
+
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.all(10),
+          // Inner Decoration
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 4,
+              color: kPrimaryLightColor,
+            ),
+            shape: BoxShape.circle,
+          ),
+          child: SvgPicture.asset(
+            iconSrc!,
+            height: 25,
+            width: 25,
+          ),
+        ), // Inner Container
+      ), // Outer Container
     );
   }
 }

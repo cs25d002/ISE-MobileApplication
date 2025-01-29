@@ -52,7 +52,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             left: 0,
             right: 0,
             child: Image.asset(
-              'images/blocks/main_bottom.png', // Replace with your bottom image path
+              'assets/images/blocks/main_bottom.png', // Replace with your bottom image path
               fit: BoxFit.cover,
               height: 70,
             ),
