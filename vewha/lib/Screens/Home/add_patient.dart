@@ -157,7 +157,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Patient Name'),
-                decoration: const InputDecoration(labelText: 'Patient Name'),
+                //decoration: const InputDecoration(labelText: 'Patient Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter patient name';
@@ -208,7 +208,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                controller: _bloodPressureController,
+                controller: _bpController,
                 decoration: const InputDecoration(labelText: 'Blood Pressure'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -219,7 +219,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                controller: _healthHistoryController,
+                controller: _historyController,
                 decoration: const InputDecoration(labelText: 'Health History'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
