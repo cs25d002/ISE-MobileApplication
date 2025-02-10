@@ -30,7 +30,8 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Navigate to the HomeScreen after a delay
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(context,
+      Navigator.pushReplacement(
+        context,
         MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     });
@@ -71,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
                   TextSpan(
                     text: "Visual Enhanced Well-Being and Health Assistant",
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -79,7 +80,6 @@ class _SplashScreenState extends State<SplashScreen>
                 ],
               ),
             ),
-
             const SizedBox(height: 10),
             /* const Text(
               "Visual Enhanced Well-being Assistant",

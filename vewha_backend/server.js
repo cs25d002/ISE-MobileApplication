@@ -86,5 +86,5 @@ app.post('/add-prescription', upload.single('prescriptionImage'), (req, res) => 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://10.25.73.154:${PORT}`);
 });

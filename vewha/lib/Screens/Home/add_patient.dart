@@ -72,7 +72,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
       "healthHistory": _historyController.text,
     };
 
-    final uri = Uri.parse('http://127.0.0.1:3000/add-patient');
+    final uri = Uri.parse('http://10.25.73.154:3000/add-patient');
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['patientData'] = jsonEncode(patientData);
@@ -115,7 +115,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
       return;
     }
 
-    final uri = Uri.parse('http://127.0.0.1:3000/add-prescription');
+    final uri = Uri.parse('http://10.25.73.154:3000/add-prescription');
     final request = http.MultipartRequest('POST', uri);
 
     request.fields['pid'] = _uniquePid!;
