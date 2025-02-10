@@ -50,7 +50,7 @@ class GreetingPage extends StatelessWidget {
                   // Navigate to AddPatientPage
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddPatientPage()),
+                    MaterialPageRoute(builder: (context) => const AddPatientPage()),
                   );
                 },
                 child: const Text(' Add Patient'),
@@ -73,7 +73,7 @@ class GreetingPage extends StatelessWidget {
                     const SnackBar(content: Text('Appointments')),
                   );
                 },
-                child: const Text('Appointments'),
+                child: const Text('Scheduled Appointments'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(

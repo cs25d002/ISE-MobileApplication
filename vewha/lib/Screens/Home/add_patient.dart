@@ -1,70 +1,144 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/chatbot/chatbot_page.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:uuid/uuid.dart'; // For unique ID generation
+import 'package:http/http.dart' as http;
 
 class AddPatientPage extends StatefulWidget {
+  const AddPatientPage({super.key});
+
   @override
   _AddPatientPageState createState() => _AddPatientPageState();
 }
 
 class _AddPatientPageState extends State<AddPatientPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _bloodPressureController = TextEditingController();
-  final _healthHistoryController = TextEditingController();
-  File? _patientPicture;
-  String? _selectedSex;
-  String? _patientId;
 
-  final ImagePicker _picker = ImagePicker();
+  // Controllers for patient details
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _sexController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _bpController = TextEditingController();
+  final TextEditingController _historyController = TextEditingController();
 
-  // Image Picker function
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
+  // File variables for images
+  File? _patientImage;
+  File? _prescriptionImage;
+
+  final picker = ImagePicker();
+  bool _showAddPrescription = false;
+  String? _uniquePid;
+
+  // Function to capture patient image
+  Future<void> _takePatientPicture() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
     if (pickedFile != null) {
       setState(() {
-        _patientPicture = File(pickedFile.path);
+        _patientImage = File(pickedFile.path);
       });
     }
   }
 
-  // Handle form submission
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Generate a unique patient ID
-      final uuid = Uuid();
+  // Function to capture prescription image
+  Future<void> _addPrescriptionImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
       setState(() {
-        _patientId = uuid.v4();
+        _prescriptionImage = File(pickedFile.path);
       });
+    }
+  }
 
-      // Mock save to Firebase (replace with actual Firebase logic)
-      final patientData = {
-        "patientId": _patientId,
-        "name": _nameController.text,
-        "age": _ageController.text,
-        "sex": _selectedSex,
-        "weight": _weightController.text,
-        "bloodPressure": _bloodPressureController.text,
-        "healthHistory": _healthHistoryController.text,
-        "picturePath": _patientPicture?.path,
-      };
-
-      print("Patient data saved: $patientData");
-
-      // Navigate to success or reset form
+  // Function to submit patient details
+  Future<void> _submitForm() async {
+    if (!_formKey.currentState!.validate() || _patientImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Patient added successfully! PID: $_patientId")),
+        const SnackBar(
+            content: Text('Please fill all fields and take a patient picture')),
       );
+      return;
+    }
 
-      _formKey.currentState?.reset();
-      setState(() {
-        _patientPicture = null;
-        _selectedSex = null;
-      });
+    final patientData = {
+      "name": _nameController.text,
+      "age": _ageController.text,
+      "sex": _sexController.text,
+      "weight": _weightController.text,
+      "bloodPressure": _bpController.text,
+      "healthHistory": _historyController.text,
+    };
+
+    final uri = Uri.parse('http://127.0.0.1:3000/add-patient');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['patientData'] = jsonEncode(patientData);
+    request.files.add(
+      await http.MultipartFile.fromPath('patientImage', _patientImage!.path),
+    );
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(await response.stream.bytesToString())
+            as Map<String, dynamic>;
+
+        setState(() {
+          _uniquePid = responseData['pid'];
+          _showAddPrescription = true;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Patient data submitted successfully!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Submission failed! Please try again.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+  // Function to upload prescription
+  Future<void> _addPrescription() async {
+    if (_uniquePid == null || _uniquePid!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Patient ID not found!')),
+      );
+      return;
+    }
+
+    final uri = Uri.parse('http://127.0.0.1:3000/add-prescription');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['pid'] = _uniquePid!;
+    request.files.add(
+      await http.MultipartFile.fromPath(
+          'prescriptionImage', _prescriptionImage!.path),
+    );
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Prescription added successfully!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to add prescription!')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
     }
   }
 
@@ -79,47 +153,46 @@ class _AddPatientPageState extends State<AddPatientPage> {
         child: Form(
           key: _formKey,
           child: ListView(
-            children: <Widget>[
-              // Patient Name
+            children: [
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Patient Name'),
+                decoration: const InputDecoration(labelText: 'Patient Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
+                    return 'Please enter patient name';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
-              // Age
               TextFormField(
                 controller: _ageController,
-                decoration: InputDecoration(labelText: 'Age'),
+                decoration: const InputDecoration(labelText: 'Age'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the age';
+                    return 'Please enter age';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
-              // Sex
               DropdownButtonFormField<String>(
-                value: _selectedSex,
+                value:
+                    _sexController.text.isNotEmpty ? _sexController.text : null,
                 items: ['Male', 'Female', 'Other']
-                    .map((sex) => DropdownMenuItem<String>(
+                    .map((sex) => DropdownMenuItem(
                           value: sex,
                           child: Text(sex),
                         ))
                     .toList(),
                 onChanged: (value) {
                   setState(() {
-                    _selectedSex = value;
+                    _sexController.text = value!;
                   });
                 },
-                decoration: InputDecoration(labelText: 'Sex'),
+                decoration: const InputDecoration(labelText: 'Sex'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please select sex';
@@ -128,20 +201,12 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 },
               ),
               const SizedBox(height: 20),
-              // Weight
               TextFormField(
                 controller: _weightController,
-                decoration: InputDecoration(labelText: 'Weight'),
+                decoration: const InputDecoration(labelText: 'Weight'),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the weight';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 20),
-              // Blood Pressure
               TextFormField(
                 controller: _bloodPressureController,
                 decoration: const InputDecoration(labelText: 'Blood Pressure'),
@@ -153,7 +218,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 },
               ),
               const SizedBox(height: 20),
-              // Previous Health History
               TextFormField(
                 controller: _healthHistoryController,
                 decoration: const InputDecoration(labelText: 'Health History'),
@@ -164,26 +228,29 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
-              // Picture Upload
-              TextButton(
-                onPressed: () {
-                  _pickImage(ImageSource.camera);
-                },
-                child: Text(_patientPicture == null
-                    ? 'Take Patient Picture'
-                    : 'Change Patient Picture'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _takePatientPicture,
+                child: const Text('Take Patient Picture'),
               ),
-              _patientPicture != null
-                  ? Image.file(_patientPicture!, height: 150)
-                  : Container(),
-                  const SizedBox(height: 20),
-              // Submit Button
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
-              if (_patientId != null) Text('Generated PID: $_patientId'),
+              if (_showAddPrescription) ...[
+                const SizedBox(height: 32),
+                const Text('Add Prescription', style: TextStyle(fontSize: 18)),
+                ElevatedButton(
+                  onPressed: _addPrescriptionImage,
+                  child: const Text('Capture Prescription Image'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _addPrescription,
+                  child: const Text('Upload Prescription'),
+                ),
+              ],
             ],
           ),
         ),
