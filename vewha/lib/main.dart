@@ -6,15 +6,10 @@ import 'package:Vewha/Screens/Welcome/splash_screen.dart';
 import 'package:Vewha/Components/constants.dart';
 import 'package:Vewha/Screens/Welcome/welcome_screen.dart';
 // Local Notifications
-//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 // Import Calendar Page
 import 'package:Vewha/Screens/Home/calendar.dart';
-
-// Global instance of the notifications plugin
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
 
 // wait till firebase is inittialized before rendering front end
 void main() async {
@@ -35,20 +30,6 @@ void main() async {
 
   // Initialize Timezones (Required for scheduling notifications)
   tz.initializeTimeZones();
-
-  // Initialize Local Notifications
-  // const AndroidInitializationSettings androidInitSettings =
-  //     AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  // final InitializationSettings initSettings =
-  //     InitializationSettings(android: androidInitSettings);
-
-  // await flutterLocalNotificationsPlugin.initialize(initSettings,
-  //     onDidReceiveNotificationResponse: (NotificationResponse response) async {
-  //   String? payload = response.payload;
-  //   // Your logic here
-  // }
-  // );
 
   //Run the app
   runApp(const MyApp());

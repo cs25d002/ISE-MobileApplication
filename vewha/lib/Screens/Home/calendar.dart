@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
-import 'package:Vewha/Screens/Home/notification_helper.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -109,8 +108,8 @@ class _CalendarPageState extends State<CalendarPage> {
               right: -10,
               top: -10,
               child: SizedBox(
-                width: 150,
-                height: 150,
+                width: 120,
+                height: 120,
                 child: Lottie.asset('assets/animations/time.json'),
               ),
             ),
