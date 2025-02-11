@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      // home: const WelcomeScreen(), // using current spash screen crashes
+      // home: const WelcomeScreen(), // debug faster with splash screen
       home:
           const SplashScreen(), // need to modify to keep login pages on top of HOME if user creds not found locally
     );

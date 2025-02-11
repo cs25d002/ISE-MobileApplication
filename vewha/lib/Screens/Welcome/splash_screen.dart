@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Vewha/Screens/Welcome/welcome_screen.dart';
-import 'package:Vewha/Screens/Home/home_page.dart'; // Import the HomeScreen file
+//import 'package:Vewha/Screens/Home/home_page.dart'; 
+// Import the HomeScreen file, if user cred already login in
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

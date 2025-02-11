@@ -3,6 +3,7 @@ import 'package:Vewha/chatbot/chatbot_page.dart';
 import 'package:lottie/lottie.dart';
 import 'add_patient.dart';
 import 'package:Vewha/Screens/Home/calendar.dart';
+import 'doctor_profile.dart';
 
 class GreetingPage extends StatelessWidget {
   final String email;
@@ -15,10 +16,31 @@ class GreetingPage extends StatelessWidget {
     String username = email.split('@')[0];
 
     return Scaffold(
+      
       appBar: AppBar(
         title: const Text('Welcome'),
         backgroundColor: const Color.fromARGB(255, 121, 68, 255),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              // Navigate to DoctorProfilePage
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DoctorProfilePage( // currently keep some default param values
+                    name: 'Dr. $username', // have to make this a simple call with no arg,
+                    age: 35, // server needds to fetch the user details accordingly
+                    department: 'Cardiology', // possibily to add/update profile info
+                    qualification: 'MD, PhD',
+                    hospital: 'City General Hospital',
+                    experience: '10 years',
+                  ),
+                ), );
+            },
+          ), ],
       ),
+
       body: SafeArea(
         child: Center(
           child: Column(
@@ -29,6 +51,7 @@ class GreetingPage extends StatelessWidget {
                 height: 250,
                 width: 250,
               ),
+              
               const SizedBox(height: 20),
               Text(
                 'Hello Dr. $username', // Use extracted username
@@ -37,6 +60,7 @@ class GreetingPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
               const SizedBox(height: 10),
               const Text(
                 'Great day, huh?',
@@ -45,6 +69,7 @@ class GreetingPage extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
+
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
@@ -56,6 +81,7 @@ class GreetingPage extends StatelessWidget {
                 },
                 child: const Text(' Add Patient'),
               ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -66,6 +92,7 @@ class GreetingPage extends StatelessWidget {
                 },
                 child: const Text('Search for Patient'),
               ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -79,6 +106,7 @@ class GreetingPage extends StatelessWidget {
                 },
                 child: const Text('Scheduled Appointments'),
               ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -95,6 +123,7 @@ class GreetingPage extends StatelessWidget {
             ],
           ),
         ),
+        
       ),
     );
   }
