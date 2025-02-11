@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Components/responsive.dart';
+import 'package:Vewha/Components/responsive.dart';
 
 import '../_shared/background.dart';
 import 'login_form.dart';

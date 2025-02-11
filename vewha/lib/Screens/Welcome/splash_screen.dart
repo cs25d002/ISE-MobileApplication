@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
-import 'package:flutter_auth/Screens/Home/home_page.dart'; // Import the HomeScreen file
+import 'package:Vewha/Screens/Welcome/welcome_screen.dart';
+import 'package:Vewha/Screens/Home/home_page.dart'; // Import the HomeScreen file
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 // Import the global notification instance from main.dart
-import 'package:flutter_auth/main.dart';
+import 'package:Vewha/main.dart';
 
 class NotificationHelper {
   static Future<void> scheduleNotification(DateTime eventTime, String title) async {

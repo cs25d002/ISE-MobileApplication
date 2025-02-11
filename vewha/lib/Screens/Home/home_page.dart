@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/chatbot/chatbot_page.dart';
+import 'package:Vewha/chatbot/chatbot_page.dart';
 import 'package:lottie/lottie.dart';
 import 'add_patient.dart';
-import 'package:flutter_auth/Screens/Home/calendar.dart';
+import 'package:Vewha/Screens/Home/calendar.dart';
 
 class GreetingPage extends StatelessWidget {
   final String email;

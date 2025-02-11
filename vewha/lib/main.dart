@@ -2,20 +2,19 @@
 import 'package:firebase_core/firebase_core.dart';
 // Flutter References
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Screens/Welcome/splash_screen.dart';
-import 'package:flutter_auth/Components/constants.dart';
-import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
+import 'package:Vewha/Screens/Welcome/splash_screen.dart';
+import 'package:Vewha/Components/constants.dart';
+import 'package:Vewha/Screens/Welcome/welcome_screen.dart';
 // Local Notifications
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 // Import Calendar Page
-import 'package:flutter_auth/Screens/Home/calendar.dart';
+import 'package:Vewha/Screens/Home/calendar.dart';
 
 // Global instance of the notifications plugin
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
 
 // wait till firebase is inittialized before rendering front end
 void main() async {
@@ -34,7 +33,7 @@ void main() async {
     ),
   );
 
-   // Initialize Timezones (Required for scheduling notifications)
+  // Initialize Timezones (Required for scheduling notifications)
   tz.initializeTimeZones();
 
   // Initialize Local Notifications
@@ -63,7 +62,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Auth',
+      title: 'Vewha',
       theme: ThemeData(
           primaryColor: kPrimaryColor,
           scaffoldBackgroundColor: Colors.white,
