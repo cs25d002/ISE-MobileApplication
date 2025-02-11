@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
-import '../Home/home_page.dart'; // Import the HomeScreen file
+import 'package:Vewha/Screens/Welcome/welcome_screen.dart';
+import 'package:Vewha/Screens/Home/home_page.dart'; // Import the HomeScreen file
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -30,7 +30,8 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Navigate to the HomeScreen after a delay
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(context,
+      Navigator.pushReplacement(
+        context,
         MaterialPageRoute(builder: (context) => const WelcomeScreen()),
       );
     });
@@ -71,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
                   TextSpan(
                     text: "Visual Enhanced Well-Being and Health Assistant",
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -79,7 +80,6 @@ class _SplashScreenState extends State<SplashScreen>
                 ],
               ),
             ),
-
             const SizedBox(height: 10),
             /* const Text(
               "Visual Enhanced Well-being Assistant",
