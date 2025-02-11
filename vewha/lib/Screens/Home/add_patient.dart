@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth/chatbot/chatbot_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_auth/Screens/Home/calendar.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});
@@ -286,6 +287,15 @@ class _AddPatientPageState extends State<AddPatientPage> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ChatbotPage()),
+            );
+            // } else {
+            //   // Handle other navigation logic here
+            //   print("Navigated to section: $index");
+          } else if (index == 2) {
+            //Navigate to CalendarPage when "Appointments" icon is clicked
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CalendarPage()),
             );
           } else {
             // Handle other navigation logic here
