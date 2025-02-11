@@ -247,7 +247,7 @@ class _CalendarPageState extends State<CalendarPage> {
     });
 
     // Schedule Notification 15 min before
-    NotificationHelper.scheduleNotification(eventTime, title);
+    // NotificationHelper.scheduleNotification(eventTime, title);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
