@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #youtube_player_flutter: ^8.1.2
+  youtube_player_iframe: ^4.0.4
   firebase_core: ^3.10.0 # connect firebase 3rd party services
   firebase_auth: ^5.4.1 # connect auth services of firebase
   google_sign_in: ^6.2.2 # google sign in services

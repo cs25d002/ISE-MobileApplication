@@ -3,8 +3,8 @@ import 'package:Vewha/chatbot/chatbot_page.dart';
 import 'package:lottie/lottie.dart';
 import 'add_patient.dart';
 import 'package:Vewha/Screens/Home/calendar.dart';
+import 'package:Vewha/Screens/Home/EHR/ehr_knee.dart';
 import 'doctor_profile.dart';
-
 class GreetingPage extends StatelessWidget {
   final String email;
 
@@ -86,8 +86,12 @@ class GreetingPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Navigate to Search Patient page or logic
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Search for Patient Clicked')),
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Search for Patient Clicked')),
+                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PrescriptionDetailsScreen()), // Navigate to EHR
                   );
                 },
                 child: const Text('Search for Patient'),
