@@ -1,3 +1,4 @@
 {
-  "cmake.sourceDirectory": "E:/APP/ISE-MobileApplication/vewha/windows"
+  "cmake.sourceDirectory": "E:/APP/ISE-MobileApplication/vewha/windows",
+  "cmake.ignoreCMakeListsMissing": true
 }
