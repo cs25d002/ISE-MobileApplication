@@ -6,7 +6,8 @@ import '../../../Components/constants.dart';
 import '../_shared/already_have_an_account_acheck.dart';
 // page refs
 import '../Login/login_screen.dart';
-import '../../Home/home_page.dart';
+//import '../../Home/home_page.dart';
+import 'profile_setup_screen.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -37,11 +38,8 @@ class _SignUpState extends State<SignUpForm> {
           style: TextStyle(fontSize: 20.0),
         )));
 
-        Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GreetingPage(email: email),
-      ),
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => ProfileSetupScreen(email: email),),
     );
     } 
       on FirebaseAuthException catch (e) {
