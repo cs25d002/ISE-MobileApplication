@@ -56,7 +56,7 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 
 ### Patient and Appointment Management
 ![Add Patient](/screenshots/add.jpg) ![Search Patient](/screenshots/search.jpg) <br>
-![Precriptions](/screenshots/prescip.jpg) ![Appointment Calendar](/screenshots/calendar.jpg)
+![Precriptions](/screenshots/prescrip.jpg) ![Appointment Calendar](/screenshots/calendar.jpg)
 
 ### Advanced Features
 ![Chatbot](/screenshots/chat.jpg) ![EHR Viewer](/screenshots/anim.jpg)
