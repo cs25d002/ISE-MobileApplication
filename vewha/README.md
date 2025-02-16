@@ -1,6 +1,5 @@
-# vewha
+# Vewha Project Details
 
-A new Flutter project.
 
 ## Environment Dependencies
 - Android Studio version: "AI-242.23726.103.2422.12816248"
