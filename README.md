@@ -47,6 +47,9 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 
 ## Screenshots & Usage
 
+### Simuation
+![Simulation Video](/screenshots/team3_vewha_app.webm)
+
 ### Welcome and Authentication
 ![Welcome Screen](/screenshots/welcome.jpg) ![Login Screen](/screenshots/login.jpg) <br>
 ![SignUp Screed](/screenshots/sign.jpg) ![Forgot Password](/screenshots/password.jpg)
