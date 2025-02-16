@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'sample.dart'; // Animated page import
 import 'package:Vewha/Screens/Home/AnimatedPrescriptionPage.dart';
+// Animated page import
 
 class PrescriptionPage extends StatefulWidget {
   final String pid;
