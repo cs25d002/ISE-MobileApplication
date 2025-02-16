@@ -49,7 +49,7 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 
 ### Welcome and Authentication
 ![Welcome Screen](/screenshots/welcome.jpg) ![Login Screen](/screenshots/login.jpg) <br>
-![SignUp Screed](/screenshots/sign.png) ![Forgot Password](/screenshots/password.png)
+![SignUp Screed](/screenshots/sign.jpg) ![Forgot Password](/screenshots/password.jpg)
 
 ### Home and Profile Management
 ![Home Page](/screenshots/home.jpg) ![Doctor Profile](/screenshots/profile.jpg)
