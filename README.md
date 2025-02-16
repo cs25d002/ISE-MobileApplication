@@ -61,7 +61,7 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 
 ## How to Use
 
-1. **Installation**: Download the app from the respective app store and install it on your device.
+1. **Installation**: Download the app from the apk file and install it on your device.
 2. **Registration**: Sign up using your professional details or use Google Signup for quicker access.
 3. **Navigation**: Use the bottom navigation bar to switch between different sections like Home, Patients, Appointments, and Chatbot.
 4. **Managing Patients**: Add new patients or search existing ones using the respective forms.
