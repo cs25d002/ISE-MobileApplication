@@ -52,7 +52,14 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 ![SignUp Screed](/screenshots/sign.jpg) ![Forgot Password](/screenshots/password.jpg)
 
 ### Home and Profile Management
-![Home Page](/screenshots/home.jpg) ![Doctor Profile](/screenshots/profile.jpg)
+<div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+  <div style="width: 45%; height: 300px; overflow: hidden; border: 2px solid #ddd; border-radius: 10px;">
+    <img src="/placeholder/home.jpg" alt="Home Page" style="width: 100%; height: 100%; object-fit: cover;">
+  </div>
+  <div style="width: 45%; height: 300px; overflow: hidden; border: 2px solid #ddd; border-radius: 10px;">
+    <img src="/placeholder/profile.jpg" alt="Doctor Profile" style="width: 100%; height: 100%; object-fit: cover;">
+  </div>
+</div>
 
 ### Patient and Appointment Management
 ![Add Patient](/screenshots/add.jpg) ![Search Patient](/screenshots/search.jpg) <br>
