@@ -42,5 +42,16 @@
     "docID": "DOC478494",
     "pid": "PID6654407",
     "imagePath": "/uploads/DOC478494/patient_pics/k.jpg"
+  },
+  {
+    "name": "shilpa",
+    "age": "23",
+    "sex": "Female",
+    "weight": "54",
+    "bloodPressure": "120",
+    "healthHistory": "nil",
+    "docID": "DOC478494",
+    "pid": "PID6578959",
+    "imagePath": "/uploads/DOC478494/patient_pics/shilpa.jpg"
   }
 ]
