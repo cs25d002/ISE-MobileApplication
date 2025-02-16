@@ -48,16 +48,18 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 ## Screenshots & Usage
 
 ### Welcome and Authentication
-![Welcome Screen](/placeholder/welcome.png) ![Login Screen](/placeholder/login.png)
+![Welcome Screen](/screenshots/welcome.jpg) ![Login Screen](/screenshots/login.jpg) <br>
+![SignUp Screed](/screenshots/sign.png) ![Forgot Password](/screenshots/password.png)
 
 ### Home and Profile Management
-![Home Page](/placeholder/home.png) ![Doctor Profile](/placeholder/profile.png)
+![Home Page](/screenshots/home.jpg) ![Doctor Profile](/screenshots/profile.jpg)
 
 ### Patient and Appointment Management
-![Add Patient](/placeholder/add_patient.png) ![Appointment Calendar](/placeholder/calendar.png)
+![Add Patient](/screenshots/add.jpg) ![Search Patient](/screenshots/search.jpg) <br>
+![Precriptions](/screenshots/prescip.png) ![Appointment Calendar](/screenshots/calendar.jpg)
 
 ### Advanced Features
-![Chatbot](/placeholder/chatbot.png) ![EHR Viewer](/placeholder/ehr.png)
+![Chatbot](/screenshots/chat.jpg) ![EHR Viewer](/screenshots/anim.jpg)
 
 ## How to Use
 
