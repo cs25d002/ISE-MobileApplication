@@ -74,4 +74,4 @@ For any issues or feedback, please contact our support team through the app's se
 
 ---
 
-**Note**: link to our proj stuff details
+**Note**: [LLM's Usage and Project Environment Setup](/vewha/README.md)
