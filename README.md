@@ -54,7 +54,7 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 ### Home and Profile Management
 | Home Page | Doctor Profile |
 |-----------|----------------|
-| <img src="/placeholder/home.png" alt="Home Page" width="200" height="355" style="border: 2px solid #ddd; border-radius: 10px;"> | <img src="/placeholder/profile.png" alt="Doctor Profile" width="200" height="355" style="border: 2px solid #ddd; border-radius: 10px;"> |
+| <img src="/placeholder/home.jpg" alt="Home Page" width="200" height="355" style="border: 2px solid #ddd; border-radius: 10px;"> | <img src="/placeholder/profile.jpg" alt="Doctor Profile" width="200" height="355" style="border: 2px solid #ddd; border-radius: 10px;"> |
 
 ### Patient and Appointment Management
 ![Add Patient](/screenshots/add.jpg) ![Search Patient](/screenshots/search.jpg) <br>
