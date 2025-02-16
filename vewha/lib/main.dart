@@ -4,12 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Vewha/Screens/Welcome/splash_screen.dart';
 import 'package:Vewha/Components/constants.dart';
-import 'package:Vewha/Screens/Welcome/welcome_screen.dart';
 // Local Notifications
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 // Import Calendar Page
-import 'package:Vewha/Screens/Home/calendar.dart';
 
 // wait till firebase is inittialized before rendering front end
 void main() async {
@@ -36,7 +33,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override

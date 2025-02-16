@@ -7,8 +7,8 @@ import '../../../Services/auth.dart';
 
 class SocalSignUp extends StatelessWidget {
   const SocalSignUp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,12 @@
+// This file contains the code for the calendar page of the app.
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 
+
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+  const CalendarPage({super.key});
 
   @override
   _CalendarPageState createState() => _CalendarPageState();
@@ -127,6 +129,67 @@ class _CalendarPageState extends State<CalendarPage> {
           ],
         ),
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person_add),
+      //       label: 'Add Patient',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.search),
+      //       label: 'Search Patient',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.calendar_today),
+      //       label: 'Appointments',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.message),
+      //       label: 'Messages',
+      //     ),
+      //   ],
+      //   selectedItemColor:
+      //       Theme.of(context).primaryColor, // Uses theme's primary color
+      //   unselectedItemColor:
+      //       Theme.of(context).disabledColor, // Uses theme's disabled color
+      //   backgroundColor: Theme.of(context)
+      //       .scaffoldBackgroundColor, // Matches app's background
+      //   onTap: (index) {
+      //     if (index == 3) {
+      //       // Navigate to ChatPage when "Messages" icon is clicked
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => ChatbotPage()),
+      //       );
+      //       // } else {
+      //       //   // Handle other navigation logic here
+      //       //   print("Navigated to section: $index");
+      //     } else if (index == 1) {
+      //       //Navigate to CalendarPage when "Appointments" icon is clicked
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => SearchPatientPage()),
+      //       );
+      //       }
+      //       else if (index == 2) {
+      //       //Navigate to CalendarPage when "Appointments" icon is clicked
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => CalendarPage()),
+      //       );
+      //     } else if (index == 0) {
+      //       //Navigate to CalendarPage when "Appointments" icon is clicked
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => AddPatientPage()),
+      //       );
+      //     } 
+      //     else {
+      //       // Handle other navigation logic here
+      //       print("Navigated to section: $index");
+      //     }
+      //   },
+      // ),
     );
   }
 
@@ -255,6 +318,7 @@ class _CalendarPageState extends State<CalendarPage> {
           style: const TextStyle(fontSize: 16),
         ),
       ),
+      
     );
   }
 }

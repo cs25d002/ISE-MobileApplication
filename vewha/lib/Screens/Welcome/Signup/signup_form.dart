@@ -22,7 +22,8 @@ class _SignUpState extends State<SignUpForm> {
   TextEditingController mailcontroller = TextEditingController();
 
   final _formkey = GlobalKey<FormState>(); // helps to validate each text-field
-
+  
+  
   registration() async {
     if (password.isNotEmpty &&
         namecontroller.text != "" &&
@@ -30,6 +31,8 @@ class _SignUpState extends State<SignUpForm> {
       try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
+
+        
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(

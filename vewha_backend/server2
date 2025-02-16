@@ -1,0 +1,171 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const fs = require('fs-extra');
+const path = require('path');
+const moment = require('moment');
+
+const app = express();
+const PORT = 3000;
+
+app.use(bodyParser.json());
+
+const DOCTOR_INFO_FILE = 'doctor_info.json';
+const PATIENT_INFO_FILE = 'patient_info.json';
+
+// Helper function to generate a unique ID
+const generatePID = () => `PID${Math.floor(1000000 + Math.random() * 9000000)}`;
+const generateDocID = () => `DOC${Math.floor(100000 + Math.random() * 900000)}`;
+
+// Helper function to sanitize filenames
+const sanitizeFilename = (name) => name.replace(/[^a-zA-Z0-9]/g, "_");
+
+// Read doctor data
+const readDoctorData = async () => {
+    if (!fs.existsSync(DOCTOR_INFO_FILE)) return {};
+    return JSON.parse(await fs.readFile(DOCTOR_INFO_FILE, 'utf8'));
+};
+
+// Save doctor data
+const saveDoctorData = async (data) => {
+    await fs.writeFile(DOCTOR_INFO_FILE, JSON.stringify(data, null, 2));
+};
+
+// API to register doctor when they open the Greeting Page
+app.post('/register-doctor', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        const username = email.split('@')[0];
+        let doctors = await readDoctorData();
+
+        // Check if doctor already exists
+        let docID = Object.keys(doctors).find(key => doctors[key] === username);
+
+        if (!docID) {
+            docID = generateDocID();
+            doctors[docID] = username;
+            await saveDoctorData(doctors);
+        }
+
+        // Create doctor's directory if it doesn't exist
+        const doctorDir = path.join('uploads/doctors', docID);
+        await fs.ensureDir(doctorDir);
+
+        res.status(200).json({ message: 'Doctor registered successfully', docID });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Helper function to read patient data
+const readPatientData = async () => {
+    if (!fs.existsSync(PATIENT_INFO_FILE)) return [];
+    return JSON.parse(await fs.readFile(PATIENT_INFO_FILE, 'utf8'));
+};
+
+// Helper function to save patient data
+const savePatientData = async (data) => {
+    await fs.writeFile(PATIENT_INFO_FILE, JSON.stringify(data, null, 2));
+};
+
+// Multer storage configuration
+const storage = multer.diskStorage({
+    destination: async (req, file, cb) => {
+        let folderPath;
+
+        if (req.url === '/add-patient') {
+            folderPath = 'uploads/patient_pic';
+        } else if (req.url === '/add-prescription') {
+            const pid = req.body.pid || req.query.pid;
+            if (!pid) {
+                return cb(new Error("PID is required for prescription uploads"));
+            }
+            folderPath = path.join('uploads', pid);
+        }
+
+        await fs.ensureDir(folderPath);
+        cb(null, folderPath);
+    },
+    filename: (req, file, cb) => {
+        let filename;
+
+        if (req.url === '/add-patient') {
+            const { name } = JSON.parse(req.body.patientData);
+            const sanitizedFilename = sanitizeFilename(name);
+            filename = `${sanitizedFilename}.jpg`;
+        } else if (req.url === '/add-prescription') {
+            const timestamp = moment().format('YYYYMMDD_HHmm');
+            filename = `${timestamp}.png`;
+        }
+
+        cb(null, filename);
+    },
+});
+
+const upload = multer({ storage });
+
+/**
+ * Add Patient Route
+ */
+app.post('/add-patient', upload.single('patientImage'), async (req, res) => {
+    try {
+        const pid = generatePID();
+        const { name, age, sex, weight, bloodPressure, healthHistory } = JSON.parse(req.body.patientData);
+        const sanitizedFilename = sanitizeFilename(name);
+
+        const newPatient = {
+            pid,
+            name,
+            age,
+            sex,
+            weight,
+            bloodPressure,
+            healthHistory,
+            imagePath: `/uploads/patient_pic/${sanitizedFilename}.jpg`
+        };
+
+        let patients = await readPatientData();
+        patients.push(newPatient);
+        await savePatientData(patients);
+
+        res.status(200).json({ message: 'Patient added successfully!', pid });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Route to handle prescription upload
+app.post('/add-prescription', upload.single('prescriptionImage'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No prescription image uploaded' });
+        }
+        res.status(200).json({ message: 'Prescription uploaded successfully!' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+/**
+ * Get All Patients Route
+ */
+app.get('/patients', async (req, res) => {
+    try {
+        const patients = await readPatientData();
+        res.json(patients);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Start Server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://10.0.2.2:${PORT}`);
+});

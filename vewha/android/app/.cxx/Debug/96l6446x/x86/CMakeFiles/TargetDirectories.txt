@@ -1,0 +1,2 @@
+/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/x86/CMakeFiles/edit_cache.dir
+/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/x86/CMakeFiles/rebuild_cache.dir

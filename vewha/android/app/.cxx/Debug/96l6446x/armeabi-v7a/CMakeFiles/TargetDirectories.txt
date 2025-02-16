@@ -1,0 +1,2 @@
+/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/armeabi-v7a/CMakeFiles/rebuild_cache.dir

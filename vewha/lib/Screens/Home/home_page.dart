@@ -1,24 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:Vewha/chatbot/chatbot_page.dart';
 import 'package:lottie/lottie.dart';
 import 'add_patient.dart';
 import 'package:Vewha/Screens/Home/calendar.dart';
-import 'package:Vewha/Screens/Home/EHR/ehr_knee.dart';
+// import 'package:Vewha/Screens/Home/EHR/ehr_knee.dart';
+import 'search_patient.dart';
+import 'doctor_profile.dart';
 
-class GreetingPage extends StatelessWidget {
+class GreetingPage extends StatefulWidget {
   final String email;
+  
 
-  const GreetingPage({Key? key, required this.email}) : super(key: key);
+  const GreetingPage({super.key, required this.email});
+
+  @override
+  _GreetingPageState createState() => _GreetingPageState();
+}
+
+class _GreetingPageState extends State<GreetingPage> {
+  String? docID; // Store the docID
+  @override
+  void initState() {
+    super.initState();
+    registerDoctor();
+  }
+
+  Future<void> registerDoctor() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/register-doctor'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': widget.email}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      setState(() {
+        docID = responseData['docID']; // Store docID in state
+      });
+      print('Doctor registered successfully: ${jsonDecode(response.body)['docID']}');
+    } else {
+      print('Failed to register doctor: ${response.body}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Extract the username (part before '@')
-    String username = email.split('@')[0];
+    String username = widget.email.split('@')[0];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Welcome'),
         backgroundColor: const Color.fromARGB(255, 121, 68, 255),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DoctorProfilePage(
+                    name: 'Dr. $username',
+                    age: 35,
+                    department: 'Cardiology',
+                    qualification: 'MD, PhD',
+                    hospital: 'City General Hospital',
+                    experience: '10 years',
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -26,74 +81,58 @@ class GreetingPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Lottie.asset(
-                'assets/animations/doctorProfile.json', // Path to your image
+                'assets/animations/doctorProfile.json',
                 height: 250,
                 width: 250,
               ),
               const SizedBox(height: 20),
               Text(
-                'Hello Dr. $username', // Use extracted username
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+                'Hello Dr. $username',
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               const Text(
                 'Great day, huh?',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to AddPatientPage
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AddPatientPage()),
-                  );
-                },
-                child: const Text(' Add Patient'),
-              ),
+             ElevatedButton(
+                  onPressed: () {
+                    if (docID != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddPatientPage(docID: docID!),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please wait, fetching doctor ID...")),
+                      );
+                    }
+                  },
+                  child: const Text('Add Patient'),
+                ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to Search Patient page or logic
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(content: Text('Search for Patient Clicked')),
-                  // );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PrescriptionDetailsScreen()), // Navigate to EHR
-                  );
+                  if (docID != null) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPatientPage(docID: docID!)));
+                }
                 },
                 child: const Text('Search for Patient'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to Search Patient page or logic
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CalendarPage()),
-                  );
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(content: Text('Appointments')),
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));
                 },
                 child: const Text('Scheduled Appointments'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to Search Patient page or logic
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatbotPage()),
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(content: Text('Messages')),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatbotPage()));
                 },
                 child: const Text('AI Chatbot'),
               ),
@@ -104,6 +143,7 @@ class GreetingPage extends StatelessWidget {
     );
   }
 }
+
 
 /*import 'package:flutter/material.dart';
 import 'package:flutter_auth/chatbot/chatbot_page.dart';

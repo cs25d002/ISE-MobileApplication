@@ -1,20 +1,12 @@
 [
   {
-    "pid": "fc61219f-8d9c-4db5-8cd9-8a1e30ee1495",
-    "name": "k",
-    "age": "25",
-    "sex": "Female",
-    "weight": "58",
-    "bloodPressure": "138",
-    "healthHistory": "nil"
-  },
-  {
-    "pid": "5120e4f0-1f0e-4236-b5c8-2a58d2d043df",
-    "name": "gshs",
+    "pid": "PID7502608",
+    "name": "jj",
     "age": "23",
     "sex": "Female",
-    "weight": "68",
-    "bloodPressure": "123",
-    "healthHistory": "nil"
+    "weight": "123",
+    "bloodPressure": "12313",
+    "healthHistory": "nilnil",
+    "imagePath": "/uploads/patient_pic/jj.jpg"
   }
 ]

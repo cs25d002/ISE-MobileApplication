@@ -7,11 +7,11 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final bool login, social;
   final Function? press;
   const AlreadyHaveAnAccountCheck({
-    Key? key,
+    super.key,
     this.login = true, // navigation based on bool val for "is this login page?"
     this.social = true, // to show social icon for diff login ways
     required this.press,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
