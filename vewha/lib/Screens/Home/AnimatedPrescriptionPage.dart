@@ -10,7 +10,7 @@ class PrescriptionAnimationScreen extends StatefulWidget {
   final String pid;
   final String filename;
 
-  PrescriptionAnimationScreen({
+  const PrescriptionAnimationScreen({super.key, 
     required this.docID,
     required this.pid,
     required this.filename,
@@ -170,10 +170,6 @@ class _PrescriptionAnimationScreenState
 
   Widget _buildMedicationTable() {
     List<dynamic> medications = prescriptionData?["medications"] ?? [];
-
-    if (medications is! List) {
-      medications = [];
-    }
 
     return Container(
       margin: EdgeInsets.only(top: 10),
