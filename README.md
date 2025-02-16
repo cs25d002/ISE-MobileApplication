@@ -23,9 +23,9 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 | Doctor Profile in Home Page                  | Logesh        |
 | Doctor Profile Setup after Signup            | Logesh        |
 | Add Patient Screen                           | Shilpa        |
-| Search Patient Screen                        | Shilpa        |
+| Search Patient Screen                        | Shilpa & kavya|
 | Prescription Screen                          | Shilpa        |
-| EHR Screen                                   | Shilpa        |
+| EHR Screen                                   | Shilpa &kavya |
 | Chatbot Interface                            | Kavya         |
 | Calendar & Appointment Handler               | Kavya         |
 | Responsiveness for Various Devices           | Logesh        |
@@ -41,7 +41,7 @@ Welcome to the **Doctor's Assistant App**, a comprehensive mobile application de
 | Add Patient - Form details handler                   | Shilpa     |
 | Patient Photo Handler                                | Shilpa     |
 | Prescription Upload Handler                          | Shilpa     |
-| LLM invocation (OCR)                                 | Shilpa     |
+| LLM invocation (OCR)                                 | Shilpa & kavya|
 | Animation of Prescription                           | Shilpa     |
 
 
