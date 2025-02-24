@@ -31,7 +31,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
   Future<void> _fetchPrescriptions() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.25.84.132:3000/prescriptions?docID=${widget.docID}&pid=${widget.pid}'),
+        Uri.parse('http://10.0.2.2:3000/prescriptions?docID=${widget.docID}&pid=${widget.pid}'),
       );
 
       if (response.statusCode == 200) {
@@ -67,7 +67,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
       return;
     }
 
-    final uri = Uri.parse('http://10.25.84.132:3000/add-prescription');
+    final uri = Uri.parse('http://10.0.2.2:3000/add-prescription');
     final request = http.MultipartRequest('POST', uri);
     request.fields['docID'] = widget.docID;
     request.fields['pid'] = widget.pid;
@@ -108,7 +108,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
   // Process OCR and navigate to animated screen
   void _processOCR(BuildContext context, String imageUrl) async {
     try {
-      final Uri url = Uri.parse("http://10.25.84.132:3000/process-ocr");
+      final Uri url = Uri.parse("http://10.0.2.2:3000/process-ocr");
       String filename = imageUrl.split('/').last;
 
       final response = await http.post(

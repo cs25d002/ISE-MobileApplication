@@ -6,7 +6,7 @@ const path = require('path');
 const moment = require('moment');
 
 const app = express();
-const HOST = "0.0.0.0"
+const HOST = "10.0.2.2"
 const PORT = 3000;
 
 app.use(bodyParser.json());
