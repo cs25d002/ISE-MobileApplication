@@ -60,7 +60,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
       "docID": widget.docID,
     };
 
-    final uri = Uri.parse('http://10.0.2.2:3000/add-patient');
+    final uri = Uri.parse('http://10.25.84.132:3000/add-patient');
     final request = http.MultipartRequest('POST', uri);
     request.fields['patientData'] = jsonEncode(patientData);
     request.files.add(await http.MultipartFile.fromPath('patientImage', _patientImage!.path));
@@ -90,7 +90,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
       return;
     }
 
-    final uri = Uri.parse('http://10.0.2.2:3000/add-prescription');
+    final uri = Uri.parse('http://10.25.84.132:3000/add-prescription');
     final request = http.MultipartRequest('POST', uri);
     request.fields['docID'] = widget.docID; 
     request.fields['pid'] = _uniquePid!;
@@ -142,7 +142,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                       keyboardType: TextInputType.number,
                     ),
               const SizedBox(height: 20),
-              TextFormField(controller: _bpController, decoration: const InputDecoration(labelText: 'Blood Pressure'), inputFormatters: [FilteringTextInputFormatter.digitsOnly],validator: (value) => value!.isEmpty ? 'Enter BP' : null),
+              TextFormField(controller: _bpController, decoration: const InputDecoration(labelText: 'Blood Pressure'),validator: (value) => value!.isEmpty ? 'Enter BP' : null),
               const SizedBox(height: 20),
               TextFormField(controller: _historyController, decoration: const InputDecoration(labelText: 'Health History'), validator: (value) => value!.isEmpty ? 'Enter History' : null),
               

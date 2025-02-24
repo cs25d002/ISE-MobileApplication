@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:Vewha/Screens/Home/AnimatedPrescriptionPage.dart';
-// Animated page import
+import 'package:Vewha/Screens/Home/AnimatedPrescriptionPage.dart'; // Import animated page
 
 class PrescriptionPage extends StatefulWidget {
   final String pid;
@@ -20,7 +19,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
   List<String> _prescriptions = [];
   bool _isLoading = true;
   File? _prescriptionImage;
-  final ImagePicker picker = ImagePicker(); // Ensure ImagePicker is initialized
+  final ImagePicker picker = ImagePicker();
 
   @override
   void initState() {
@@ -32,7 +31,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
   Future<void> _fetchPrescriptions() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:3000/prescriptions?docID=${widget.docID}&pid=${widget.pid}'),
+        Uri.parse('http://10.25.84.132:3000/prescriptions?docID=${widget.docID}&pid=${widget.pid}'),
       );
 
       if (response.statusCode == 200) {
@@ -68,7 +67,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
       return;
     }
 
-    final uri = Uri.parse('http://10.0.2.2:3000/add-prescription');
+    final uri = Uri.parse('http://10.25.84.132:3000/add-prescription');
     final request = http.MultipartRequest('POST', uri);
     request.fields['docID'] = widget.docID;
     request.fields['pid'] = widget.pid;
@@ -95,10 +94,21 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
     }
   }
 
+  void _processOCR2(BuildContext context, String imageUrl) {
+  // Navigate directly to the animated prescription page when an image is clicked
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) =>  PrescriptionAnimationScreen(),
+    ),
+  );
+}
+
+
   // Process OCR and navigate to animated screen
   void _processOCR(BuildContext context, String imageUrl) async {
     try {
-      final Uri url = Uri.parse("http://10.0.2.2:3000/process-ocr");
+      final Uri url = Uri.parse("http://10.25.84.132:3000/process-ocr");
       String filename = imageUrl.split('/').last;
 
       final response = await http.post(
@@ -114,24 +124,27 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String extractedText = data['text'];
-        print("OCR Result: ${data['text']}");
 
+        print("OCR Result: $extractedText");
+
+        // Navigate to animated prescription screen with extracted text
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PrescriptionAnimationScreen(
-              docID: "your_doc_id",
-              pid: "your_patient_id",
-              filename: "your_prescription_filename.jpg",
-            ),
+            builder: (context) =>  PrescriptionAnimationScreen(),
           ),
         );
-
       } else {
         print("OCR Error: ${response.body}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('OCR Processing Failed!')),
+        );
       }
     } catch (e) {
       print("OCR Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
   }
 
@@ -155,7 +168,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                     String imageUrl = _prescriptions[index];
                     String fileName = imageUrl.split('/').last;
                     return GestureDetector(
-                      onTap: () => _processOCR(context, imageUrl),
+                      onTap: () => _processOCR2(context, imageUrl),
                       child: Card(
                         elevation: 3,
                         shape: RoundedRectangleBorder(

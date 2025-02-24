@@ -30,7 +30,7 @@ class _GreetingPageState extends State<GreetingPage> {
 
   Future<void> registerDoctor() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:3000/register-doctor'),
+      Uri.parse('http://10.25.84.132:3000/register-doctor'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': widget.email}),
     );
@@ -56,7 +56,10 @@ class _GreetingPageState extends State<GreetingPage> {
         backgroundColor: const Color.fromARGB(255, 121, 68, 255),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
+             icon: CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/images/icon.png'), // Doctor Image
+            ),
             onPressed: () {
               Navigator.push(
                 context,

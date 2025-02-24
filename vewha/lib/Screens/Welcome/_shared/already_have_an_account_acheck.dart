@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Vewha/Components/constants.dart';
 
-import 'socal_sign_up.dart';
 
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final bool login, social;
@@ -16,7 +15,8 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: 
-    [ social ? const SocalSignUp() : const SizedBox.shrink(),
+    [ 
+      //social ? const SocalSignUp() : const SizedBox.shrink(),
       const SizedBox(height: pad_norm),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,

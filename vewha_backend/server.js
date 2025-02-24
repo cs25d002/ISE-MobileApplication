@@ -6,6 +6,7 @@ const path = require('path');
 const moment = require('moment');
 
 const app = express();
+const HOST = "0.0.0.0"
 const PORT = 3000;
 
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ const saveDoctorData = async (data) => {
 
 app.post('/register-doctor', async (req, res) => {
     try {
+        console.log('req.body:', req.body);
         const { email } = req.body;
         if (!email) return res.status(400).json({ error: 'Email is required' });
 
@@ -155,5 +157,5 @@ app.use('/', ocrRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://10.0.2.2:${PORT}`);
+    console.log(`Server is running on http://${HOST}:${PORT}`);
 });

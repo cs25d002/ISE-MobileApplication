@@ -24,7 +24,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
 
   Future<void> fetchPatients(String docID) async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:3000/patients?docID=$docID'),
+    Uri.parse('http://10.25.84.132:3000/patients?docID=$docID'),
   );
 
   if (response.statusCode == 200) {
@@ -86,7 +86,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(
-                        'http://10.0.2.2:3000/uploads/${patient['docID']}/patient_pics/${patient['name']}.jpg'),
+                        'http://10.25.84.132:3000/uploads/${patient['docID']}/patient_pics/${patient['name']}.jpg'),
                     onBackgroundImageError: (_, __) => const Icon(Icons.person),
                   ),
                   title: Text(patient['name']),

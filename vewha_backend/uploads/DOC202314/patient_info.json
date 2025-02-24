@@ -1,0 +1,13 @@
+[
+  {
+    "name": "prethi",
+    "age": "23",
+    "sex": "Female",
+    "weight": "55",
+    "bloodPressure": "120",
+    "healthHistory": "nil",
+    "docID": "DOC202314",
+    "pid": "PID6552261",
+    "imagePath": "/uploads/DOC202314/patient_pics/prethi.jpg"
+  }
+]

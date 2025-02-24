@@ -2,19 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class PrescriptionAnimationScreen extends StatefulWidget {
-  final String docID;
-  final String pid;
-  final String filename;
-
-  PrescriptionAnimationScreen({
-    required this.docID,
-    required this.pid,
-    required this.filename,
-  });
+  const PrescriptionAnimationScreen({super.key});
 
   @override
   _PrescriptionAnimationScreenState createState() =>
@@ -25,18 +15,10 @@ class _PrescriptionAnimationScreenState
     extends State<PrescriptionAnimationScreen> {
   late VideoPlayerController _videoController;
   bool _isVideoInitialized = false;
-  Map<String, dynamic>? prescriptionData;
-  bool _isLoading = true;
-  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    _loadPrescriptionData();
-    _initializeVideo();
-  }
-
-  void _initializeVideo() {
     _videoController = VideoPlayerController.asset("assets/body.mp4")
       ..initialize().then((_) {
         setState(() {
@@ -45,41 +27,6 @@ class _PrescriptionAnimationScreenState
         _videoController.setLooping(true);
         _videoController.play();
       });
-  }
-
-  Future<void> _loadPrescriptionData() async {
-    try {
-      final response = await http.post(
-        Uri.parse("http://10.0.2.2:3000/process-ocr"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "docID": widget.docID,
-          "pid": widget.pid,
-          "filename": widget.filename,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final decodedJson = jsonDecode(response.body);
-
-        if (decodedJson is Map<String, dynamic>) {
-          setState(() {
-            prescriptionData = decodedJson;
-            _isLoading = false;
-          });
-        } else {
-          throw Exception("Invalid JSON format: Expected Map, got ${decodedJson.runtimeType}");
-        }
-      } else {
-        throw Exception("Failed to fetch data: ${response.statusCode}");
-      }
-    } catch (e) {
-      setState(() {
-        _hasError = true;
-        _isLoading = false;
-      });
-      print("OCR Error: $e");
-    }
   }
 
   @override
@@ -95,63 +42,62 @@ class _PrescriptionAnimationScreenState
       appBar: AppBar(
         title: Text(
           "Animated Prescription",
-          style: GoogleFonts.lato(fontWeight: FontWeight.bold),
+          style: GoogleFonts.lato(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, // Title in white
+            fontSize: 20,
+          ),
         ),
-        backgroundColor: Colors.black87,
+        backgroundColor: const Color.fromARGB(221, 50, 50, 50),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : _hasError
-              ? Center(
-                  child: Text(
-                    "Error loading prescription data",
-                    style: GoogleFonts.lato(fontSize: 18, color: Colors.red),
-                  ),
-                )
-              : Stack(
-                  children: [
-                    if (_isVideoInitialized)
-                      Positioned.fill(
-                        child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: SizedBox(
-                            width: _videoController.value.size.width,
-                            height: _videoController.value.size.height,
-                            child: VideoPlayer(_videoController),
-                          ),
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _animatedText("👨‍⚕️ Physician: ${_getSafeValue("physician", "name")}"),
-                            _animatedText("📜 License #: ${_getSafeValue("physician", "license")}"),
-                            _animatedText("🏥 Medical Centre: ${_getSafeValue("physician", "medical_centre")}"),
-                            _animatedText("📞 Phone: ${_getSafeValue("physician", "phone")}"),
-                            SizedBox(height: 20),
-                            _animatedText("👤 Patient: ${_getSafeValue("patient", "name")}"),
-                            _animatedText("🏠 Address: ${_getSafeValue("patient", "address")}"),
-                            _animatedText("📅 Date: ${_getSafeValue("patient", "date")}"),
-                            SizedBox(height: 20),
-                            _buildMedicationTable(),
-                            SizedBox(height: 20),
-                            _animatedText("✍️ Signature: ${_getSafeValue("signature")}", textStyle: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+      body: Stack(
+        children: [
+          if (_isVideoInitialized)
+            Positioned.fill(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _videoController.value.size.width,
+                  height: _videoController.value.size.height,
+                  child: VideoPlayer(_videoController),
                 ),
+              ),
+            )
+          else
+            const Center(child: CircularProgressIndicator()),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _animatedText("Physician: Dr. G. Pe Saddell"),
+                _animatedText("DEA#: GB 05455616 | License #: 976269"),
+                _animatedText(
+                    "Medical Centre: 824 14th Street, New York, NY 91743, USA"),
+                _animatedText("Phone: 1-889-422-0700"),
+                const SizedBox(height: 20),
+                _animatedText("Patient: Naber Oll"),
+                _animatedText("Address: 167 Example St"),
+                _animatedText("Date: 09-11-17"),
+                const SizedBox(height: 20),
+                _buildMedicationTable(),
+                const Spacer(),
+                _animatedText("Signature: [Physician Signature]",
+                    textStyle: GoogleFonts.lato(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
+  /// Function to display animated text with bold styling
   Widget _animatedText(String text, {TextStyle? textStyle}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -159,8 +105,13 @@ class _PrescriptionAnimationScreenState
         animatedTexts: [
           TypewriterAnimatedText(
             text,
-            textStyle: textStyle ?? GoogleFonts.lato(fontSize: 16, color: Colors.black87),
-            speed: Duration(milliseconds: 50),
+            textStyle: textStyle ??
+                GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold, // All text bold
+                  color: const Color.fromARGB(221, 219, 214, 214),
+                ),
+            speed: const Duration(milliseconds: 50),
           ),
         ],
         isRepeatingAnimation: false,
@@ -168,15 +119,41 @@ class _PrescriptionAnimationScreenState
     );
   }
 
+  /// Function to build a sample medication table
   Widget _buildMedicationTable() {
-    List<dynamic> medications = prescriptionData?["medications"] ?? [];
-
-    if (medications is! List) {
-      medications = [];
-    }
+    List<Map<String, String>> medications = [
+      {
+        "name": "Betiloc",
+        "dosage": "100mg",
+        "route": "Oral",
+        "frequency": "BID",
+        "refills": "1"
+      },
+      {
+        "name": "Dorzolamidua",
+        "dosage": "10mg",
+        "route": "Ophthalmic",
+        "frequency": "TID",
+        "refills": "2"
+      },
+      {
+        "name": "Erith",
+        "dosage": "50mg",
+        "route": "Oral",
+        "frequency": "TID",
+        "refills": "None"
+      },
+      {
+        "name": "Orprelol",
+        "dosage": "50mg",
+        "route": "Oral",
+        "frequency": "QP",
+        "refills": "None"
+      }
+    ];
 
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.8),
         borderRadius: BorderRadius.circular(15),
@@ -185,7 +162,7 @@ class _PrescriptionAnimationScreenState
         padding: const EdgeInsets.all(8.0),
         child: Table(
           border: TableBorder.all(color: Colors.black54),
-          columnWidths: {0: FractionColumnWidth(0.3)},
+          columnWidths: const {0: FractionColumnWidth(0.3)},
           children: [
             TableRow(
               decoration: BoxDecoration(color: Colors.grey[300]),
@@ -197,64 +174,47 @@ class _PrescriptionAnimationScreenState
                 _tableHeader("Refills"),
               ],
             ),
-            if (medications.isEmpty)
+            for (var med in medications)
               TableRow(
                 children: [
-                  _tableCell("No Data", isBold: true),
-                  _tableCell(""),
-                  _tableCell(""),
-                  _tableCell(""),
-                  _tableCell(""),
+                  _tableCell(med["name"] ?? "N/A"),
+                  _tableCell(med["dosage"] ?? "N/A"),
+                  _tableCell(med["route"] ?? "N/A"),
+                  _tableCell(med["frequency"] ?? "N/A"),
+                  _tableCell(med["refills"] ?? "N/A"),
                 ],
               ),
-            for (var med in medications)
-              if (med is Map<String, dynamic>)
-                TableRow(
-                  children: [
-                    _tableCell(med["name"]?.toString() ?? "N/A"),
-                    _tableCell(med["dosage"]?.toString() ?? "N/A"),
-                    _tableCell(med["route"]?.toString() ?? "N/A"),
-                    _tableCell(med["frequency"]?.toString() ?? "N/A"),
-                    _tableCell(med["refills"]?.toString() ?? "N/A"),
-                  ],
-                ),
           ],
         ),
       ),
     );
   }
 
+  /// Function to create a bold table header
   Widget _tableHeader(String text) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
         text,
-        style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.bold),
+        style: GoogleFonts.lato(
+          fontSize: 14,
+          fontWeight: FontWeight.bold, // Bold headers
+        ),
       ),
     );
   }
 
-  Widget _tableCell(String text, {bool isBold = false}) {
+  /// Function to create a bold table cell
+  Widget _tableCell(String text) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
         text,
-        style: GoogleFonts.lato(fontSize: 14, fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
+        style: GoogleFonts.lato(
+          fontSize: 14,
+          fontWeight: FontWeight.bold, // Bold table content
+        ),
       ),
     );
-  }
-
-  String _getSafeValue(String key1, [String? key2]) {
-    if (prescriptionData == null) return "N/A";
-
-    var value = prescriptionData![key1];
-    if (value == null) return "N/A";
-
-    if (key2 != null) {
-      var nestedValue = value[key2];
-      return nestedValue is String ? nestedValue : "N/A";
-    }
-
-    return value is String ? value : "N/A";
   }
 }
