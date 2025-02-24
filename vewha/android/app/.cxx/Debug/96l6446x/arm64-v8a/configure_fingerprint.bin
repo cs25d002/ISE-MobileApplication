@@ -2,6 +2,7 @@ C/C++ Structured Logu
 s
 q/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/additional_project_files.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÌˆÒÐÑ2 ²ÔñöÐ2r
 p
 n/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/android_gradle_build.json	ÌˆÒÐÑ2ê ´ÔñöÐ2w
@@ -26,3 +27,29 @@ n
 l/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/symbol_folder_index.txt	ÍˆÒÐÑ2c ¸ÔñöÐ2c
 a
 _/Users/shilpas/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	ÍˆÒÐÑ2¤ ÒòÆïÐ2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Öÿ±÷Ð2 ²ÔñöÐ2r
+p
+n/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/android_gradle_build.json	Öÿ±÷Ð2ê ´ÔñöÐ2w
+u
+s/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/android_gradle_build_mini.json	Öÿ±÷Ð2ï ¸ÔñöÐ2d
+b
+`/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/build.ninja	Öÿ±÷Ð2´É ¨ÔñöÐ2h
+f
+d/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/build.ninja.txt	Öÿ±÷Ð2m
+k
+i/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/build_file_index.txt	Öÿ±÷Ð2_ ¹ÔñöÐ2n
+l
+j/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/compile_commands.json	Öÿ±÷Ð2r
+p
+n/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/compile_commands.json.bin	Öÿ±÷Ð2	x
+v
+t/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/metadata_generation_command.txt	Öÿ±÷Ð2
+Ù ¸ÔñöÐ2k
+i
+g/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/prefab_config.json	Öÿ±÷Ð2( ¸ÔñöÐ2p
+n
+l/Users/shilpas/ISE-MobileApplication/vewha/android/app/.cxx/Debug/96l6446x/arm64-v8a/symbol_folder_index.txt	Öÿ±÷Ð2c ¸ÔñöÐ2c
+a
+_/Users/shilpas/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	Öÿ±÷Ð2¤ ÒòÆïÐ2
+>>>>>>> f70ee1c1f66f62703dcc0c1b36c8fcea623c8447

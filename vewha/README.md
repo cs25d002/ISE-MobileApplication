@@ -1,6 +1,5 @@
-# vewha
+# Vewha Project Details
 
-A new Flutter project.
 
 ## Environment Dependencies
 - Android Studio version: "AI-242.23726.103.2422.12816248"
@@ -10,15 +9,8 @@ A new Flutter project.
 - Flutter version: "3.27.2"
     - google-services: "4.4.2"
 
-## Getting Started
+## LLM Usage
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Gemini Input](../screenshots/llm-1.jpg)
+![Gemini Response](../screenshots/llm-2.jpg)
+![Ouput Json](../screenshots/llm-3.jpg)
