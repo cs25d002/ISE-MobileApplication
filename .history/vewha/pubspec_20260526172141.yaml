@@ -44,7 +44,6 @@ dependencies:
   animated_text_kit: ^4.2.2
   google_fonts: ^6.3.0
   video_player: ^2.8.2
-  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
@@ -85,7 +84,6 @@ flutter:
     - assets/body.mp4
     - assets/images/icon.png
     - assets/images/
-    - assets/anatomy/
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

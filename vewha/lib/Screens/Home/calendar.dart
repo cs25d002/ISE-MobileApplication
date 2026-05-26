@@ -43,7 +43,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.25),
+                    color: primaryColor.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: TableCalendar(
@@ -70,7 +70,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     },
                     calendarStyle: CalendarStyle(
                       todayDecoration: BoxDecoration(
-                        color: accentColor.withOpacity(0.4),
+                        color: accentColor.withValues(alpha: 0.4),
                         shape: BoxShape.circle,
                       ),
                       selectedDecoration: BoxDecoration(

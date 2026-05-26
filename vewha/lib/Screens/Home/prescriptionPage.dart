@@ -78,16 +78,19 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
     try {
       final response = await request.send();
       if (response.statusCode == 200) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Prescription uploaded successfully!')),
         );
         _fetchPrescriptions(); // Refresh UI
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Upload failed!')),
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
@@ -127,6 +130,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
 
         print("OCR Result: $extractedText");
 
+        if (!context.mounted) return;
         // Navigate to animated prescription screen with extracted text
         Navigator.push(
           context,
@@ -136,12 +140,14 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
         );
       } else {
         print("OCR Error: ${response.body}");
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('OCR Processing Failed!')),
         );
       }
     } catch (e) {
       print("OCR Error: $e");
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );

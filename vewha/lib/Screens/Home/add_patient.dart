@@ -73,11 +73,14 @@ class _AddPatientPageState extends State<AddPatientPage> {
           _uniquePid = responseData['pid'];
           _showAddPrescription = true;
         });
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Patient added successfully!')));
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Submission failed!')));
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
@@ -99,11 +102,14 @@ class _AddPatientPageState extends State<AddPatientPage> {
     try {
       final response = await request.send();
       if (response.statusCode == 200) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Prescription uploaded!')));
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Upload failed!')));
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
@@ -124,7 +130,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               TextFormField(controller: _ageController, decoration: const InputDecoration(labelText: 'Age',suffixText: 'years', ), inputFormatters: [FilteringTextInputFormatter.digitsOnly],keyboardType: TextInputType.number, validator: (value) => value!.isEmpty ? 'Enter Age' : null),
               const SizedBox(height: 20),
               DropdownButtonFormField<String>(
-                value: _sexController.text.isNotEmpty ? _sexController.text : null,
+                initialValue: _sexController.text.isNotEmpty ? _sexController.text : null,
                 items: ['Male', 'Female', 'Other'].map((sex) => DropdownMenuItem(value: sex, child: Text(sex))).toList(),
                 onChanged: (value) => setState(() => _sexController.text = value!),
                 decoration: const InputDecoration(labelText: 'Sex'),

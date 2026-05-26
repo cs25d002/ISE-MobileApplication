@@ -20,6 +20,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   resetPassword() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Password Reset Email has been sent!",
@@ -27,6 +28,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       ));
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       if (e.code == "user-not-found") {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(

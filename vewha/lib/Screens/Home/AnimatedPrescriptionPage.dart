@@ -155,7 +155,7 @@ class _PrescriptionAnimationScreenState
     return Container(
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
+        color: Colors.white.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(

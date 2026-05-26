@@ -28,6 +28,7 @@ class _LogInState extends State<LoginForm> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      if (!mounted) return;
       Navigator.push(
       context,
       MaterialPageRoute(
@@ -38,6 +39,7 @@ class _LogInState extends State<LoginForm> {
     on FirebaseAuthException catch (e) {
       // disable email enumeration protection (recently added) inorder to use error codes like user already exist
       // https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.orangeAccent,
           content: Text("${e.code}:${e.message}", // show other types of error

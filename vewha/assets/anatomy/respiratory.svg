@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 400" width="100%" height="100%">
+  <!-- Body base outline -->
+  <g id="body-outline" stroke="#CCCCCC" stroke-width="3" fill="#F5F5F5">
+    <circle cx="100" cy="45" r="22" />
+    <rect x="94" y="67" width="12" height="15" rx="3" />
+    <path d="M 60,82 C 60,82 45,150 45,180 C 45,190 53,190 55,180 L 63,110 L 65,220 C 65,225 70,225 70,220 L 73,380 C 73,387 87,387 87,380 L 97,220 L 103,220 L 113,380 C 113,387 127,387 127,380 L 130,220 C 130,225 135,225 135,220 L 137,110 L 145,180 C 147,190 155,190 155,180 C 155,150 140,82 140,82 Z" />
+  </g>
+  <!-- Highlight region: Respiratory system (Lungs in chest) -->
+  <g fill="#1D9E75" fill-opacity="0.85" stroke="#1D9E75" stroke-width="1.5">
+    <ellipse cx="84" cy="115" rx="10" ry="18" transform="rotate(-5 84 115)" />
+    <ellipse cx="116" cy="115" rx="10" ry="18" transform="rotate(5 116 115)" />
+  </g>
+</svg>

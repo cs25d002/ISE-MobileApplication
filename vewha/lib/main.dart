@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Vewha/Screens/Welcome/splash_screen.dart';
 import 'package:Vewha/Components/constants.dart';
+import 'package:Vewha/screens/patient_view/patient_entry_screen.dart';
 // Local Notifications
 import 'package:timezone/data/latest_all.dart' as tz;
 // Import Calendar Page
@@ -13,17 +14,21 @@ void main() async {
   // try finding dynamic fet app details instead of manually setting
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase with values from the .env file
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey:
-          "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ", // "api_key:current_key here",
-      appId:
-          "1:838890390964:android:1f625e152497dd2caadee1", // "mobilesdk_app_id here",
-      messagingSenderId: "838890390964", // "project_number id here",
-      projectId: "vewha-2d3a2", // "project id here",
-    ),
-  );
+  // Initialize Firebase with values from the .env file (only if not in patient mode)
+  const bool isPatient = String.fromEnvironment('MODE') == 'patient' || 
+                         bool.fromEnvironment('patient_mode', defaultValue: false);
+  if (!isPatient) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey:
+            "AIzaSyAMcCCh44Cz2uBdnHAu7TXQ74BtmKv6YKQ", // "api_key:current_key here",
+        appId:
+            "1:838890390964:android:1f625e152497dd2caadee1", // "mobilesdk_app_id here",
+        messagingSenderId: "838890390964", // "project_number id here",
+        projectId: "vewha-2d3a2", // "project id here",
+      ),
+    );
+  }
 
   // Initialize Timezones (Required for scheduling notifications)
   tz.initializeTimeZones();
@@ -66,9 +71,10 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      // home: const WelcomeScreen(), // using current spash screen crashes
-      home:
-          const SplashScreen(), // need to modify to keep login pages on top of HOME if user creds not found locally
+      home: (const String.fromEnvironment('MODE') == 'patient' ||
+              const bool.fromEnvironment('patient_mode', defaultValue: false))
+          ? const PatientEntryScreen()
+          : const SplashScreen(),
     );
   }
 }

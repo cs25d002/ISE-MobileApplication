@@ -34,6 +34,7 @@ class _SignUpState extends State<SignUpForm> {
 
         
 
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
           "Registered Successfully",
@@ -48,6 +49,7 @@ class _SignUpState extends State<SignUpForm> {
     );
     } 
       on FirebaseAuthException catch (e) {
+        if (!mounted) return;
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: Colors.orangeAccent,

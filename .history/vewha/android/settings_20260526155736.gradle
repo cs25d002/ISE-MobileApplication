@@ -18,7 +18,7 @@ pluginManagement {
 
 plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    id "com.android.application" version "8.6.1" apply false // gradle:(min 8.2.1 <= ver <= wrapper-8.x-distributionUrl)
+    id "com.android.application" version "8.5.0" apply false // gradle:(min 8.2.1 <= ver <= wrapper-8.x-distributionUrl)
     id "org.jetbrains.kotlin.android" version "2.1.0" apply false // (for gradle ver >= 8.5)
 }
 
