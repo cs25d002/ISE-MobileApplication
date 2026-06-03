@@ -52,3 +52,23 @@ app.*.map.json
 /linux/flutter/generated_plugins.cmake
 /linux/flutter/generated_plugin_registrant.h
 /linux/flutter/generated_plugin_registrant.cc
+
+# Patient Layer Study Exclusions
+/study_logs/
+/patient_logs/
+/temp_animations/
+/benchmarks/
+/benchmark_results/
+/test_recordings/
+/study_exports/
+*.cpuprofile
+*.heapprofile
+study_data_*.csv
+study_data_*.json
+assets/animations/temp_*
+test_recordings/
+patient_study_*.csv
+patient_study_*.json
+*.json.gz
+debug_recordings/
+/temporary_validation_artifacts/

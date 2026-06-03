@@ -1,10 +1,13 @@
+// lib/Screens/patient_view/comprehension_screen.dart
+// Interactive MCQ evaluation quizzes with hardened multi-line text wrapping buttons.
+// Utilizes prewarmed PatientTtsService singleton for recovery explanation audio guidance.
+
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import '../../data/prescriptions.dart';
 import '../../data/plain_language_map.dart';
 import '../../logging/study_logger.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
-import '../../logging/performance_tracker.dart';
+import '../../services/patient_tts_service.dart';
 
 class ComprehensionScreen extends StatefulWidget {
   final StudyDrug drug;
@@ -29,8 +32,7 @@ class ComprehensionScreen extends StatefulWidget {
 class _ComprehensionScreenState extends State<ComprehensionScreen> {
   int _currentQ = 0;
   bool _recoveryMode = false;
-  bool _isTtsPlaying = false;
-  FlutterTts? _tts;
+  final PatientTtsService _ttsService = PatientTtsService();
 
   McqQuestion get _currentQuestion => widget.drug.questions[_currentQ];
 
@@ -44,36 +46,40 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
   void initState() {
     super.initState();
     if (widget.showVisuals) {
-      _tts = FlutterTts();
-      PatientModuleRegistry.isTtsInitialized = true;
-      _tts!.setCompletionHandler(() {
-        if (mounted) setState(() => _isTtsPlaying = false);
-      });
+      _ttsService.prewarm();
+      _ttsService.stateNotifier.addListener(_onTtsStateChange);
     }
   }
 
   @override
   void dispose() {
-    _tts?.stop();
+    if (widget.showVisuals) {
+      _ttsService.stateNotifier.removeListener(_onTtsStateChange);
+      _ttsService.stop();
+    }
     super.dispose();
   }
 
+  void _onTtsStateChange() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _playRecoveryAudio() async {
-    if (_tts == null) return;
-    await _tts!.stop();
-    
-    String langCode = 'en-IN';
-    if (widget.language == 'te') langCode = 'te-IN';
-    if (widget.language == 'hi') langCode = 'hi-IN';
-    
-    await _tts!.setLanguage(langCode);
-    await _tts!.setSpeechRate(0.45);
-    
-    final entry = plainLanguageMap[widget.drug.plainLanguageKey]?[widget.language] ?? 
-                  plainLanguageMap[widget.drug.plainLanguageKey]!['en']!;
-    
-    await _tts!.speak(entry.audioText);
-    if (mounted) setState(() => _isTtsPlaying = true);
+    try {
+      String langCode = 'en-IN';
+      if (widget.language == 'te') langCode = 'te-IN';
+      if (widget.language == 'hi') langCode = 'hi-IN';
+      
+      final entry = plainLanguageMap[widget.drug.plainLanguageKey]?[widget.language] ?? 
+                    plainLanguageMap[widget.drug.plainLanguageKey]!['en']!;
+      
+      final textToSpeak = "${entry.whatItIsFor.trim()} ${entry.howToTake.trim()} ${entry.mechanismSteps.join(' ').trim()}";
+      await _ttsService.speak(textToSpeak, langCode);
+    } catch (e) {
+      debugPrint("[TTS COMPREHENSION ERROR] $e");
+    }
   }
 
   void _submitOption(int selectedIndex) {
@@ -92,7 +98,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
     );
 
     if (correct) {
-      _tts?.stop();
+      _ttsService.stop();
       if (_currentQ < widget.drug.questions.length - 1) {
         setState(() {
           _currentQ++;
@@ -122,6 +128,8 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
     if (widget.language == 'te') options = q.optionsTe;
     if (widget.language == 'hi') options = q.optionsHi;
 
+    final isSpeaking = _ttsService.stateNotifier.value == PatientTtsState.playing;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -133,7 +141,10 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF555555)),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            _ttsService.stop();
+            Navigator.of(context).pop();
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -175,7 +186,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              _t('Let\'s review the information:', 'సమాచారాన్ని మళ్లీ చూద్దాం:', 'आइए जानकारी की समीक्षा करें:'),
+                              _t('Let\'s review the information:', 'సмаచారాన్ని మళ్లీ చూద్దాం:', 'आइए जानकारी की समीक्षा करें:'),
                               style: const TextStyle(color: Color(0xFF856404), fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),
@@ -183,13 +194,20 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                       ),
                       const SizedBox(height: 12),
                       if (widget.showVisuals) ...[
-                        Center(child: AnatomyViewer(bodySystem: widget.drug.bodySystem, height: 180)),
+                        Center(
+                          child: AnatomyViewer(
+                            bodySystem: widget.drug.bodySystem,
+                            height: 180,
+                            config: widget.drug.anatomyConfig,
+                            language: widget.language,
+                          ),
+                        ),
                         const SizedBox(height: 16),
                         Center(
                           child: ElevatedButton.icon(
                             onPressed: _playRecoveryAudio,
-                            icon: Icon(_isTtsPlaying ? Icons.volume_up : Icons.replay),
-                            label: Text(_isTtsPlaying 
+                            icon: Icon(isSpeaking ? Icons.volume_up : Icons.replay),
+                            label: Text(isSpeaking 
                                 ? _t('Playing...', 'ప్లే అవుతోంది...', 'बज रहा है...')
                                 : _t('Listen Again', 'మళ్లీ వినండి', 'फिर से सुनें')),
                             style: ElevatedButton.styleFrom(
@@ -228,22 +246,28 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
               ...List.generate(options.length, (index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: ElevatedButton(
-                    onPressed: () => _submitOption(index),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFF8F9FA),
-                      foregroundColor: const Color(0xFF1A1A2E),
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Color(0xFFDEE2E6)),
-                      ),
-                      elevation: 0,
+                  child: Material(
+                    color: const Color(0xFFF8F9FA),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Color(0xFFDEE2E6)),
                     ),
-                    child: Text(
-                      options[index],
-                      style: const TextStyle(fontSize: 18),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () => _submitOption(index),
+                      child: Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(minHeight: 60),
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                        child: Text(
+                          options[index],
+                          style: const TextStyle(fontSize: 18, height: 1.4, color: Color(0xFF1A1A2E)),
+                          softWrap: true,
+                          maxLines: null,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
                     ),
                   ),
                 );

@@ -30,6 +30,32 @@ void main() {
     tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
       const MethodChannel('flutter_tts'),
       (MethodCall methodCall) async {
+        if (methodCall.method == 'speak') {
+          // Trigger speak start asynchronously to mimic native latency
+          tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+            'flutter_tts',
+            const StandardMethodCodec().encodeMethodCall(
+              const MethodCall('speak.onStart'),
+            ),
+            null,
+          );
+        } else if (methodCall.method == 'pause') {
+          tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+            'flutter_tts',
+            const StandardMethodCodec().encodeMethodCall(
+              const MethodCall('speak.onPause'),
+            ),
+            null,
+          );
+        } else if (methodCall.method == 'stop') {
+          tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+            'flutter_tts',
+            const StandardMethodCodec().encodeMethodCall(
+              const MethodCall('speak.onComplete'),
+            ),
+            null,
+          );
+        }
         return 1;
       },
     );

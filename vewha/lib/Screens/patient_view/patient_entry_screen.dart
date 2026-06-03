@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../logging/study_logger.dart';
 import 'medication_list_screen.dart';
+import '../../services/patient_tts_service.dart';
 
 class PatientEntryScreen extends StatefulWidget {
   final String initialCondition;
@@ -25,6 +26,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
   void initState() {
     super.initState();
     _condition = widget.initialCondition;
+    PatientTtsService().prewarm();
   }
 
   void _launch() {
