@@ -4,6 +4,10 @@ class MechanismStep {
   final String titleEn;
   final String titleTe;
   final String titleHi;
+  final String titleKn;
+  final String titleTa;
+  final String titleMr;
+  final String titleBn;
   final IconData icon;
   final String organTargetId; 
   final String animationTrigger;
@@ -12,6 +16,10 @@ class MechanismStep {
     required this.titleEn,
     required this.titleTe,
     required this.titleHi,
+    this.titleKn = '',
+    this.titleTa = '',
+    this.titleMr = '',
+    this.titleBn = '',
     required this.icon,
     required this.organTargetId,
     required this.animationTrigger,
@@ -23,6 +31,10 @@ class OrganTarget {
   final String name;
   final String nameTe;
   final String nameHi;
+  final String nameKn;
+  final String nameTa;
+  final String nameMr;
+  final String nameBn;
   final Offset normalizedPosition; 
   final Color highlightColor;
   final String effectType; 
@@ -32,6 +44,10 @@ class OrganTarget {
     required this.name,
     required this.nameTe,
     required this.nameHi,
+    this.nameKn = '',
+    this.nameTa = '',
+    this.nameMr = '',
+    this.nameBn = '',
     required this.normalizedPosition,
     required this.highlightColor,
     this.effectType = 'pulse',
@@ -62,6 +78,10 @@ class AnatomyAnimationConfig {
   final String outcomeText;
   final String outcomeTextTe;
   final String outcomeTextHi;
+  final String outcomeTextKn;
+  final String outcomeTextTa;
+  final String outcomeTextMr;
+  final String outcomeTextBn;
   final Color outcomeColor;
 
   const AnatomyAnimationConfig({
@@ -72,6 +92,10 @@ class AnatomyAnimationConfig {
     this.outcomeText = '',
     this.outcomeTextTe = '',
     this.outcomeTextHi = '',
+    this.outcomeTextKn = '',
+    this.outcomeTextTa = '',
+    this.outcomeTextMr = '',
+    this.outcomeTextBn = '',
     this.outcomeColor = Colors.transparent,
   });
 }

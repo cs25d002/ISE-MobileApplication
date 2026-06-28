@@ -18,9 +18,17 @@ class McqQuestion {
   final String questionEn;
   final String questionTe;
   final String questionHi;
+  final String questionKn;
+  final String questionTa;
+  final String questionMr;
+  final String questionBn;
   final List<String> optionsEn;
   final List<String> optionsTe;
   final List<String> optionsHi;
+  final List<String> optionsKn;
+  final List<String> optionsTa;
+  final List<String> optionsMr;
+  final List<String> optionsBn;
   final int correctIndex;
 
   const McqQuestion({
@@ -28,9 +36,17 @@ class McqQuestion {
     required this.questionEn,
     required this.questionTe,
     required this.questionHi,
+    this.questionKn = '',
+    this.questionTa = '',
+    this.questionMr = '',
+    this.questionBn = '',
     required this.optionsEn,
     required this.optionsTe,
     required this.optionsHi,
+    this.optionsKn = const [],
+    this.optionsTa = const [],
+    this.optionsMr = const [],
+    this.optionsBn = const [],
     required this.correctIndex,
   });
 }
@@ -40,18 +56,38 @@ class StudyDrug {
   final String name;
   final String nameTe;
   final String nameHi;
+  final String nameKn;
+  final String nameTa;
+  final String nameMr;
+  final String nameBn;
   final String dose;
   final String doseTe;
   final String doseHi;
+  final String doseKn;
+  final String doseTa;
+  final String doseMr;
+  final String doseBn;
   final String route;
   final String routeTe;
   final String routeHi;
+  final String routeKn;
+  final String routeTa;
+  final String routeMr;
+  final String routeBn;
   final String frequency;
   final String frequencyTe;
   final String frequencyHi;
+  final String frequencyKn;
+  final String frequencyTa;
+  final String frequencyMr;
+  final String frequencyBn;
   final String purpose;
   final String purposeTe;
   final String purposeHi;
+  final String purposeKn;
+  final String purposeTa;
+  final String purposeMr;
+  final String purposeBn;
   final BodySystem bodySystem;
   final String plainLanguageKey;
   final bool isNonObvious;
@@ -63,18 +99,38 @@ class StudyDrug {
     required this.name,
     required this.nameTe,
     required this.nameHi,
+    this.nameKn = '',
+    this.nameTa = '',
+    this.nameMr = '',
+    this.nameBn = '',
     required this.dose,
     required this.doseTe,
     required this.doseHi,
+    this.doseKn = '',
+    this.doseTa = '',
+    this.doseMr = '',
+    this.doseBn = '',
     required this.route,
     required this.routeTe,
     required this.routeHi,
+    this.routeKn = '',
+    this.routeTa = '',
+    this.routeMr = '',
+    this.routeBn = '',
     required this.frequency,
     required this.frequencyTe,
     required this.frequencyHi,
+    this.frequencyKn = '',
+    this.frequencyTa = '',
+    this.frequencyMr = '',
+    this.frequencyBn = '',
     required this.purpose,
     required this.purposeTe,
     required this.purposeHi,
+    this.purposeKn = '',
+    this.purposeTa = '',
+    this.purposeMr = '',
+    this.purposeBn = '',
     required this.bodySystem,
     required this.plainLanguageKey,
     required this.isNonObvious,
@@ -126,8 +182,12 @@ const List<StudyDrug> studyDrugs = [
         3: ['outcome'],
       },
       outcomeText: 'Diabetes Controlled',
-      outcomeTextTe: 'మధుమేహం అదుపులో ఉంటుంది',
-      outcomeTextHi: 'मधुमेह नियंत्रण में',
+      outcomeTextTe: 'మధుమేహ నియంత్రణ',
+      outcomeTextHi: 'मधुमेह नियंत्रण',
+      outcomeTextKn: 'ಮಧುಮೇಹ ನಿಯಂತ್ರಣ',
+      outcomeTextTa: 'நீரிழிவு கட்டுப்பாடு',
+      outcomeTextMr: 'मधुमेह नियंत्रण',
+      outcomeTextBn: 'ডায়াবেটিস নিয়ন্ত্রণ',
       outcomeColor: Colors.green,
     ),
     questions: [
@@ -222,8 +282,8 @@ const List<StudyDrug> studyDrugs = [
       ],
       organTargets: [
         OrganTarget(id: 'mouth', name: 'Mouth', nameTe: 'నోరు', nameHi: 'मुंह', normalizedPosition: Offset(0.5, 0.15), highlightColor: Colors.lightBlue),
-        OrganTarget(id: 'lungs', name: 'Lungs', nameTe: 'ఊపిరితిత్తులు', nameHi: 'फेफड़े', normalizedPosition: Offset(0.5, 0.35), highlightColor: Colors.blue, effectType: 'expand'),
-        OrganTarget(id: 'airways', name: 'Airways', nameTe: 'శ్వాసనాళాలు', nameHi: 'वायुमार्ग', normalizedPosition: Offset(0.5, 0.35), highlightColor: Colors.cyan, effectType: 'widen'),
+        OrganTarget(id: 'lungs', name: 'Lungs', nameTe: 'ఊపిరితిత్తులు', nameHi: 'फेफड़े', normalizedPosition: Offset(0.5, 0.35), highlightColor: Colors.blue, effectType: 'air_flow'),
+        OrganTarget(id: 'airways', name: 'Airways', nameTe: 'శ్వాసనాళాలు', nameHi: 'वायुमार्ग', normalizedPosition: Offset(0.5, 0.35), highlightColor: Colors.cyan, effectType: 'bronchi_cascade'),
       ],
       animationPaths: [
         AnimationPath(id: 'path1', startNormalized: Offset(0.5, 0.15), endNormalized: Offset(0.5, 0.35), color: Colors.lightBlue),
@@ -235,8 +295,12 @@ const List<StudyDrug> studyDrugs = [
         3: ['outcome'],
       },
       outcomeText: 'Asthma Controlled',
-      outcomeTextTe: 'ఆస్త్మా అదుపులో ఉంటుంది',
-      outcomeTextHi: 'अस्थमा नियंत्रण में',
+      outcomeTextTe: 'ఆస్తమా నియంత్రణ',
+      outcomeTextHi: 'अस्थमा नियंत्रण',
+      outcomeTextKn: 'ಉಬ್ಬಸ ನಿಯಂತ್ರಣ',
+      outcomeTextTa: 'ஆஸ்துமா கட்டுப்பாடு',
+      outcomeTextMr: 'दम्यावर नियंत्रण',
+      outcomeTextBn: 'অ্যাজমা নিয়ন্ত্রণ',
       outcomeColor: Colors.blueAccent,
     ),
     questions: [
@@ -342,9 +406,13 @@ const List<StudyDrug> studyDrugs = [
         2: ['skin_deep'],
         3: ['skin_surface', 'outcome'],
       },
-      outcomeText: 'Eczema Cleared',
-      outcomeTextTe: 'ఎగ్జిమా తగ్గింది',
-      outcomeTextHi: 'एक्जिमा साफ',
+      outcomeText: 'Inflammation Reduced',
+      outcomeTextTe: 'వాపు తగ్గుదల',
+      outcomeTextHi: 'सूजन में कमी',
+      outcomeTextKn: 'ಉರಿಯೂತ ಕಡಿತ',
+      outcomeTextTa: 'வீக்கம் குறைதல்',
+      outcomeTextMr: 'सूज कमी होणे',
+      outcomeTextBn: 'প্রদাহ হ্রাস',
       outcomeColor: Colors.pinkAccent,
     ),
     questions: [
@@ -454,9 +522,13 @@ const List<StudyDrug> studyDrugs = [
         2: ['vessels'],
         3: ['outcome'],
       },
-      outcomeText: 'Heart Protected',
-      outcomeTextTe: 'గుండె రక్షించబడుతుంది',
-      outcomeTextHi: 'हृदय सुरक्षित',
+      outcomeText: 'Blood Pressure Controlled',
+      outcomeTextTe: 'రక్తపోటు నియంత్రణ',
+      outcomeTextHi: 'रक्तचाप नियंत्रण',
+      outcomeTextKn: 'ರಕ್ತದೊತ್ತಡ ನಿಯಂತ್ರಣ',
+      outcomeTextTa: 'இரத்த அழுத்த கட்டுப்பாடு',
+      outcomeTextMr: 'रक्तदाब नियंत्रण',
+      outcomeTextBn: 'রক্তচাপ নিয়ন্ত্রণ',
       outcomeColor: Colors.green,
     ),
     questions: [
@@ -547,6 +619,7 @@ const List<StudyDrug> studyDrugs = [
         MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'bloodstream', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Bloodstream', titleTe: 'రక్తప్రవాహం', titleHi: 'रक्त प्रवाह', icon: Icons.accessibility_new, organTargetId: 'body', animationTrigger: 'move'),
         MechanismStep(titleEn: 'Calms Immune System', titleTe: 'రోగనిరోధక శక్తిని శాంతపరుస్తుంది', titleHi: 'प्रतिरक्षा प्रणाली को शांत करता है', icon: Icons.shield, organTargetId: 'immune', animationTrigger: 'effect'),
+        MechanismStep(titleEn: 'Do Not Stop Abruptly', titleTe: 'ఆకస్మికంగా ఆపకండి', titleHi: 'अचानक न रोकें', icon: Icons.warning, organTargetId: 'adrenal', animationTrigger: 'warning'),
         MechanismStep(titleEn: 'Inflammation Is Reduced', titleTe: 'వాపు తగ్గుతుంది', titleHi: 'सूजन कम हो जाती है', icon: Icons.healing, organTargetId: 'outcome', animationTrigger: 'outcome'),
       ],
       organTargets: [
@@ -554,6 +627,7 @@ const List<StudyDrug> studyDrugs = [
         OrganTarget(id: 'stomach', name: 'Stomach', nameTe: 'కడుపు', nameHi: 'पेट', normalizedPosition: Offset(0.55, 0.35), highlightColor: Colors.orange),
         OrganTarget(id: 'bloodstream', name: 'Bloodstream', nameTe: 'రక్తప్రవాహం', nameHi: 'रक्त प्रवाह', normalizedPosition: Offset(0.4, 0.5), highlightColor: Colors.redAccent),
         OrganTarget(id: 'body', name: 'Body', nameTe: 'శరీరం', nameHi: 'शरीर', normalizedPosition: Offset(0.5, 0.4), highlightColor: Colors.orange, effectType: 'circulate'),
+        OrganTarget(id: 'adrenal', name: 'Adrenal Glands', nameTe: 'అడ్రినల్ గ్రంథులు', nameHi: 'अधिवृक्क ग्रंथियां', normalizedPosition: Offset(0.5, 0.48), highlightColor: Colors.red, effectType: 'taper_warning'),
       ],
       animationPaths: [
         AnimationPath(id: 'path1', startNormalized: Offset(0.5, 0.15), endNormalized: Offset(0.55, 0.35), color: Colors.purple),
@@ -564,11 +638,16 @@ const List<StudyDrug> studyDrugs = [
         0: ['mouth', 'path1'],
         1: ['stomach', 'path2', 'bloodstream', 'path3', 'body'],
         2: ['body'],
-        3: ['outcome'],
+        3: ['adrenal'],
+        4: ['outcome'],
       },
-      outcomeText: 'Symptoms Improve',
-      outcomeTextTe: 'లక్షణాలు మెరుగుపడతాయి',
-      outcomeTextHi: 'लक्षणों में सुधार',
+      outcomeText: 'Immune System Regulated',
+      outcomeTextTe: 'రోగనిరోధక వ్యవస్థ నియంత్రణ',
+      outcomeTextHi: 'प्रतिरक्षा प्रणाली नियंत्रण',
+      outcomeTextKn: 'ರೋಗನಿರೋಧಕ ವ್ಯವಸ್ಥೆ ನಿಯಂತ್ರಣ',
+      outcomeTextTa: 'நோய் எதிர்ப்பு அமைப்பு கட்டுப்பாடு',
+      outcomeTextMr: 'रोगप्रतिकारक प्रणाली नियंत्रण',
+      outcomeTextBn: 'ইমিউন সিস্টেম নিয়ন্ত্রণ',
       outcomeColor: Colors.green,
     ),
     questions: [
@@ -630,6 +709,170 @@ const List<StudyDrug> studyDrugs = [
         optionsEn: ['Yes, I understood', 'No, I did not understand'],
         optionsTe: ['అవును, నాకు అర్థమైంది', 'లేదు, నాకు అర్థం కాలేదు'],
         optionsHi: ['हां, मुझे समझ आ गया', 'नहीं, मुझे समझ नहीं आया'],
+        correctIndex: 0,
+      ),
+    ],
+  ),
+  StudyDrug(
+    drugId: 'lisinopril_01',
+    name: 'Lisinopril 10mg',
+    nameTe: 'లిసినోప్రిల్ 10mg',
+    nameHi: 'लिसिनोप्रिल 10mg',
+    nameKn: 'ಲಿಸಿನೊಪ್ರಿಲ್ 10mg',
+    nameTa: 'லிசினோபிரில் 10mg',
+    nameMr: 'लिसिनोप्रिल 10mg',
+    nameBn: 'লিসিনোপ্রিল 10mg',
+    dose: '10mg',
+    doseTe: '10mg',
+    doseHi: '10mg',
+    doseKn: '10mg',
+    doseTa: '10mg',
+    doseMr: '10mg',
+    doseBn: '10mg',
+    route: 'Oral (swallow)',
+    routeTe: 'నోటి ద్వారా (మింగాలి)',
+    routeHi: 'मुंह से (निगलें)',
+    routeKn: 'ಬಾಯಿಯ ಮೂಲಕ (ನುಂಗಿ)',
+    routeTa: 'வாய்வழியாக (விழுங்கு)',
+    routeMr: 'तोंडाने (गिळा)',
+    routeBn: 'মুখ দিয়ে (গিলে ফেলুন)',
+    frequency: 'Once daily',
+    frequencyTe: 'రోజుకు ఒకసారి',
+    frequencyHi: 'दिन में एक बार',
+    frequencyKn: 'ದಿನಕ್ಕೆ ಒಮ್ಮೆ',
+    frequencyTa: 'தினமும் ஒருமுறை',
+    frequencyMr: 'दिवसातून एकदा',
+    frequencyBn: 'দিনে একবার',
+    purpose: 'High blood pressure',
+    purposeTe: 'అధిక రక్తపోటు',
+    purposeHi: 'उच्च रक्तचाप',
+    purposeKn: 'ಅಧಿಕ ರಕ್ತದೊತ್ತಡ',
+    purposeTa: 'உயர் இரத்த அழுத்தம்',
+    purposeMr: 'उच्च रक्तदाब',
+    purposeBn: 'উচ্চ রক্তচাপ',
+    bodySystem: BodySystem.cardiovascular,
+    plainLanguageKey: 'lisinopril_01',
+    isNonObvious: false,
+    anatomyConfig: const AnatomyAnimationConfig(
+      storyboardSteps: [
+        MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'blood', animationTrigger: 'start'),
+        MechanismStep(titleEn: 'Blood Vessels', titleTe: 'రక్త నాళాలు', titleHi: 'रक्त वाहिकाएं', icon: Icons.waves, organTargetId: 'vessels', animationTrigger: 'move'),
+        MechanismStep(titleEn: 'Vessels Widen', titleTe: 'రక్త నాళాలు వెడల్పు అవుతాయి', titleHi: 'रक्त वाहिकाएं चौड़ी होती हैं', icon: Icons.open_with, organTargetId: 'vessels', animationTrigger: 'effect'),
+        MechanismStep(titleEn: 'Blood Pressure Drops', titleTe: 'రక్తపోటు తగ్గుతుంది', titleHi: 'रक्तचाप कम होता है', icon: Icons.arrow_downward, organTargetId: 'outcome', animationTrigger: 'outcome'),
+      ],
+      organTargets: [
+        OrganTarget(id: 'blood', name: 'Blood', nameTe: 'రక్తం', nameHi: 'रक्त', normalizedPosition: Offset(0.5, 0.2), highlightColor: Colors.redAccent),
+        OrganTarget(id: 'vessels', name: 'Vessels', nameTe: 'రక్త నాళాలు', nameHi: 'रक्त वाहिकाएं', normalizedPosition: Offset(0.5, 0.4), highlightColor: Colors.red, effectType: 'vessel_widen'),
+      ],
+      animationPaths: [
+        AnimationPath(id: 'path1', startNormalized: Offset(0.5, 0.2), endNormalized: Offset(0.5, 0.4), color: Colors.redAccent),
+      ],
+      narrationSyncPoints: {
+        0: ['blood'],
+        1: ['vessels', 'path1'],
+        2: ['vessels'],
+        3: ['outcome'],
+      },
+      outcomeText: 'Blood Pressure Lowered',
+      outcomeTextTe: 'రక్తపోటు తగ్గింది',
+      outcomeTextHi: 'रक्तचाप कम हुआ',
+      outcomeTextKn: 'ರಕ್ತದೊತ್ತಡ ಕಡಿಮೆಯಾಗಿದೆ',
+      outcomeTextTa: 'இரத்த அழுத்தம் குறைந்தது',
+      outcomeTextMr: 'रक्तदाब कमी झाला',
+      outcomeTextBn: 'রক্তচাপ কমেছে',
+      outcomeColor: Colors.green,
+    ),
+    questions: [
+      McqQuestion(
+        id: 'q_purpose_lis',
+        questionEn: 'What problem does this medicine help with?',
+        questionTe: 'ఈ మందు ఏ సమస్యకు సహాయపడుతుంది?',
+        questionHi: 'यह दवा किस समस्या में मदद करती है?',
+        optionsEn: ['Asthma', 'High blood pressure', 'Diabetes'],
+        optionsTe: ['ఆస్తమా', 'అధిక రక్తపోటు', 'మధుమేహం'],
+        optionsHi: ['अस्थमा', 'उच्च रक्तचाप', 'मधुमेह'],
+        correctIndex: 1,
+      ),
+    ],
+  ),
+  StudyDrug(
+    drugId: 'atorvastatin_01',
+    name: 'Atorvastatin 20mg',
+    nameTe: 'అటోర్వాస్టాటిన్ 20mg',
+    nameHi: 'एटोरवास्टेटिन 20mg',
+    nameKn: 'ಅಟೊರ್ವಾಸ್ಟಾಟಿನ್ 20mg',
+    nameTa: 'அடோர்வாஸ்டாடின் 20mg',
+    nameMr: 'अटोर्वास्टॅटिन 20mg',
+    nameBn: 'অ্যাটরভাস্টাটিন 20mg',
+    dose: '20mg',
+    doseTe: '20mg',
+    doseHi: '20mg',
+    doseKn: '20mg',
+    doseTa: '20mg',
+    doseMr: '20mg',
+    doseBn: '20mg',
+    route: 'Oral (swallow)',
+    routeTe: 'నోటి ద్వారా (మింగాలి)',
+    routeHi: 'मुंह से (निगलें)',
+    routeKn: 'ಬಾಯಿಯ ಮೂಲಕ (ನುಂಗಿ)',
+    routeTa: 'வாய்வழியாக (விழுங்கு)',
+    routeMr: 'तोंडाने (गिळा)',
+    routeBn: 'মুখ দিয়ে (গিলে ফেলুন)',
+    frequency: 'Once daily at night',
+    frequencyTe: 'రాత్రికి ఒకసారి',
+    frequencyHi: 'रात में एक बार',
+    frequencyKn: 'ರಾತ್ರಿ ಒಮ್ಮೆ',
+    frequencyTa: 'இரவில் ஒருமுறை',
+    frequencyMr: 'रात्री एकदा',
+    frequencyBn: 'রাতে একবার',
+    purpose: 'High cholesterol',
+    purposeTe: 'అధిక కొలెస్ట్రాల్',
+    purposeHi: 'उच्च कोलेस्ट्रॉल',
+    purposeKn: 'ಅಧಿಕ ಕೊಲೆಸ್ಟ್ರಾಲ್',
+    purposeTa: 'அதிக கொழுப்பு',
+    purposeMr: 'उच्च कोलेस्ट्रॉल',
+    purposeBn: 'উচ্চ কোলেস্টেরল',
+    bodySystem: BodySystem.endocrine,
+    plainLanguageKey: 'atorvastatin_01',
+    isNonObvious: false,
+    anatomyConfig: const AnatomyAnimationConfig(
+      storyboardSteps: [
+        MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'stomach', animationTrigger: 'start'),
+        MechanismStep(titleEn: 'Liver', titleTe: 'కాలేయం', titleHi: 'जिगर', icon: Icons.bloodtype, organTargetId: 'liver', animationTrigger: 'move'),
+        MechanismStep(titleEn: 'Blocks Cholesterol', titleTe: 'కొలెస్ట్రాల్ అడ్డుకుంటుంది', titleHi: 'कोलेस्ट्रॉल रोकता है', icon: Icons.block, organTargetId: 'liver', animationTrigger: 'effect'),
+        MechanismStep(titleEn: 'Lower Cholesterol', titleTe: 'తక్కువ కొలెస్ట్రాల్', titleHi: 'कम कोलेस्ट्रॉल', icon: Icons.trending_down, organTargetId: 'outcome', animationTrigger: 'outcome'),
+      ],
+      organTargets: [
+        OrganTarget(id: 'stomach', name: 'Stomach', nameTe: 'కడుపు', nameHi: 'पेट', normalizedPosition: Offset(0.5, 0.4), highlightColor: Colors.orange),
+        OrganTarget(id: 'liver', name: 'Liver', nameTe: 'కాలేయం', nameHi: 'यकृत', normalizedPosition: Offset(0.4, 0.35), highlightColor: Colors.red, effectType: 'hepatocytes'),
+      ],
+      animationPaths: [
+        AnimationPath(id: 'path1', startNormalized: Offset(0.5, 0.4), endNormalized: Offset(0.4, 0.35), color: Colors.orange),
+      ],
+      narrationSyncPoints: {
+        0: ['stomach'],
+        1: ['liver', 'path1'],
+        2: ['liver'],
+        3: ['outcome'],
+      },
+      outcomeText: 'Cholesterol Lowered',
+      outcomeTextTe: 'కొలెస్ట్రాల్ తగ్గింది',
+      outcomeTextHi: 'कोलेस्ट्रॉल कम हुआ',
+      outcomeTextKn: 'ಕೊಲೆಸ್ಟ್ರಾಲ್ ಕಡಿಮೆಯಾಗಿದೆ',
+      outcomeTextTa: 'கொழுப்பு குறைந்தது',
+      outcomeTextMr: 'कोलेस्ट्रॉल कमी झाले',
+      outcomeTextBn: 'কোলেস্টেরল কমেছে',
+      outcomeColor: Colors.green,
+    ),
+    questions: [
+      McqQuestion(
+        id: 'q_purpose_ator',
+        questionEn: 'What problem does this medicine help with?',
+        questionTe: 'ఈ మందు ఏ సమస్యకు సహాయపడుతుంది?',
+        questionHi: 'यह दवा किस समस्या में मदद करती है?',
+        optionsEn: ['High cholesterol', 'Pain', 'Asthma'],
+        optionsTe: ['అధిక కొలెస్ట్రాల్', 'నొప్పి', 'ఆస్తమా'],
+        optionsHi: ['उच्च कोलेस्ट्रॉल', 'दर्द', 'अस्थमा'],
         correctIndex: 0,
       ),
     ],
