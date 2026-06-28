@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/prescriptions.dart';
+import 'package:Vewha/data/prescriptions.dart' hide Colors;
 import '../../components/patient_view/progress_stepper.dart';
 import 'medication_detail_screen.dart';
 import 'plain_text_condition_screen.dart';
@@ -21,9 +21,13 @@ class MedicationListScreen extends StatefulWidget {
 class _MedicationListScreenState extends State<MedicationListScreen> {
   int _current = 0;
 
-  String _t(String en, String te, String hi) {
+  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
     if (widget.language == 'hi') return hi;
     if (widget.language == 'te') return te;
+    if (widget.language == 'kn') return kn;
+    if (widget.language == 'ta') return ta;
+    if (widget.language == 'mr') return mr;
+    if (widget.language == 'bn') return bn;
     return en;
   }
 
@@ -60,7 +64,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t('Medication ${_current + 1} of ${studyDrugs.length}', 'మందు ${_current + 1} / ${studyDrugs.length}', 'दवा ${_current + 1} / ${studyDrugs.length}'),
+          _t('Medication ${_current + 1} of ${studyDrugs.length}', 'మందు ${_current + 1} / ${studyDrugs.length}', 'दवा ${_current + 1} / ${studyDrugs.length}', 'ಔಷಧಿ ${_current + 1} / ${studyDrugs.length}', 'மருந்து ${_current + 1} / ${studyDrugs.length}', 'औषध ${_current + 1} / ${studyDrugs.length}', 'ওষুধ ${_current + 1} / ${studyDrugs.length}'),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,
@@ -95,7 +99,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _t(drug.name, drug.nameTe, drug.nameHi),
+                        _t(drug.name, drug.nameTe, drug.nameHi, drug.nameKn, drug.nameTa, drug.nameMr, drug.nameBn),
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -104,7 +108,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        _t(drug.purpose, drug.purposeTe, drug.purposeHi),
+                        _t(drug.purpose, drug.purposeTe, drug.purposeHi, drug.purposeKn, drug.purposeTa, drug.purposeMr, drug.purposeBn),
                         style: const TextStyle(
                           fontSize: 16,
                           height: 1.5,
@@ -116,7 +120,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            _t('Tap to view details', 'వివరాలను చూడటానికి నొక్కండి', 'विवरण देखने के लिए टैप करें'),
+                            _t('Tap to view details', 'వివరాలను చూడటానికి నొక్కండి', 'विवरण देखने के लिए टैप करें', 'ವಿವರಗಳನ್ನು ನೋಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ', 'விவரங்களைக் காண தட்டவும்', 'तपशील पाहण्यासाठी टॅप करा', 'বিবরণ দেখতে ট্যাপ করুন'),
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1D9E75),
@@ -145,7 +149,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        _t('Previous', 'వెనక్కి', 'पिछला'),
+                        _t('Previous', 'వెనక్కి', 'पिछला', 'ಹಿಂದಿನ', 'முந்தைய', 'मागील', 'আগের'),
                         style: const TextStyle(
                           color: Color(0xFF1D9E75),
                           fontWeight: FontWeight.bold,
@@ -166,7 +170,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        _t('Next', 'తదుపరి', 'अगला'),
+                        _t('Next', 'తదుపరి', 'अगला', 'ಮುಂದಿನ', 'அடுத்த', 'पुढील', 'পরবর্তী'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
@@ -182,7 +186,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        _t('Done', 'పూర్తయింది', 'हो गया'),
+                        _t('Done', 'పూర్తయింది', 'हो गया', 'ಮುಗಿದಿದೆ', 'முடிந்தது', 'पूर्ण झाले', 'হয়ে গেছে'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),

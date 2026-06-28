@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '../../data/prescriptions.dart';
+import 'package:Vewha/data/prescriptions.dart' hide Colors;
 import '../../data/plain_language_map.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../components/patient_view/mechanism_animator.dart';
@@ -32,9 +32,13 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
   final ValueNotifier<int> _activeStepNotifier = ValueNotifier<int>(-1);
   Timer? _autoPlayTimer;
 
-  String _t(String en, String te, String hi) {
+  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
     if (_lang == 'hi') return hi;
     if (_lang == 'te') return te;
+    if (_lang == 'kn') return kn;
+    if (_lang == 'ta') return ta;
+    if (_lang == 'mr') return mr;
+    if (_lang == 'bn') return bn;
     return en;
   }
 
@@ -99,7 +103,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t(widget.drug.name, widget.drug.nameTe, widget.drug.nameHi),
+          _t(widget.drug.name, widget.drug.nameTe, widget.drug.nameHi, widget.drug.nameKn, widget.drug.nameTa, widget.drug.nameMr, widget.drug.nameBn),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -126,6 +130,10 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
               DropdownMenuItem(value: 'en', child: Text('English')),
               DropdownMenuItem(value: 'te', child: Text('తెలుగు')),
               DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
+              DropdownMenuItem(value: 'kn', child: Text('ಕನ್ನಡ')),
+              DropdownMenuItem(value: 'ta', child: Text('தமிழ்')),
+              DropdownMenuItem(value: 'mr', child: Text('मराठी')),
+              DropdownMenuItem(value: 'bn', child: Text('বাংলা')),
             ],
           ),
           const SizedBox(width: 8),
@@ -164,9 +172,9 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             const SizedBox(height: 28),
             
             // Plain language what it's for
-            _section(_t('What this medicine is for', 'ఈ మందు దేనికి వాడతారు', 'यह दवा किसलिए है'), _entry.whatItIsFor),
+            _section(_t('What this medicine is for', 'ఈ మందు దేనికి వాడతారు', 'यह दवा किसलिए है', 'ಈ ಔಷಧಿಯನ್ನು ಯಾವುದಕ್ಕಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ', 'இந்த மருந்து எதற்காக', 'हे औषध कशासाठी आहे', 'এই ওষুধটি কিসের জন্য'), _entry.whatItIsFor),
             const SizedBox(height: 20),
-            _section(_t('How to take it', 'ఎలా వాడాలి', 'इसे कैसे लेना है'), _entry.howToTake),
+            _section(_t('How to take it', 'ఎలా వాడాలి', 'इसे कैसे लेना है', 'ಅದನ್ನು ಹೇಗೆ ತೆಗೆದುಕೊಳ್ಳುವುದು', 'எப்படி எடுத்துக்கொள்வது', 'ते कसे घ्यावे', 'কীভাবে খাবেন'), _entry.howToTake),
             const SizedBox(height: 28),
             
             // Audio button
@@ -184,7 +192,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             
             // Clinical summary card
             Text(
-              _t('Clinical details', 'క్లినికల్ వివరాలు', 'नैदानिक विवरण'),
+              _t('Clinical details', 'క్లినికల్ వివరాలు', 'नैदानिक विवरण', 'ಕ್ಲಿನಿಕಲ್ ವಿವರಗಳು', 'மருத்துவ விவரங்கள்', 'क्लिनिकल तपशील', 'ক্লিনিক্যাল বিবরণ'),
               style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -202,7 +210,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                   elevation: 2,
                 ),
                 child: Text(
-                  _t('Answer questions about this medicine', 'ప్రశ్నలకు సమాధానం ఇవ్వండి', 'इस दवा के बारे में सवालों के जवाब दें'),
+                  _t('Answer questions about this medicine', 'ప్రశ్నలకు సమాధానం ఇవ్వండి', 'इस दवा के बारे में सवालों के जवाब दें', 'ಈ ಔಷಧಿಯ ಬಗ್ಗೆ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ', 'இந்த மருந்து பற்றிய கேள்விகளுக்கு பதிலளிக்கவும்', 'या औषधाबद्दल प्रश्नांची उत्तरे द्या', 'এই ওষুধ সম্পর্কে প্রশ্নের উত্তর দিন'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),

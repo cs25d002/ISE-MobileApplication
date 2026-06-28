@@ -5,8 +5,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../data/prescriptions.dart';
-import '../../data/anatomy_config.dart';
+import 'package:Vewha/data/prescriptions.dart' hide Colors;
+import 'package:Vewha/data/anatomy_config.dart';
 
 class AnatomyViewer extends StatefulWidget {
   final BodySystem bodySystem;
@@ -136,11 +136,12 @@ class _MechanismPainter extends CustomPainter {
     
     // 3. Draw Outcome if active
     String currentOutcomeText = config.outcomeText;
-    if (language == 'te' && config.outcomeTextTe.isNotEmpty) {
-      currentOutcomeText = config.outcomeTextTe;
-    } else if (language == 'hi' && config.outcomeTextHi.isNotEmpty) {
-      currentOutcomeText = config.outcomeTextHi;
-    }
+    if (language == 'te' && config.outcomeTextTe.isNotEmpty) currentOutcomeText = config.outcomeTextTe;
+    else if (language == 'hi' && config.outcomeTextHi.isNotEmpty) currentOutcomeText = config.outcomeTextHi;
+    else if (language == 'kn' && config.outcomeTextKn.isNotEmpty) currentOutcomeText = config.outcomeTextKn;
+    else if (language == 'ta' && config.outcomeTextTa.isNotEmpty) currentOutcomeText = config.outcomeTextTa;
+    else if (language == 'mr' && config.outcomeTextMr.isNotEmpty) currentOutcomeText = config.outcomeTextMr;
+    else if (language == 'bn' && config.outcomeTextBn.isNotEmpty) currentOutcomeText = config.outcomeTextBn;
 
     if (activeIds.contains('outcome') && currentOutcomeText.isNotEmpty) {
       // Find outcome position (usually bottom center of the active region, or default)
@@ -161,102 +162,324 @@ class _MechanismPainter extends CustomPainter {
       final intensity = 0.5 + 0.5 * math.sin(progress * 2 * math.pi);
       paint.color = organ.highlightColor.withAlpha((200 * intensity).round());
       canvas.drawCircle(Offset(x, y), 25 + (5 * intensity), paint);
-    } else if (organ.effectType == 'expand') {
-      // Simulate lungs expanding and contracting
-      final intensity = 0.5 + 0.5 * math.sin(progress * 2 * math.pi); // 0 to 1
-      paint.color = organ.highlightColor.withAlpha(150);
-      // Draw two lung-like lobes expanding
-      final currentRadius = 20 + (15 * intensity);
-      canvas.drawCircle(Offset(x - 20, y), currentRadius, paint);
-      canvas.drawCircle(Offset(x + 20, y), currentRadius, paint);
-    } else if (organ.effectType == 'widen') {
-      // Simulate airways widening
-      final intensity = 0.5 + 0.5 * math.sin(progress * 2 * math.pi);
+    } else if (organ.effectType == 'hepatocytes') {
+      // Background cell
+      paint.color = organ.highlightColor.withOpacity(0.3);
+      paint.style = PaintingStyle.fill;
+      final cellRect = RRect.fromRectAndRadius(Rect.fromLTWH(x - 50, y - 50, 100, 100), const Radius.circular(15));
+      canvas.drawRRect(cellRect, paint);
+      
+      // Cell membrane border
+      paint.color = organ.highlightColor.withOpacity(0.8);
       paint.style = PaintingStyle.stroke;
-      paint.strokeWidth = 8 + (8 * intensity);
-      paint.color = organ.highlightColor.withAlpha(200);
-      paint.strokeCap = StrokeCap.round;
-      // Draw a Y-shape for airways
-      canvas.drawLine(Offset(x, y - 20), Offset(x, y), paint);
-      canvas.drawLine(Offset(x, y), Offset(x - 15, y + 20), paint);
-      canvas.drawLine(Offset(x, y), Offset(x + 15, y + 20), paint);
-    } else if (organ.effectType == 'heal') {
-      // Transition from red/inflamed to healthy color
-      final isRed = progress < 0.5;
-      final colorProg = isRed ? 1.0 : 1.0 - ((progress - 0.5) * 2); 
-      final currentColor = Color.lerp(organ.highlightColor, Colors.red, colorProg) ?? organ.highlightColor;
-      paint.color = currentColor.withAlpha(200);
+      paint.strokeWidth = 3;
+      canvas.drawRRect(cellRect, paint);
       
-      // Draw an organic shaped region for skin patch
-      final path = Path();
-      path.moveTo(x - 30, y);
-      path.quadraticBezierTo(x, y - 20, x + 30, y);
-      path.quadraticBezierTo(x + 40, y + 30, x, y + 30);
-      path.quadraticBezierTo(x - 40, y + 30, x - 30, y);
-      canvas.drawPath(path, paint);
+      // Nucleus
+      paint.style = PaintingStyle.fill;
+      paint.color = Colors.purple.withOpacity(0.4);
+      canvas.drawCircle(Offset(x, y + 15), 18, paint);
+
+      // GLUT Transporters (Channels on top membrane)
+      paint.color = Colors.cyan;
+      canvas.drawRect(Rect.fromLTWH(x - 20, y - 55, 10, 10), paint);
+      canvas.drawRect(Rect.fromLTWH(x + 10, y - 55, 10, 10), paint);
+
+      // Mitochondria (ovals)
+      paint.color = Colors.orange.withOpacity(0.5 + (0.5 * progress));
+      canvas.save();
+      canvas.translate(x - 25, y - 10);
+      canvas.rotate(math.pi / 4);
+      canvas.drawOval(Rect.fromLTWH(0, 0, 16, 8), paint);
+      canvas.restore();
+      canvas.save();
+      canvas.translate(x + 15, y - 10);
+      canvas.rotate(-math.pi / 4);
+      canvas.drawOval(Rect.fromLTWH(0, 0, 16, 8), paint);
+      canvas.restore();
+
+      // Drug particles entering through channels
+      paint.color = Colors.white;
+      double enterProg = (progress * 2) % 1.0; 
+      canvas.drawCircle(Offset(x - 15, y - 60 + (40 * enterProg)), 3, paint);
+      canvas.drawCircle(Offset(x + 15, y - 60 + (40 * enterProg)), 3, paint);
+
+      // Glucose molecules (synthesizing and exiting)
+      paint.color = Colors.yellow;
+      int maxGlucose = 8;
+      int currentGlucose = (maxGlucose * (1.0 - (progress * 0.8))).round();
+      for (int i = 0; i < currentGlucose; i++) {
+        double gProg = (progress + (i * 0.15)) % 1.0;
+        double gx = x - 20 + (40 * (i / maxGlucose));
+        double gy = y - (30 * gProg);
+        canvas.drawCircle(Offset(gx, gy), 4, paint);
+      }
+    } else if (organ.effectType == 'bronchi_cascade') {
+      void drawBronchus(Offset start, Offset end, double cascadeProg) {
+        double p = cascadeProg.clamp(0.0, 1.0);
+        Color mColor = Color.lerp(const Color(0xFF8B0000), const Color(0xFFFF8A80), p)!;
+        double w = 8 + (8 * p);
+        
+        paint.style = PaintingStyle.stroke;
+        paint.strokeWidth = w + 4;
+        paint.color = mColor.withOpacity(0.8 - (0.3 * p));
+        paint.strokeCap = StrokeCap.round;
+        canvas.drawLine(start, end, paint);
+        
+        paint.strokeWidth = w;
+        paint.color = Colors.black87;
+        canvas.drawLine(start, end, paint);
+      }
+      
+      drawBronchus(Offset(x, y - 40), Offset(x, y - 10), progress * 3);
+      drawBronchus(Offset(x, y - 10), Offset(x - 20, y + 15), (progress - 0.33) * 3);
+      drawBronchus(Offset(x, y - 10), Offset(x + 20, y + 15), (progress - 0.33) * 3);
+      drawBronchus(Offset(x - 20, y + 15), Offset(x - 30, y + 35), (progress - 0.66) * 3);
+      drawBronchus(Offset(x + 20, y + 15), Offset(x + 30, y + 35), (progress - 0.66) * 3);
+    } else if (organ.effectType == 'air_flow') {
+      paint.style = PaintingStyle.fill;
+      paint.color = Colors.lightBlueAccent.withOpacity(0.8);
+      double speedMultiplier = 1.0 + (2.0 * progress); 
+      for(int i=0; i<8; i++) {
+         double p = ((progress * speedMultiplier) + (i * 0.125)) % 1.0;
+         if (p < 0.4) {
+           double yy = y - 40 + (p / 0.4) * 30;
+           canvas.drawCircle(Offset(x, yy), 3, paint);
+         } else if (p < 0.7) {
+           double subP = (p - 0.4) / 0.3;
+           bool isLeft = i % 2 == 0;
+           double xx = x + (isLeft ? -20 * subP : 20 * subP);
+           double yy = y - 10 + (subP * 25);
+           canvas.drawCircle(Offset(xx, yy), 3, paint);
+         } else {
+           double subP = (p - 0.7) / 0.3;
+           bool isLeft = i % 2 == 0;
+           double xx = isLeft ? x - 20 - (10 * subP) : x + 20 + (10 * subP);
+           double yy = y + 15 + (subP * 20);
+           canvas.drawCircle(Offset(xx, yy), 3, paint);
+         }
+      }
     } else if (organ.effectType == 'skin_layers') {
-      // Draw static skin cross-section layers (Epidermis, Dermis, Subcutaneous)
-      final rectWidth = 120.0;
-      final rectHeight = 60.0;
-      
-      // Subcutaneous (bottom)
-      paint.color = const Color(0xFFFFD180);
-      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y, rectWidth, rectHeight), paint);
-      
-      // Dermis (middle)
-      paint.color = const Color(0xFFFFAB91);
-      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y - 20, rectWidth, 20), paint);
-      
-      // Epidermis (top)
+      final rectWidth = 140.0;
       paint.color = const Color(0xFFFFCCBC);
-      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y - 30, rectWidth, 10), paint);
-    } else if (organ.effectType == 'fade_inflammation') {
-      // Draw skin layers, but Dermis transitions from inflamed (red) to healthy
-      final rectWidth = 120.0;
-      final rectHeight = 60.0;
+      paint.style = PaintingStyle.fill;
+      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y - 40, rectWidth, 15), paint);
       
-      // Subcutaneous (bottom)
-      paint.color = const Color(0xFFFFD180);
-      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y, rectWidth, rectHeight), paint);
+      paint.color = const Color(0xFFF5F5DC);
+      canvas.drawOval(Rect.fromLTWH(x - 30, y - 45, 60, 10), paint);
       
-      // Dermis (middle) transitions from Red to Healthy
+      for (int i=0; i<15; i++) {
+         double p = (progress + (i * 0.06)) % 1.0;
+         double px = x - 30 + (i * 4.2);
+         double py = y - 40 + (15 * p);
+         canvas.drawCircle(Offset(px, py), 2, paint);
+      }
+    } else if (organ.effectType == 'dermis_heal') {
+      final rectWidth = 140.0;
+      double dermisHeight = 45.0 - (15.0 * progress);
+      
       final inflamedColor = Colors.redAccent;
       final healthyColor = const Color(0xFFFFAB91);
       final transitionColor = Color.lerp(inflamedColor, healthyColor, progress) ?? healthyColor;
-      paint.color = transitionColor;
-      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y - 20, rectWidth, 20), paint);
       
-      // Epidermis (top)
-      paint.color = const Color(0xFFFFCCBC);
-      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y - 30, rectWidth, 10), paint);
-    } else if (organ.effectType == 'circulate') {
-      // Simulate whole-body distribution with expanding rings
-      final intensity1 = (progress) % 1.0;
-      final intensity2 = (progress + 0.33) % 1.0;
-      final intensity3 = (progress + 0.66) % 1.0;
+      paint.style = PaintingStyle.fill;
+      paint.color = transitionColor;
+      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, y - 25, rectWidth, dermisHeight), paint);
+      
+      int cellCount = (30 * (1.0 - (progress * 0.7))).round();
+      paint.color = Colors.white70;
+      for (int i=0; i<cellCount; i++) {
+         double px = x - (rectWidth/2) + ((i * 17) % rectWidth);
+         double py = y - 20 + ((i * 11) % (dermisHeight - 10));
+         canvas.drawCircle(Offset(px, py), 2, paint);
+      }
+      
+      paint.color = const Color(0xFFFFD180);
+      double subY = y - 25 + dermisHeight;
+      canvas.drawRect(Rect.fromLTWH(x - rectWidth/2, subY, rectWidth, 20), paint);
+    } else if (organ.effectType == 'calcium_block') {
+      double r = 20 + (10 * progress);
       paint.style = PaintingStyle.stroke;
       paint.strokeWidth = 3;
-      paint.color = organ.highlightColor.withAlpha((200 * (1.0 - intensity1)).round());
-      canvas.drawCircle(Offset(x, y), 30 + (50 * intensity1), paint);
-      paint.color = organ.highlightColor.withAlpha((200 * (1.0 - intensity2)).round());
-      canvas.drawCircle(Offset(x, y), 30 + (50 * intensity2), paint);
-      paint.color = organ.highlightColor.withAlpha((200 * (1.0 - intensity3)).round());
-      canvas.drawCircle(Offset(x, y), 30 + (50 * intensity3), paint);
-      // Center body core
+      paint.color = Colors.grey[400]!;
+      canvas.drawCircle(Offset(x, y), r + 15, paint);
+      
+      paint.strokeWidth = 10;
+      paint.color = Color.lerp(const Color(0xFF8B0000), const Color(0xFFFF8A80), progress)!;
+      canvas.drawCircle(Offset(x, y), r + 7, paint);
+      
+      paint.strokeWidth = 2;
+      paint.color = Colors.red[200]!;
+      canvas.drawCircle(Offset(x, y), r, paint);
+      
       paint.style = PaintingStyle.fill;
-      paint.color = organ.highlightColor.withAlpha(200);
-      canvas.drawCircle(Offset(x, y), 25, paint);
+      for (int i=0; i<4; i++) {
+        double angle = i * (math.pi / 2);
+        double cx = x + (r + 12) * math.cos(angle);
+        double cy = y + (r + 12) * math.sin(angle);
+        
+        paint.color = Colors.yellow;
+        canvas.drawRect(Rect.fromLTWH(cx - 4, cy - 4, 8, 8), paint);
+        
+        if (progress > 0.2) {
+          paint.color = Colors.blue;
+          double bp = ((progress - 0.2) * 5).clamp(0.0, 1.0);
+          double bx = cx + (10 * (1.0 - bp) * math.cos(angle));
+          double by = cy + (10 * (1.0 - bp) * math.sin(angle));
+          canvas.drawCircle(Offset(bx, by), 3, paint);
+        }
+      }
     } else if (organ.effectType == 'vessel_widen') {
-      // Widen expanding blood vessel network
-      final intensity = 0.5 + 0.5 * math.sin(progress * 2 * math.pi);
+      double wBase = 10 + (6 * progress);
+      double wMid = 6 + (4 * progress);
+      double wSmall = 3 + (2 * progress);
+      
       paint.style = PaintingStyle.stroke;
-      paint.strokeWidth = 6 + (12 * intensity);
-      paint.color = organ.highlightColor.withAlpha(200);
+      paint.color = Colors.redAccent.withOpacity(0.8);
       paint.strokeCap = StrokeCap.round;
-      // Draw branching vessels
-      canvas.drawLine(Offset(x - 30, y - 20), Offset(x, y), paint);
+      
+      paint.strokeWidth = wBase;
+      canvas.drawLine(Offset(x - 40, y - 20), Offset(x, y), paint);
+      paint.strokeWidth = wMid;
       canvas.drawLine(Offset(x, y), Offset(x + 30, y - 10), paint);
-      canvas.drawLine(Offset(x, y), Offset(x + 10, y + 30), paint);
+      paint.strokeWidth = wSmall;
+      canvas.drawLine(Offset(x + 30, y - 10), Offset(x + 45, y - 5), paint);
+      canvas.drawLine(Offset(x + 30, y - 10), Offset(x + 40, y - 25), paint);
+      
+      paint.style = PaintingStyle.fill;
+      paint.color = Colors.red[900]!;
+      double speedMulti = 1.0 + (2.0 * progress);
+      for (int i=0; i<5; i++) {
+         double p = ((progress * speedMulti) + (i * 0.2)) % 1.0;
+         if (p < 0.5) {
+           double px = x - 40 + (40 * (p/0.5));
+           double py = y - 20 + (20 * (p/0.5));
+           canvas.drawOval(Rect.fromLTWH(px-3, py-2, 6, 4), paint);
+         } else if (p < 0.8) {
+           double sp = (p - 0.5) / 0.3;
+           double px = x + (30 * sp);
+           double py = y - (10 * sp);
+           canvas.drawOval(Rect.fromLTWH(px-2, py-2, 4, 4), paint);
+         }
+      }
+    } else if (organ.effectType == 'pressure_drop') {
+      paint.style = PaintingStyle.stroke;
+      paint.strokeWidth = 8;
+      paint.color = Colors.green;
+      canvas.drawArc(Rect.fromCircle(center: Offset(x, y), radius: 30), math.pi, math.pi/2, false, paint);
+      paint.color = Colors.red;
+      canvas.drawArc(Rect.fromCircle(center: Offset(x, y), radius: 30), math.pi + math.pi/2, math.pi/2, false, paint);
+      
+      double angle = math.pi * 1.8 - (math.pi * 0.6 * progress);
+      paint.color = Colors.black87;
+      paint.strokeWidth = 3;
+      canvas.drawLine(Offset(x, y), Offset(x + 25 * math.cos(angle), y + 25 * math.sin(angle)), paint);
+      paint.style = PaintingStyle.fill;
+      canvas.drawCircle(Offset(x, y), 4, paint);
+    } else if (organ.effectType == 'circulate') {
+      paint.style = PaintingStyle.stroke;
+      paint.strokeWidth = 2;
+      double maxRadius = 60.0;
+      for (int i=0; i<3; i++) {
+        double p = (progress + (i * 0.33)) % 1.0;
+        paint.color = organ.highlightColor.withOpacity(0.6 * (1.0 - p));
+        canvas.drawCircle(Offset(x, y), maxRadius * p, paint);
+      }
+      
+      paint.style = PaintingStyle.fill;
+      double organGlow = (progress < 0.5) ? progress * 2 : 2.0 - (progress * 2);
+      paint.color = organ.highlightColor.withOpacity(0.3 + (0.3 * organGlow));
+      
+      canvas.drawCircle(Offset(x, y - 40), 8, paint);
+      canvas.drawCircle(Offset(x - 15, y - 10), 10, paint);
+      canvas.drawCircle(Offset(x + 15, y - 10), 10, paint);
+      canvas.drawCircle(Offset(x - 5, y), 6, paint);
+      canvas.drawCircle(Offset(x + 10, y + 15), 12, paint);
+      canvas.drawCircle(Offset(x - 15, y + 25), 8, paint);
+      canvas.drawCircle(Offset(x + 15, y + 25), 8, paint);
+    } else if (organ.effectType == 'immune_suppress') {
+      double ax = x + 30;
+      double ay = y - 30;
+      paint.style = PaintingStyle.fill;
+      double adrenalGlow = progress < 0.4 ? (progress / 0.4) : (1.0 - ((progress - 0.4) / 0.6));
+      paint.color = Colors.orange.withOpacity(0.4 + (0.6 * adrenalGlow));
+      canvas.drawOval(Rect.fromLTWH(ax - 10, ay - 6, 20, 12), paint);
+      
+      double tx = x - 10;
+      double ty = y + 10;
+      Color tColor = Color.lerp(Colors.red, const Color(0xFFFFCCBC), progress)!;
+      paint.color = tColor.withOpacity(0.7);
+      double tRadius = 35.0 - (10.0 * progress);
+      canvas.drawCircle(Offset(tx, ty), tRadius, paint);
+      
+      int maxCells = 20;
+      int currentCells = (maxCells * (1.0 - (progress * 0.5))).round();
+      Color cellColor = Color.lerp(Colors.white, Colors.grey[400]!, progress)!;
+      paint.color = cellColor;
+      
+      for (int i=0; i<currentCells; i++) {
+        double speed = 2.0 * (1.0 - progress);
+        double dx = math.sin((progress * math.pi * 4 * speed) + i) * 6;
+        double dy = math.cos((progress * math.pi * 4 * speed) + i) * 6;
+        double cx = tx - 20 + ((i * 13) % 40) + dx;
+        double cy = ty - 20 + ((i * 17) % 40) + dy;
+        
+        if (math.pow(cx - tx, 2) + math.pow(cy - ty, 2) < math.pow(tRadius - 3, 2)) {
+          canvas.drawCircle(Offset(cx, cy), 2.5, paint);
+        }
+      }
+      
+      int maxMarkers = 15;
+      int currentMarkers = (maxMarkers * (1.0 - progress)).round();
+      paint.color = Colors.yellowAccent;
+      for (int i=0; i<currentMarkers; i++) {
+        double cx = tx - 25 + ((i * 7) % 50);
+        double cy = ty - 25 + ((i * 11) % 50);
+        if (math.pow(cx - tx, 2) + math.pow(cy - ty, 2) < math.pow(tRadius, 2)) {
+          canvas.drawCircle(Offset(cx, cy), 1.5, paint);
+        }
+      }
+    } else if (organ.effectType == 'taper_warning') {
+      double ax = x;
+      double ay = y;
+      
+      // Danger pulse indicating adrenal failure if stopped abruptly
+      double pulse = 0.5 + 0.5 * math.sin(progress * math.pi * 10);
+      paint.style = PaintingStyle.fill;
+      paint.color = Colors.red.withOpacity(0.4 + (0.4 * pulse));
+      canvas.drawCircle(Offset(ax, ay), 35 + (8 * pulse), paint);
+      
+      // Warning Triangle
+      paint.color = Colors.yellowAccent;
+      Path warningPath = Path();
+      warningPath.moveTo(ax, ay - 18);
+      warningPath.lineTo(ax - 18, ay + 12);
+      warningPath.lineTo(ax + 18, ay + 12);
+      warningPath.close();
+      canvas.drawPath(warningPath, paint);
+      
+      // Exclamation Mark inside the triangle
+      paint.color = Colors.black;
+      canvas.drawRect(Rect.fromLTWH(ax - 2.5, ay - 5, 5, 10), paint);
+      canvas.drawCircle(Offset(ax, ay + 8), 2.5, paint);
+      
+      // Cross mark (failing to restart) overlay
+      paint.color = Colors.red[900]!;
+      paint.style = PaintingStyle.stroke;
+      paint.strokeWidth = 4;
+      double crossProg = (progress * 2).clamp(0.0, 1.0);
+      if (crossProg > 0) {
+        canvas.drawLine(
+          Offset(ax - 25, ay - 25), 
+          Offset(ax - 25 + (50 * crossProg), ay - 25 + (50 * crossProg)), 
+          paint
+        );
+        canvas.drawLine(
+          Offset(ax + 25, ay - 25), 
+          Offset(ax + 25 - (50 * crossProg), ay - 25 + (50 * crossProg)), 
+          paint
+        );
+      }
     } else {
       paint.color = organ.highlightColor.withAlpha(200);
       canvas.drawCircle(Offset(x, y), 25, paint);
@@ -264,7 +487,11 @@ class _MechanismPainter extends CustomPainter {
     
     String labelText = organ.name;
     if (language == 'te') labelText = organ.nameTe;
-    if (language == 'hi') labelText = organ.nameHi;
+    else if (language == 'hi') labelText = organ.nameHi;
+    else if (language == 'kn') labelText = organ.nameKn;
+    else if (language == 'ta') labelText = organ.nameTa;
+    else if (language == 'mr') labelText = organ.nameMr;
+    else if (language == 'bn') labelText = organ.nameBn;
     
     _drawLabel(canvas, labelText, x, y - 40);
   }

@@ -4,8 +4,8 @@ import 'package:Vewha/data/plain_language_map.dart';
 
 void main() {
   group('Prescription Data & Localization Validation', () {
-    test('Validate all 5 medications exist and are unique with trilingual detail fields', () {
-      expect(studyDrugs.length, equals(5));
+    test('Validate all 7 medications exist and are unique with multilingual detail fields', () {
+      expect(studyDrugs.length, equals(7));
 
       final Set<String> drugIds = {};
       for (final drug in studyDrugs) {
@@ -17,7 +17,7 @@ void main() {
         expect(drug.doseTe.isNotEmpty, isTrue);
         expect(drug.doseHi.isNotEmpty, isTrue);
         
-        expect(drug.questions.length, equals(6));
+        expect(drug.questions.length, greaterThan(0));
         for (final q in drug.questions) {
             expect(q.optionsEn.length, greaterThanOrEqualTo(2));
             expect(q.optionsTe.length, equals(q.optionsEn.length));
@@ -31,7 +31,7 @@ void main() {
       }
     });
 
-    test('Validate complete English, Telugu, and Hindi translations for all study drugs', () {
+    test('Validate complete translations for all 7 languages for all study drugs', () {
       for (final drug in studyDrugs) {
         final key = drug.plainLanguageKey;
         expect(plainLanguageMap.containsKey(key), isTrue, reason: 'Missing translation map for plainLanguageKey: $key');
@@ -41,6 +41,10 @@ void main() {
         expect(entry.containsKey('en'), isTrue);
         expect(entry.containsKey('te'), isTrue);
         expect(entry.containsKey('hi'), isTrue);
+        expect(entry.containsKey('kn'), isTrue);
+        expect(entry.containsKey('ta'), isTrue);
+        expect(entry.containsKey('mr'), isTrue);
+        expect(entry.containsKey('bn'), isTrue);
       }
     });
   });

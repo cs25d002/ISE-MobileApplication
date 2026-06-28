@@ -59,7 +59,7 @@ void main() {
 
       // Verify that we navigated to the MedicationListScreen and are on Medication 1
       expect(find.byType(MedicationListScreen), findsOneWidget);
-      expect(find.text('Medication 1 of 5'), findsOneWidget);
+      expect(find.text('Medication 1 of 7'), findsOneWidget);
       expect(find.byType(PatientEntryScreen), findsNothing);
     });
   });

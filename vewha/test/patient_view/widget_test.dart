@@ -192,7 +192,7 @@ void main() {
       ));
 
       // Medication 1 is visible
-      expect(find.text('Medication 1 of 5'), findsOneWidget);
+      expect(find.text('Medication 1 of 7'), findsOneWidget);
       expect(find.text('Previous'), findsNothing); // First item, no previous button
       expect(find.text('Next'), findsOneWidget);
 
@@ -200,7 +200,7 @@ void main() {
       await tester.tap(find.text('Next'));
       await tester.pump();
 
-      expect(find.text('Medication 2 of 5'), findsOneWidget);
+      expect(find.text('Medication 2 of 7'), findsOneWidget);
       expect(find.text('Previous'), findsOneWidget);
     });
 
