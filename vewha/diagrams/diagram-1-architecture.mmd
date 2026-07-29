@@ -26,10 +26,11 @@ graph TB
             subgraph DataLayer["Data Layer (Static, No Network)"]
                 direction TB
                 prescriptions["prescriptions.dart (~50KB)"]
-                plainLang["plain_language_map.dart (~500KB)"]
+                translationService["TranslationService (JSON Lazy Loader)"]
+                medicalGlossary["MedicalGlossary (Interceptor)"]
                 strings["strings.dart (~50KB)"]
                 animConfig["Animation Configs"]
-                noteData["All data loaded at startup (~600KB)<br>Memory baseline: ~15-20MB peak"]
+                noteData["Language JSONs loaded on-demand<br>Memory baseline: ~10MB peak"]
             end
 
             subgraph ScreenLayer["Screen Layer"]
@@ -48,21 +49,21 @@ graph TB
 
             subgraph ComponentLayer["Component Layer"]
                 direction TB
-                anatomyViewer["AnatomyViewer<br>(CustomPainter, SVG)"]
+                anatomyViewer["AnatomyViewer<br>(CustomPainter, SVG, RepaintBoundary)"]
                 mechanismAnimator["MechanismAnimator<br>(Step-by-step reveal)"]
                 pictogramRow["PictogramRow<br>(Icons + labels)"]
                 audioNarration["AudioNarration<br>(flutter_tts)"]
                 medCard["MedicationCard"]
                 progStepper["ProgressStepper"]
                 
-                noteAnatomy["CustomPainter loop<br>60fps target, <16.67ms/frame"]
-                noteMech["Timer-driven, 1.8s step<br>No frame-sync"]
-                noteAudio["TTS lazy init (~200-500ms)<br><1ms cached"]
+                noteAnatomy["CustomPainter loop<br>Synced to Audio Clock via ValueListenableBuilder"]
+                noteMech["Audio position driven<br>Frame-synced to chunked speech"]
+                noteAudio["TTS prewarmed singleton<br>0ms latency, provides Master Clock (Stopwatch)"]
                 noteStepper["Minimal redraws<br>O(1) state update"]
             end
 
             subgraph i18n["i18n Layer (7 Languages)"]
-                langs["en.dart, te.dart, hi.dart, kn.dart, ta.dart, mr.dart, bn.dart"]
+                langs["assets/i18n/*.json (en, te, hi, kn, ta, mr, bn)"]
             end
 
             subgraph LoggingLayer["Logging Layer (Local Only)"]

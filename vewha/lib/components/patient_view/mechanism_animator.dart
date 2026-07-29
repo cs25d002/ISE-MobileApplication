@@ -87,10 +87,12 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
         _progressController.forward(from: 0.0);
       } else {
         t.cancel();
-        if (mounted) setState(() {
+        if (mounted) {
+          setState(() {
           _completed = true;
           _progressController.value = 1.0;
         });
+        }
       }
     });
   }

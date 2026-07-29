@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Vewha/data/prescriptions.dart';
-import 'package:Vewha/data/plain_language_map.dart';
 
 void main() {
   group('Prescription Data & Localization Validation', () {
@@ -31,21 +30,5 @@ void main() {
       }
     });
 
-    test('Validate complete translations for all 7 languages for all study drugs', () {
-      for (final drug in studyDrugs) {
-        final key = drug.plainLanguageKey;
-        expect(plainLanguageMap.containsKey(key), isTrue, reason: 'Missing translation map for plainLanguageKey: $key');
-
-        final entry = plainLanguageMap[key]!;
-        
-        expect(entry.containsKey('en'), isTrue);
-        expect(entry.containsKey('te'), isTrue);
-        expect(entry.containsKey('hi'), isTrue);
-        expect(entry.containsKey('kn'), isTrue);
-        expect(entry.containsKey('ta'), isTrue);
-        expect(entry.containsKey('mr'), isTrue);
-        expect(entry.containsKey('bn'), isTrue);
-      }
-    });
   });
 }

@@ -45,6 +45,7 @@ dependencies:
   google_fonts: ^6.3.0
   video_player: ^2.8.2
   flutter_tts: ^4.0.2
+  share_plus: ^13.3.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
@@ -53,6 +54,8 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
 
+  path_provider_platform_interface: any
+  plugin_platform_interface: any
 flutter_icons:
   android: true
   ios: true
@@ -86,6 +89,7 @@ flutter:
     - assets/images/icon.png
     - assets/images/
     - assets/anatomy/
+    - assets/i18n/
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

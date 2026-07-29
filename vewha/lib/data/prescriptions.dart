@@ -160,7 +160,7 @@ const List<StudyDrug> studyDrugs = [
     bodySystem: BodySystem.endocrine,
     plainLanguageKey: 'metformin_01',
     isNonObvious: false,
-    anatomyConfig: const AnatomyAnimationConfig(
+    anatomyConfig: AnatomyAnimationConfig(
       storyboardSteps: [
         MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'stomach', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Liver', titleTe: 'కాలేయం', titleHi: 'जिगर', icon: Icons.bloodtype, organTargetId: 'liver', animationTrigger: 'move'),
@@ -273,7 +273,7 @@ const List<StudyDrug> studyDrugs = [
     bodySystem: BodySystem.respiratory,
     plainLanguageKey: 'salbutamol_01',
     isNonObvious: false,
-    anatomyConfig: const AnatomyAnimationConfig(
+    anatomyConfig: AnatomyAnimationConfig(
       storyboardSteps: [
         MechanismStep(titleEn: 'Inhaler', titleTe: 'ఇన్హేలర్', titleHi: 'इनहेलर', icon: Icons.air, organTargetId: 'mouth', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Lungs', titleTe: 'ఊపిరితిత్తులు', titleHi: 'फेफड़े', icon: Icons.masks, organTargetId: 'lungs', animationTrigger: 'move'),
@@ -386,7 +386,7 @@ const List<StudyDrug> studyDrugs = [
     bodySystem: BodySystem.integumentary,
     plainLanguageKey: 'betamethasone_01',
     isNonObvious: false,
-    anatomyConfig: const AnatomyAnimationConfig(
+    anatomyConfig: AnatomyAnimationConfig(
       storyboardSteps: [
         MechanismStep(titleEn: 'Apply Ointment', titleTe: 'ఆయింట్‌మెంట్ పూయండి', titleHi: 'मलहम लगाएं', icon: Icons.clean_hands, organTargetId: 'skin_surface', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Enters Skin', titleTe: 'చర్మంలోకి వెళుతుంది', titleHi: 'त्वचा में प्रवेश', icon: Icons.back_hand, organTargetId: 'skin_surface', animationTrigger: 'move'),
@@ -498,7 +498,7 @@ const List<StudyDrug> studyDrugs = [
     bodySystem: BodySystem.cardiovascular,
     plainLanguageKey: 'amlodipine_01',
     isNonObvious: false,
-    anatomyConfig: const AnatomyAnimationConfig(
+    anatomyConfig: AnatomyAnimationConfig(
       storyboardSteps: [
         MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'bloodstream', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Bloodstream', titleTe: 'రక్తప్రవాహం', titleHi: 'रक्त प्रवाह', icon: Icons.linear_scale, organTargetId: 'vessels', animationTrigger: 'move'),
@@ -753,7 +753,7 @@ const List<StudyDrug> studyDrugs = [
     bodySystem: BodySystem.cardiovascular,
     plainLanguageKey: 'lisinopril_01',
     isNonObvious: false,
-    anatomyConfig: const AnatomyAnimationConfig(
+    anatomyConfig: AnatomyAnimationConfig(
       storyboardSteps: [
         MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'blood', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Blood Vessels', titleTe: 'రక్త నాళాలు', titleHi: 'रक्त वाहिकाएं', icon: Icons.waves, organTargetId: 'vessels', animationTrigger: 'move'),
@@ -835,7 +835,7 @@ const List<StudyDrug> studyDrugs = [
     bodySystem: BodySystem.endocrine,
     plainLanguageKey: 'atorvastatin_01',
     isNonObvious: false,
-    anatomyConfig: const AnatomyAnimationConfig(
+    anatomyConfig: AnatomyAnimationConfig(
       storyboardSteps: [
         MechanismStep(titleEn: 'Tablet', titleTe: 'మాత్ర', titleHi: 'गोली', icon: Icons.medication, organTargetId: 'stomach', animationTrigger: 'start'),
         MechanismStep(titleEn: 'Liver', titleTe: 'కాలేయం', titleHi: 'जिगर', icon: Icons.bloodtype, organTargetId: 'liver', animationTrigger: 'move'),

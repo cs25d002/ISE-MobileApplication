@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../logging/study_logger.dart';
 import 'medication_list_screen.dart';
 import '../../services/patient_tts_service.dart';
@@ -59,15 +60,23 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
   Future<void> _export() async {
     final path = await StudyLogger().exportToCsv();
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _t('Exported to: $path', 'ఎగుమతి చేయబడింది: $path', 'निर्यात किया गया: $path', 'ರಫ್ತು ಮಾಡಲಾಗಿದೆ: $path', 'ஏற்றுமதி செய்யப்பட்டது: $path', 'निर्यात केले: $path', 'রপ্তানি করা হয়েছে: $path'),
-            style: const TextStyle(fontWeight: FontWeight.bold),
+      try {
+        await Share.shareXFiles([XFile(path)], text: 'VEWHA Study Log CSV');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _t('Exported & Shared successfully', 'ఎగుమతి చేయబడింది', 'निर्यात किया गया', 'ರಫ್ತು ಮಾಡಲಾಗಿದೆ', 'ஏற்றுமதி செய்யப்பட்டது', 'निर्यात केले', 'রপ্তানি করা হয়েছে'),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: const Color(0xFF1D9E75),
           ),
-          backgroundColor: const Color(0xFF1D9E75),
-        ),
-      );
+        );
+      } catch (e) {
+        debugPrint('Error sharing file: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to share file: $e')),
+        );
+      }
     }
   }
 

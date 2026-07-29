@@ -8,7 +8,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'package:Vewha/data/prescriptions.dart';
-import 'package:Vewha/data/plain_language_map.dart';
+import 'package:Vewha/data/plain_lang_entry.dart';
 import 'package:Vewha/logging/study_logger.dart';
 import 'package:Vewha/components/patient_view/anatomy_viewer.dart';
 import 'package:Vewha/components/patient_view/audio_narration.dart';

@@ -4,10 +4,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:Vewha/data/prescriptions.dart' hide Colors;
-import '../../data/plain_language_map.dart';
 import '../../logging/study_logger.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../services/patient_tts_service.dart';
+import '../../Services/translation_service.dart';
 
 class ComprehensionScreen extends StatefulWidget {
   final StudyDrug drug;
@@ -80,8 +80,8 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
       if (widget.language == 'mr') langCode = 'mr-IN';
       if (widget.language == 'bn') langCode = 'bn-IN';
       
-      final entry = plainLanguageMap[widget.drug.plainLanguageKey]?[widget.language] ?? 
-                    plainLanguageMap[widget.drug.plainLanguageKey]!['en']!;
+      final entry = TranslationService().getEntry(widget.drug.plainLanguageKey, widget.language);
+      if (entry == null) return;
       
       final textToSpeak = "${entry.whatItIsFor.trim()} ${entry.howToTake.trim()} ${entry.mechanismSteps.join(' ').trim()}";
       await _ttsService.speak(textToSpeak, langCode);

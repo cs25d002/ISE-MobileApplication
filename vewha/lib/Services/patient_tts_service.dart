@@ -18,10 +18,14 @@ class PatientTtsService {
 
   final FlutterTts _tts = FlutterTts();
   final ValueNotifier<PatientTtsState> stateNotifier = ValueNotifier(PatientTtsState.idle);
+  final ValueNotifier<Duration> currentChunkPosition = ValueNotifier(Duration.zero);
   bool _isInitialized = false;
 
   bool _cancelChunked = false;
   Completer<void>? _chunkCompleter;
+  
+  final Stopwatch _stopwatch = Stopwatch();
+  Timer? _ticker;
 
   /// Prewarms and initializes the TTS engine early during study setup flows.
   Future<void> prewarm() {
@@ -32,22 +36,27 @@ class PatientTtsService {
     try {
       _tts.awaitSpeakCompletion(true);
       _tts.setCompletionHandler(() {
+        _stopClock();
         stateNotifier.value = PatientTtsState.idle;
         if (_chunkCompleter != null && !_chunkCompleter!.isCompleted) {
           _chunkCompleter!.complete();
         }
       });
       _tts.setStartHandler(() {
+        _startClock();
         stateNotifier.value = PatientTtsState.playing;
       });
       _tts.setPauseHandler(() {
+        _stopClock();
         stateNotifier.value = PatientTtsState.paused;
       });
       _tts.setContinueHandler(() {
+        _startClock();
         stateNotifier.value = PatientTtsState.playing;
       });
       _tts.setErrorHandler((msg) {
         debugPrint("[TTS SERVICE ERROR] $msg");
+        _stopClock();
         stateNotifier.value = PatientTtsState.idle;
         if (_chunkCompleter != null && !_chunkCompleter!.isCompleted) {
           _chunkCompleter!.completeError(msg);
@@ -60,6 +69,24 @@ class PatientTtsService {
       debugPrint("[TTS SERVICE INIT ERROR] $e");
     }
     return Future.value();
+  }
+
+  void _startClock() {
+    _stopwatch.start();
+    _ticker?.cancel();
+    _ticker = Timer.periodic(const Duration(milliseconds: 16), (timer) {
+      currentChunkPosition.value = _stopwatch.elapsed;
+    });
+  }
+
+  void _stopClock() {
+    _stopwatch.stop();
+    _ticker?.cancel();
+  }
+
+  void _resetClock() {
+    _stopwatch.reset();
+    currentChunkPosition.value = Duration.zero;
   }
 
   /// Consolidated speak call with pre-configured parameters and active stop actions.
@@ -97,6 +124,7 @@ class PatientTtsService {
       for (int i = 0; i < chunks.length; i++) {
         if (_cancelChunked) break;
         onProgress(i);
+        _resetClock(); // Reset audio clock for new chunk
         _chunkCompleter = Completer<void>();
         await _tts.speak(chunks[i]);
         
@@ -147,6 +175,8 @@ class PatientTtsService {
 
   Future<void> stop() async {
     _cancelChunked = true;
+    _stopClock();
+    _resetClock();
     if (_chunkCompleter != null && !_chunkCompleter!.isCompleted) {
       _chunkCompleter!.complete();
     }

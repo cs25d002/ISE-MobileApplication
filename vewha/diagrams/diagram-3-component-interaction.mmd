@@ -15,10 +15,10 @@ graph LR
     end
 
     subgraph Rendering Components
-        anatomy["AnatomyViewer<br>Performance: ~5-10ms/frame<br>60fps target"]
-        mechAnim["MechanismAnimator<br>Timer: 1800ms<br>Build: <3ms"]
+        anatomy["AnatomyViewer<br>Performance: ~5-10ms/frame<br>60fps target, RepaintBoundary"]
+        mechAnim["MechanismAnimator<br>Audio clock synced<br>Build: <3ms"]
         pictoRow["PictogramRow<br>Build: <5ms"]
-        audioPlay["AudioNarration<br>Init: 200-500ms"]
+        audioPlay["PatientTtsService (AudioNarration)<br>Master Clock (Stopwatch)"]
         plainText["PlainLanguageText<br>Build: <1ms"]
     end
 
@@ -31,10 +31,10 @@ graph LR
     
     drugBodySys --> anatomy
     animConfig --> anatomy
-    medScreen -- "frame render (60fps)" --> anatomy
+    audioPlay -- "currentChunkPosition (Master Clock)" --> anatomy
     
     mechSteps --> mechAnim
-    medScreen -- "timer tick (1.8s)" --> mechAnim
+    audioPlay -- "onProgress (chunk index)" --> mechAnim
     
     pictoData --> pictoRow
     medScreen -- "language toggle" --> pictoRow
