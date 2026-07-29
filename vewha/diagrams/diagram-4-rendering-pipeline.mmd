@@ -1,0 +1,48 @@
+```mermaid
+graph TD
+    subgraph FrameLifecycle["Frame Lifecycle (Target: <16.67ms @ 60fps)"]
+        t0["T=0ms: AnimationController._tick()<br>Time: <1ms"]
+        t1["T=<1ms: Widget.build()<br>Total time: <7ms"]
+        t2["T=<7ms: RenderObject.performLayout()<br>Time: <2ms"]
+        t3["T=<9ms: RenderObject.paint()<br>Total time: <7ms"]
+        t4["T=<16ms: Raster Phase (GPU)<br>Time: <1ms"]
+        t5["T=16.67ms: Frame Complete"]
+        
+        t0 --> t1
+        t1 --> t2
+        t2 --> t3
+        t3 --> t4
+        t4 --> t5
+        
+        subgraph BuildPhase["Build Details"]
+            b1["AnatomyViewer.build() (<2ms)"]
+            b2["MechanismAnimator.build() (<3ms)"]
+            b3["PictogramRow.build() (<1ms)"]
+            b4["Text Widgets (<1ms)"]
+            t1 --> b1 & b2 & b3 & b4
+        end
+        
+        subgraph PaintPhase["Paint Details"]
+            p1["SvgPicture.paint() (<4ms)"]
+            p2["Text.paint() (<2ms)"]
+            p3["DecoratedBox.paint() (<1ms)"]
+            t3 --> p1 & p2 & p3
+        end
+    end
+    
+    subgraph Optimizations["Optimization Techniques"]
+        opt1["Technique 1: RepaintBoundary around AnatomyViewer (Saves ~2-3ms)"]
+        opt2["Technique 2: SVG Caching on app startup (Saves ~50-100ms first load)"]
+        opt3["Technique 3: Lazy Text Rendering (Saves <1ms/hidden step)"]
+        opt4["Technique 4: TTS Pre-warming on startup (Saves 200-500ms blocking)"]
+        opt5["Technique 5: Hardware Acceleration (Release mode)"]
+    end
+    
+    %% Styles
+    classDef optimal fill:#e6ffe6,stroke:#00cc66;
+    classDef caution fill:#ffffe6,stroke:#cccc00;
+    classDef warning fill:#ffcccc,stroke:#ff0000;
+    
+    class t0,t2,t4,t5,b3,b4,p2,p3 optimal;
+    class t1,t3,b1,b2,p1 caution;
+```

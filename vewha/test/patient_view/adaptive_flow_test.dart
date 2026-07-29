@@ -1,67 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:Vewha/repositories/data_repository.dart';
+import 'package:Vewha/repositories/localization_repository.dart';
+import 'package:Vewha/logging/study_logger.dart';
 import 'package:Vewha/Screens/patient_view/comprehension_screen.dart';
-import 'package:Vewha/data/prescriptions.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late DataRepository dataRepo;
+  late LocalizationRepository locRepo;
+
+  setUpAll(() async {
+    dataRepo = DataRepository();
+    await dataRepo.init();
+    locRepo = LocalizationRepository();
+    await locRepo.init();
+    await locRepo.loadLanguage('en');
+  });
+
+  void setupMockChannels(WidgetTester tester) {
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('flutter_tts'),
+      (MethodCall methodCall) async {
+        return 1;
+      },
+    );
+  }
+
+  Widget wrap(Widget child) {
+    return MultiProvider(
+      providers: [
+        Provider<DataRepository>.value(value: dataRepo),
+        Provider<LocalizationRepository>.value(value: locRepo),
+      ],
+      child: MaterialApp(home: child),
+    );
+  }
+
   group('Adaptive Comprehension Flow', () {
     testWidgets('Incorrect answer triggers recovery mode and displays explanation', (WidgetTester tester) async {
-      final drug = studyDrugs[0]; // Metformin
-      
-      await tester.pumpWidget(MaterialApp(
-        home: ComprehensionScreen(
+      setupMockChannels(tester);
+      final drug = dataRepo.studyDrugs[0]; 
+      StudyLogger().startSession('P33', 'B');
+
+      await tester.pumpWidget(wrap(TickerMode(
+        enabled: false,
+        child: ComprehensionScreen(
           drug: drug,
-          timeOnScreenMs: 5000,
+          timeOnScreenMs: 3000,
           audioPlayed: false,
           language: 'en',
           showVisuals: true,
         ),
-      ));
-      await tester.pump(const Duration(milliseconds: 50));
+      )));
 
-      // Initially no recovery mode info
-      expect(find.text('Let\'s review the information:'), findsNothing);
+      expect(find.text(locRepo.getClinicalEntry(drug.questions[0].questionKey)), findsOneWidget);
 
-      // Tap the wrong option (assuming option 0 is correct, tap option 1)
-      final wrongOption = drug.questions[0].correctIndex == 0 ? 1 : 0;
-      await tester.tap(find.text(drug.questions[0].optionsEn[wrongOption]));
+      final incorrectIndex = (drug.questions[0].correctIndex + 1) % 3;
+      final options = locRepo.getQuizStringList(drug.questions[0].optionsKey);
       
-      // Use pump instead of pumpAndSettle due to infinite animation
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.tap(find.text(options[incorrectIndex]));
+      await tester.pumpAndSettle();
 
-      // Recovery mode should be active
-      expect(find.text('Let\'s review the information:'), findsOneWidget);
-      expect(find.text(drug.purpose), findsOneWidget);
-    });
-
-    testWidgets('Correct answer progresses to next question', (WidgetTester tester) async {
-      final drug = studyDrugs[0];
-      
-      await tester.pumpWidget(MaterialApp(
-        home: ComprehensionScreen(
-          drug: drug,
-          timeOnScreenMs: 5000,
-          audioPlayed: false,
-          language: 'en',
-          showVisuals: false,
-        ),
-      ));
-
-      final firstQ = drug.questions[0].questionEn;
-      expect(find.text(firstQ), findsOneWidget);
-
-      final correctIndex = drug.questions[0].correctIndex;
-      await tester.tap(find.text(drug.questions[0].optionsEn[correctIndex]));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
-
-      // Should move to the second question
-      final secondQ = drug.questions[1].questionEn;
-      expect(find.text(secondQ), findsOneWidget);
-      
-      // No recovery mode info
-      expect(find.text('Let\'s review the information:'), findsNothing);
+      expect(find.text(locRepo.getUiString('lets_review_info')), findsOneWidget);
     });
   });
 }

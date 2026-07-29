@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:Vewha/data/prescriptions.dart' hide Colors;
-import '../../data/plain_language_map.dart';
+import 'package:provider/provider.dart';
+import 'package:Vewha/models/study_drug.dart';
+import '../../data/plain_lang_entry.dart';
+import '../../services/translation_service.dart';
+import '../../repositories/localization_repository.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../components/patient_view/mechanism_animator.dart';
 import '../../components/patient_view/audio_narration.dart';
@@ -31,16 +34,10 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
   late final DateTime _screenOpenTime;
   final ValueNotifier<int> _activeStepNotifier = ValueNotifier<int>(-1);
   Timer? _autoPlayTimer;
+  final GlobalKey<AnatomyViewerState> _anatomyKey = GlobalKey<AnatomyViewerState>();
 
-  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
-    if (_lang == 'hi') return hi;
-    if (_lang == 'te') return te;
-    if (_lang == 'kn') return kn;
-    if (_lang == 'ta') return ta;
-    if (_lang == 'mr') return mr;
-    if (_lang == 'bn') return bn;
-    return en;
-  }
+  PlainLangEntry? _entry;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -49,19 +46,52 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
     _screenOpenTime = DateTime.now();
     PatientModuleRegistry.isTtsInitialized = true;
     PatientModuleRegistry.isSvgInitialized = true;
-    _startAutoPlay();
+    _loadLanguage(_lang);
+  }
+
+  Future<void> _loadLanguage(String lang) async {
+    print('MED_DETAIL: _loadLanguage start for $lang. mounted: $mounted');
+    if (!mounted) return;
+    setState(() => _isLoading = true);
+    
+    // Load clinical entry
+    print('MED_DETAIL: before TranslationService load');
+    await TranslationService().loadLanguage(lang);
+    print('MED_DETAIL: after TranslationService load. mounted: $mounted');
+    
+    if (!mounted) return;
+
+    // Load UI localization
+    final loc = context.read<LocalizationRepository>();
+    print('MED_DETAIL: got loc. current: ${loc.currentLanguage}');
+    if (loc.currentLanguage != lang) {
+      await loc.loadLanguage(lang);
+    }
+    
+    print('MED_DETAIL: before setState. mounted: $mounted');
+    if (mounted) {
+      setState(() {
+        _entry = TranslationService().getEntry(widget.drug.plainLanguageKey, lang) ?? 
+                 TranslationService().getEntry(widget.drug.plainLanguageKey, 'en');
+        print('MED_DETAIL: got entry: ${_entry != null}');
+        _isLoading = false;
+      });
+      _startAutoPlay();
+      print('MED_DETAIL: done');
+    }
   }
 
   void _startAutoPlay() {
+    _autoPlayTimer?.cancel();
     _autoPlayTimer = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
       _activeStepNotifier.value = 0;
       _autoPlayTimer = Timer.periodic(const Duration(milliseconds: 2500), (timer) {
-        if (!mounted || _audioPlayed) {
+        if (!mounted || _audioPlayed || _entry == null) {
           timer.cancel();
           return;
         }
-        if (_activeStepNotifier.value < _entry.mechanismSteps.length - 1) {
+        if (_activeStepNotifier.value < _entry!.mechanismSteps.length - 1) {
           _activeStepNotifier.value++;
         } else {
           timer.cancel();
@@ -77,10 +107,6 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
     _activeStepNotifier.dispose();
     super.dispose();
   }
-
-  PlainLangEntry get _entry =>
-      plainLanguageMap[widget.drug.plainLanguageKey]?[_lang] ??
-      plainLanguageMap[widget.drug.plainLanguageKey]!['en']!;
 
   String get _ttsLang => _lang == 'te' ? 'te-IN' : (_lang == 'hi' ? 'hi-IN' : 'en-IN');
 
@@ -99,11 +125,16 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator(color: Color(0xFF1D9E75))));
+    }
+    final loc = context.watch<LocalizationRepository>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t(widget.drug.name, widget.drug.nameTe, widget.drug.nameHi, widget.drug.nameKn, widget.drug.nameTa, widget.drug.nameMr, widget.drug.nameBn),
+          loc.getClinicalEntry(widget.drug.nameKey),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -122,8 +153,9 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             icon: const Icon(Icons.language, color: Color(0xFF1D9E75)),
             style: const TextStyle(color: Color(0xFF1D9E75), fontWeight: FontWeight.bold, fontSize: 16),
             onChanged: (String? newValue) {
-              if (newValue != null) {
+              if (newValue != null && newValue != _lang) {
                 setState(() => _lang = newValue);
+                _loadLanguage(newValue);
               }
             },
             items: const [
@@ -147,10 +179,12 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             // Anatomy viewer with visual storyboard overlays integrated
             Center(
               child: AnatomyViewer(
-                bodySystem: widget.drug.bodySystem,
+                key: _anatomyKey,
+                bodySystem: widget.drug.bodySystem.toString(),
                 height: MediaQuery.of(context).size.height * 0.40,
                 config: widget.drug.anatomyConfig,
                 activeStepNotifier: _activeStepNotifier,
+                language: _lang,
               ),
             ),
             const SizedBox(height: 16),
@@ -158,33 +192,40 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             // Mechanism Animator (Visual + Text) synchronized
             MechanismAnimator(
               storyboardSteps: widget.drug.anatomyConfig.storyboardSteps,
-              steps: _entry.mechanismSteps,
+              steps: _entry!.mechanismSteps,
               language: _lang,
               activeStepNotifier: _activeStepNotifier,
             ),
             const SizedBox(height: 24),
 
-            // ── Pictogram row for illiterate users ───────────────────────
+            //  Pictogram row for illiterate users 
             PictogramRow(
-              codes: _entry.pictograms,
+              codes: _entry!.pictograms,
               language: _lang,
             ),
             const SizedBox(height: 28),
             
             // Plain language what it's for
-            _section(_t('What this medicine is for', 'ఈ మందు దేనికి వాడతారు', 'यह दवा किसलिए है', 'ಈ ಔಷಧಿಯನ್ನು ಯಾವುದಕ್ಕಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ', 'இந்த மருந்து எதற்காக', 'हे औषध कशासाठी आहे', 'এই ওষুধটি কিসের জন্য'), _entry.whatItIsFor),
+            _section(loc.getUiString('what_is_this_for'), _entry!.whatItIsFor),
             const SizedBox(height: 20),
-            _section(_t('How to take it', 'ఎలా వాడాలి', 'इसे कैसे लेना है', 'ಅದನ್ನು ಹೇಗೆ ತೆಗೆದುಕೊಳ್ಳುವುದು', 'எப்படி எடுத்துக்கொள்வது', 'ते कसे घ्यावे', 'কীভাবে খাবেন'), _entry.howToTake),
+            _section(loc.getUiString('how_to_take_it'), _entry!.howToTake),
             const SizedBox(height: 28),
             
             // Audio button
             Center(
               child: AudioNarration(
-                entry: _entry,
+                entry: _entry!,
                 languageCode: _ttsLang,
                 activeStepNotifier: _activeStepNotifier,
                 onPlayStateChanged: (playing) {
-                  if (playing) setState(() => _audioPlayed = true);
+                  if (playing) {
+                    _audioPlayed = true;
+                    _autoPlayTimer?.cancel();        // stop the idle auto-step timer
+                    _anatomyKey.currentState?.startSyncMode();
+                  } else {
+                    // Narration finished → resume visual replay loop
+                    _anatomyKey.currentState?.startReplayMode();
+                  }
                 },
               ),
             ),
@@ -192,7 +233,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             
             // Clinical summary card
             Text(
-              _t('Clinical details', 'క్లినికల్ వివరాలు', 'नैदानिक विवरण', 'ಕ್ಲಿನಿಕಲ್ ವಿವರಗಳು', 'மருத்துவ விவரங்கள்', 'क्लिनिकल तपशील', 'ক্লিনিক্যাল বিবরণ'),
+              loc.getUiString('clinical_details'),
               style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -210,7 +251,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                   elevation: 2,
                 ),
                 child: Text(
-                  _t('Answer questions about this medicine', 'ప్రశ్నలకు సమాధానం ఇవ్వండి', 'इस दवा के बारे में सवालों के जवाब दें', 'ಈ ಔಷಧಿಯ ಬಗ್ಗೆ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ', 'இந்த மருந்து பற்றிய கேள்விகளுக்கு பதிலளிக்கவும்', 'या औषधाबद्दल प्रश्नांची उत्तरे द्या', 'এই ওষুধ সম্পর্কে প্রশ্নের উত্তর দিন'),
+                  loc.getUiString('answer_questions'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
@@ -232,7 +273,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
         const SizedBox(height: 8),
         Text(
           content,
-          style: const TextStyle(fontSize: 18, color: Color(0xFF333333), height: 1.6),
+          style: const TextStyle(fontSize: 16, color: Color(0xFF333333), height: 1.5),
         ),
       ],
     );

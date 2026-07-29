@@ -1,0 +1,47 @@
+```mermaid
+graph TD
+    subgraph Timeline["Memory Allocation Timeline"]
+        t0["App Launch: 0-2s<br>Total: ~10.8-15.5MB"]
+        t1["Patient Entry: 2-5s<br>Peak: ~11-16MB"]
+        t2["Medication Detail: 5-60s<br>Peak: ~15-25MB"]
+        t3["Comprehension Quiz: 60-90s<br>Peak: <20MB"]
+        t4["Export (End of Session)<br>Peak: No significant spike"]
+        
+        t0 --> t1 --> t2 --> t3 --> t4
+    end
+    
+    subgraph Allocations["Detailed Allocations"]
+        a0["Flutter engine: ~10-15MB<br>Static data: ~600KB<br>SVG assets cached: ~200KB"]
+        a1["Screen widgets: ~200KB"]
+        a2["AnatomyViewer rendering: ~2-3MB<br>TTS engine (first use): ~5-10MB<br>Other components: ~600KB"]
+        a3["MCQ widgets: ~500KB<br>Log entry append: <1KB/entry"]
+        a4["CSV format string buffer: ~50KB<br>Write to file: <100ms"]
+        
+        t0 -.-> a0
+        t1 -.-> a1
+        t2 -.-> a2
+        t3 -.-> a3
+        t4 -.-> a4
+    end
+    
+    subgraph MemoryRisks["Memory Risks & Optimizations"]
+        r1["Risk 1: TTS engine leak<br>Mitigation: Dispose on app exit"]
+        r2["Risk 2: SVG asset reloads<br>Mitigation: flutter_svg ImageCache"]
+        r3["Risk 3: Animation buffer leak<br>Mitigation: Dispose AnimationController"]
+        r4["Risk 4: Language data duplication<br>Mitigation: Reference counting"]
+        
+        o1["Opt 1: TTS lazy init (Done)"]
+        o2["Opt 2: SVG pre-caching (Rec)"]
+        o3["Opt 3: Lazy language load (Rec)"]
+        o4["Opt 4: Batch log flushes (Done)"]
+    end
+    
+    %% Styles
+    classDef optimal fill:#e6ffe6,stroke:#00cc66;
+    classDef caution fill:#ffffe6,stroke:#cccc00;
+    classDef warning fill:#ffcccc,stroke:#ff0000;
+    
+    class a0,a1,a3,a4,o1,o4 optimal;
+    class a2,o2,o3 caution;
+    class r1,r2,r3,r4 warning;
+```

@@ -1,15 +1,15 @@
-// lib/components/patient_view/mechanism_animator.dart
 // Visual-first interactive drug mechanism storyboard animator.
 // Renders dynamic MechanismSteps with icons and flow indicators.
-// Helps fully illiterate patients understand how their medicine works in the body.
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../data/anatomy_config.dart';
+import 'package:provider/provider.dart';
+import '../../repositories/localization_repository.dart';
+import 'package:Vewha/models/study_drug.dart';
 
 class MechanismAnimator extends StatefulWidget {
   final List<String> steps;
-  final String language; // 'en', 'te', 'hi'
+  final String language; 
   final Color accentColor;
   final ValueNotifier<int>? activeStepNotifier;
   final List<MechanismStep> storyboardSteps;
@@ -52,12 +52,11 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
   void _onStepNotifierChanged() {
     final step = widget.activeStepNotifier!.value;
     if (step < 0) {
-      setState(() {
-        _visibleCount = 0;
-        _completed = false;
-        _progressController.reset();
-      });
+      if (_timer == null || !_timer!.isActive) {
+        _startAnimation();
+      }
     } else {
+      _timer?.cancel();
       setState(() {
         _visibleCount = step + 1; // 0-based step, 1-based visible count
         if (_visibleCount >= widget.steps.length) {
@@ -87,10 +86,12 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
         _progressController.forward(from: 0.0);
       } else {
         t.cancel();
-        if (mounted) setState(() {
+        if (mounted) {
+          setState(() {
           _completed = true;
           _progressController.value = 1.0;
         });
+        }
       }
     });
   }
@@ -105,14 +106,14 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
     super.dispose();
   }
 
-  String _tStep(MechanismStep step) {
-    if (widget.language == 'hi') return step.titleHi;
-    if (widget.language == 'te') return step.titleTe;
-    return step.titleEn;
+  String _tStep(MechanismStep step, LocalizationRepository loc) {
+    return loc.getClinicalEntry(step.titleKey);
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<LocalizationRepository>();
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -123,11 +124,7 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                widget.language == 'te'
-                    ? 'మందు పని చేసే విధానం'
-                    : widget.language == 'hi'
-                        ? 'दवा काम करने का तरीका'
-                        : 'How this medicine works',
+                loc.getUiString('how_medicine_works'),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -144,7 +141,7 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
                     Icon(Icons.replay, size: 16, color: widget.accentColor),
                     const SizedBox(width: 4),
                     Text(
-                      widget.language == 'te' ? 'మళ్లీ చూడండి' : widget.language == 'hi' ? 'फिर से देखें' : 'Replay',
+                      loc.getUiString('replay'),
                       style: TextStyle(
                         fontSize: 13,
                         color: widget.accentColor,
@@ -207,7 +204,7 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              _tStep(stepConfig),
+                              _tStep(stepConfig, loc),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: isActive ? const Color(0xFF1A1A2E) : const Color(0xFF888888),

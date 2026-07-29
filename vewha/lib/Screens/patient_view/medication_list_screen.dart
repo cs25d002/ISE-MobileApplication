@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:Vewha/data/prescriptions.dart' hide Colors;
+import 'package:provider/provider.dart';
+import 'package:Vewha/repositories/data_repository.dart';
+import 'package:Vewha/repositories/localization_repository.dart';
 import '../../components/patient_view/progress_stepper.dart';
 import 'medication_detail_screen.dart';
 import 'plain_text_condition_screen.dart';
@@ -20,24 +22,28 @@ class MedicationListScreen extends StatefulWidget {
 
 class _MedicationListScreenState extends State<MedicationListScreen> {
   int _current = 0;
+  bool _isLoading = true;
 
-  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
-    if (widget.language == 'hi') return hi;
-    if (widget.language == 'te') return te;
-    if (widget.language == 'kn') return kn;
-    if (widget.language == 'ta') return ta;
-    if (widget.language == 'mr') return mr;
-    if (widget.language == 'bn') return bn;
-    return en;
+  @override
+  void initState() {
+    super.initState();
+    _initLang();
   }
 
-  void _go(int index) {
-    if (index < 0 || index >= studyDrugs.length) return;
+  Future<void> _initLang() async {
+    final loc = context.read<LocalizationRepository>();
+    if (loc.currentLanguage != widget.language) {
+      await loc.loadLanguage(widget.language);
+    }
+    if (mounted) setState(() => _isLoading = false);
+  }
+
+  void _go(int index, int totalLength) {
+    if (index < 0 || index >= totalLength) return;
     setState(() => _current = index);
   }
 
-  void _openDetail() {
-    final drug = studyDrugs[_current];
+  void _openDetail(dynamic drug) {
     if (widget.condition == 'A') {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => MedicationDetailScreen(
@@ -57,14 +63,20 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final dataRepo = context.watch<DataRepository>();
+    final loc = context.watch<LocalizationRepository>();
+    final studyDrugs = dataRepo.studyDrugs;
     final drug = studyDrugs[_current];
-    final isTe = widget.language == 'te';
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t('Medication ${_current + 1} of ${studyDrugs.length}', 'మందు ${_current + 1} / ${studyDrugs.length}', 'दवा ${_current + 1} / ${studyDrugs.length}', 'ಔಷಧಿ ${_current + 1} / ${studyDrugs.length}', 'மருந்து ${_current + 1} / ${studyDrugs.length}', 'औषध ${_current + 1} / ${studyDrugs.length}', 'ওষুধ ${_current + 1} / ${studyDrugs.length}'),
+          loc.getUiString('medication_count', params: {'0': '${_current + 1}', '1': '${studyDrugs.length}'}),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,
@@ -81,7 +93,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
             ProgressStepper(
               currentIndex: _current,
               total: studyDrugs.length,
-              onTap: _go,
+              onTap: (idx) => _go(idx, studyDrugs.length),
             ),
             const SizedBox(height: 32),
             Card(
@@ -91,7 +103,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 side: const BorderSide(color: Color(0xFFE0E0E0), width: 1.5),
               ),
               child: InkWell(
-                onTap: _openDetail,
+                onTap: () => _openDetail(drug),
                 borderRadius: BorderRadius.circular(16),
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -99,7 +111,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _t(drug.name, drug.nameTe, drug.nameHi, drug.nameKn, drug.nameTa, drug.nameMr, drug.nameBn),
+                        loc.getClinicalEntry(drug.nameKey),
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -108,7 +120,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        _t(drug.purpose, drug.purposeTe, drug.purposeHi, drug.purposeKn, drug.purposeTa, drug.purposeMr, drug.purposeBn),
+                        loc.getClinicalEntry(drug.purposeKey),
                         style: const TextStyle(
                           fontSize: 16,
                           height: 1.5,
@@ -120,7 +132,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            _t('Tap to view details', 'వివరాలను చూడటానికి నొక్కండి', 'विवरण देखने के लिए टैप करें', 'ವಿವರಗಳನ್ನು ನೋಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ', 'விவரங்களைக் காண தட்டவும்', 'तपशील पाहण्यासाठी टॅप करा', 'বিবরণ দেখতে ট্যাপ করুন'),
+                            loc.getUiString('tap_to_view_details'),
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1D9E75),
@@ -142,14 +154,14 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 if (_current > 0)
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => _go(_current - 1),
+                      onPressed: () => _go(_current - 1, studyDrugs.length),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         side: const BorderSide(color: Color(0xFF1D9E75), width: 2),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        _t('Previous', 'వెనక్కి', 'पिछला', 'ಹಿಂದಿನ', 'முந்தைய', 'मागील', 'আগের'),
+                        loc.getUiString('previous'),
                         style: const TextStyle(
                           color: Color(0xFF1D9E75),
                           fontWeight: FontWeight.bold,
@@ -162,7 +174,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 if (_current < studyDrugs.length - 1)
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => _go(_current + 1),
+                      onPressed: () => _go(_current + 1, studyDrugs.length),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1D9E75),
                         foregroundColor: Colors.white,
@@ -170,7 +182,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        _t('Next', 'తదుపరి', 'अगला', 'ಮುಂದಿನ', 'அடுத்த', 'पुढील', 'পরবর্তী'),
+                        loc.getUiString('next'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
@@ -186,7 +198,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        _t('Done', 'పూర్తయింది', 'हो गया', 'ಮುಗಿದಿದೆ', 'முடிந்தது', 'पूर्ण झाले', 'হয়ে গেছে'),
+                        loc.getUiString('done'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),

@@ -4,7 +4,7 @@
 // Adheres fully to the minimum 48x48 tap target and screen-reader accessibility rules.
 
 import 'package:flutter/material.dart';
-import '../../data/plain_language_map.dart';
+import '../../data/plain_lang_entry.dart';
 import '../../services/patient_tts_service.dart';
 
 class AudioNarration extends StatefulWidget {

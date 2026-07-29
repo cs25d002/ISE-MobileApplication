@@ -5,15 +5,18 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Vewha/data/prescriptions.dart' hide Colors;
-import 'package:Vewha/data/anatomy_config.dart';
+import 'package:provider/provider.dart';
+import 'package:Vewha/models/study_drug.dart';
+import '../../repositories/localization_repository.dart';
+
 
 class AnatomyViewer extends StatefulWidget {
-  final BodySystem bodySystem;
+  final String bodySystem;
   final double height;
   final AnatomyAnimationConfig? config;
   final ValueNotifier<int>? activeStepNotifier;
   final String language;
+  final bool isRecoveryMode;
 
   const AnatomyViewer({
     super.key,
@@ -22,35 +25,63 @@ class AnatomyViewer extends StatefulWidget {
     this.config,
     this.activeStepNotifier,
     this.language = 'en',
+    this.isRecoveryMode = false,
   });
 
   @override
-  State<AnatomyViewer> createState() => _AnatomyViewerState();
+  State<AnatomyViewer> createState() => AnatomyViewerState();
 }
 
-class _AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
+class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderStateMixin {
+  late AnimationController _loopController;
+  final Map<String, TextPainter> _textCache = {};
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 2500),
+    _loopController = AnimationController(
       vsync: this,
+      duration: const Duration(milliseconds: 2500),
     )..repeat();
-    
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
   }
 
   @override
+  void didUpdateWidget(AnatomyViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.language != widget.language) {
+      _textCache.clear();
+    }
+  }
+
+  /// Called when narration starts — resets the loop to t=0 so the painter
+  /// follows activeStepNotifier for synchronised rendering.
+  void startSyncMode() {
+    _loopController.stop();
+    _loopController.value = 0.0;
+    _loopController.repeat();          // keep ticking so pulse effects animate
+  }
+
+  /// Called when narration finishes — continues looping so the idle painter
+  /// cycles through steps using progress-based interpolation.
+  void startReplayMode() {
+    if (!_loopController.isAnimating) {
+      _loopController.repeat();
+    }
+  }
+
+  /// Legacy alias – kept for any external callers.
+  void restartAnimation() => startReplayMode();
+
+  @override
   void dispose() {
-    _controller.dispose();
+    _loopController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<LocalizationRepository>();
+
     return Container(
       width: double.infinity,
       height: widget.height,
@@ -62,32 +93,33 @@ class _AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProvider
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Base SVG Anatomy Model
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: SvgPicture.asset(
-              'assets/anatomy/${widget.bodySystem.name}.svg',
-              height: widget.height,
-              fit: BoxFit.contain,
-              placeholderBuilder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF1D9E75))),
+          // Background Anatomy
+          RepaintBoundary(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Opacity(
+                opacity: 0.8,
+                child: SvgPicture.asset(
+                  'assets/anatomy/${widget.bodySystem}.svg',
+                  height: widget.height * 0.9,
+                  colorFilter: const ColorFilter.mode(Color(0xFFE0E0E0), BlendMode.srcIn),
+                ),
+              ),
             ),
           ),
           
-          // Mechanism Pathway Animation Overlay
           if (widget.config != null)
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: Listenable.merge([_animation, widget.activeStepNotifier]),
-                builder: (context, child) {
-                  return CustomPaint(
-                    painter: _MechanismPainter(
-                      config: widget.config!,
-                      progress: _animation.value,
-                      activeStep: widget.activeStepNotifier?.value ?? -1,
-                      language: widget.language,
-                    ),
-                  );
-                },
+            RepaintBoundary(
+              child: CustomPaint(
+                size: Size(widget.height * 0.9, widget.height * 0.9),
+                painter: _MechanismPainter(
+                  config: widget.config!,
+                  loopController: _loopController,
+                  activeStepNotifier: widget.activeStepNotifier,
+                  language: widget.language,
+                  loc: loc,
+                  textCache: _textCache,
+                ),
               ),
             ),
         ],
@@ -98,20 +130,36 @@ class _AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProvider
 
 class _MechanismPainter extends CustomPainter {
   final AnatomyAnimationConfig config;
-  final double progress;
-  final int activeStep;
+  final AnimationController loopController;
+  final ValueNotifier<int>? activeStepNotifier;
   final String language;
+  final LocalizationRepository loc;
+  final Map<String, TextPainter> textCache;
 
   _MechanismPainter({
     required this.config,
-    required this.progress,
-    required this.activeStep,
+    required this.loopController,
+    this.activeStepNotifier,
     required this.language,
-  });
+    required this.loc,
+    required this.textCache,
+  }) : super(
+          repaint: Listenable.merge([
+            loopController,
+            if (activeStepNotifier != null) activeStepNotifier
+          ]),
+        );
+
+  double get progress => loopController.value;
+  int get activeStep {
+    final val = activeStepNotifier?.value ?? -1;
+    if (val >= 0) return val;
+    if (config.storyboardSteps.isEmpty) return 0;
+    return (progress * config.storyboardSteps.length).floor() % config.storyboardSteps.length;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    // If no active step yet, don't draw overlays
     if (activeStep < 0) return;
 
     // Collect active items to draw
@@ -135,13 +183,10 @@ class _MechanismPainter extends CustomPainter {
     }
     
     // 3. Draw Outcome if active
-    String currentOutcomeText = config.outcomeText;
-    if (language == 'te' && config.outcomeTextTe.isNotEmpty) currentOutcomeText = config.outcomeTextTe;
-    else if (language == 'hi' && config.outcomeTextHi.isNotEmpty) currentOutcomeText = config.outcomeTextHi;
-    else if (language == 'kn' && config.outcomeTextKn.isNotEmpty) currentOutcomeText = config.outcomeTextKn;
-    else if (language == 'ta' && config.outcomeTextTa.isNotEmpty) currentOutcomeText = config.outcomeTextTa;
-    else if (language == 'mr' && config.outcomeTextMr.isNotEmpty) currentOutcomeText = config.outcomeTextMr;
-    else if (language == 'bn' && config.outcomeTextBn.isNotEmpty) currentOutcomeText = config.outcomeTextBn;
+    String currentOutcomeText = '';
+    if (config.outcomeTextKey.isNotEmpty) {
+      currentOutcomeText = loc.getClinicalEntry(config.outcomeTextKey);
+    }
 
     if (activeIds.contains('outcome') && currentOutcomeText.isNotEmpty) {
       // Find outcome position (usually bottom center of the active region, or default)
@@ -164,20 +209,20 @@ class _MechanismPainter extends CustomPainter {
       canvas.drawCircle(Offset(x, y), 25 + (5 * intensity), paint);
     } else if (organ.effectType == 'hepatocytes') {
       // Background cell
-      paint.color = organ.highlightColor.withOpacity(0.3);
+      paint.color = organ.highlightColor.withValues(alpha: 0.3);
       paint.style = PaintingStyle.fill;
       final cellRect = RRect.fromRectAndRadius(Rect.fromLTWH(x - 50, y - 50, 100, 100), const Radius.circular(15));
       canvas.drawRRect(cellRect, paint);
       
       // Cell membrane border
-      paint.color = organ.highlightColor.withOpacity(0.8);
+      paint.color = organ.highlightColor.withValues(alpha: 0.8);
       paint.style = PaintingStyle.stroke;
       paint.strokeWidth = 3;
       canvas.drawRRect(cellRect, paint);
       
       // Nucleus
       paint.style = PaintingStyle.fill;
-      paint.color = Colors.purple.withOpacity(0.4);
+      paint.color = Colors.purple.withValues(alpha: 0.4);
       canvas.drawCircle(Offset(x, y + 15), 18, paint);
 
       // GLUT Transporters (Channels on top membrane)
@@ -186,7 +231,7 @@ class _MechanismPainter extends CustomPainter {
       canvas.drawRect(Rect.fromLTWH(x + 10, y - 55, 10, 10), paint);
 
       // Mitochondria (ovals)
-      paint.color = Colors.orange.withOpacity(0.5 + (0.5 * progress));
+      paint.color = Colors.orange.withValues(alpha: 0.5 + (0.5 * progress));
       canvas.save();
       canvas.translate(x - 25, y - 10);
       canvas.rotate(math.pi / 4);
@@ -222,7 +267,7 @@ class _MechanismPainter extends CustomPainter {
         
         paint.style = PaintingStyle.stroke;
         paint.strokeWidth = w + 4;
-        paint.color = mColor.withOpacity(0.8 - (0.3 * p));
+        paint.color = mColor.withValues(alpha: 0.8 - (0.3 * p));
         paint.strokeCap = StrokeCap.round;
         canvas.drawLine(start, end, paint);
         
@@ -238,7 +283,7 @@ class _MechanismPainter extends CustomPainter {
       drawBronchus(Offset(x + 20, y + 15), Offset(x + 30, y + 35), (progress - 0.66) * 3);
     } else if (organ.effectType == 'air_flow') {
       paint.style = PaintingStyle.fill;
-      paint.color = Colors.lightBlueAccent.withOpacity(0.8);
+      paint.color = Colors.lightBlueAccent.withValues(alpha: 0.8);
       double speedMultiplier = 1.0 + (2.0 * progress); 
       for(int i=0; i<8; i++) {
          double p = ((progress * speedMultiplier) + (i * 0.125)) % 1.0;
@@ -335,7 +380,7 @@ class _MechanismPainter extends CustomPainter {
       double wSmall = 3 + (2 * progress);
       
       paint.style = PaintingStyle.stroke;
-      paint.color = Colors.redAccent.withOpacity(0.8);
+      paint.color = Colors.redAccent.withValues(alpha: 0.8);
       paint.strokeCap = StrokeCap.round;
       
       paint.strokeWidth = wBase;
@@ -382,13 +427,13 @@ class _MechanismPainter extends CustomPainter {
       double maxRadius = 60.0;
       for (int i=0; i<3; i++) {
         double p = (progress + (i * 0.33)) % 1.0;
-        paint.color = organ.highlightColor.withOpacity(0.6 * (1.0 - p));
+        paint.color = organ.highlightColor.withValues(alpha: 0.6 * (1.0 - p));
         canvas.drawCircle(Offset(x, y), maxRadius * p, paint);
       }
       
       paint.style = PaintingStyle.fill;
       double organGlow = (progress < 0.5) ? progress * 2 : 2.0 - (progress * 2);
-      paint.color = organ.highlightColor.withOpacity(0.3 + (0.3 * organGlow));
+      paint.color = organ.highlightColor.withValues(alpha: 0.3 + (0.3 * organGlow));
       
       canvas.drawCircle(Offset(x, y - 40), 8, paint);
       canvas.drawCircle(Offset(x - 15, y - 10), 10, paint);
@@ -402,13 +447,13 @@ class _MechanismPainter extends CustomPainter {
       double ay = y - 30;
       paint.style = PaintingStyle.fill;
       double adrenalGlow = progress < 0.4 ? (progress / 0.4) : (1.0 - ((progress - 0.4) / 0.6));
-      paint.color = Colors.orange.withOpacity(0.4 + (0.6 * adrenalGlow));
+      paint.color = Colors.orange.withValues(alpha: 0.4 + (0.6 * adrenalGlow));
       canvas.drawOval(Rect.fromLTWH(ax - 10, ay - 6, 20, 12), paint);
       
       double tx = x - 10;
       double ty = y + 10;
       Color tColor = Color.lerp(Colors.red, const Color(0xFFFFCCBC), progress)!;
-      paint.color = tColor.withOpacity(0.7);
+      paint.color = tColor.withValues(alpha: 0.7);
       double tRadius = 35.0 - (10.0 * progress);
       canvas.drawCircle(Offset(tx, ty), tRadius, paint);
       
@@ -446,7 +491,7 @@ class _MechanismPainter extends CustomPainter {
       // Danger pulse indicating adrenal failure if stopped abruptly
       double pulse = 0.5 + 0.5 * math.sin(progress * math.pi * 10);
       paint.style = PaintingStyle.fill;
-      paint.color = Colors.red.withOpacity(0.4 + (0.4 * pulse));
+      paint.color = Colors.red.withValues(alpha: 0.4 + (0.4 * pulse));
       canvas.drawCircle(Offset(ax, ay), 35 + (8 * pulse), paint);
       
       // Warning Triangle
@@ -485,13 +530,7 @@ class _MechanismPainter extends CustomPainter {
       canvas.drawCircle(Offset(x, y), 25, paint);
     }
     
-    String labelText = organ.name;
-    if (language == 'te') labelText = organ.nameTe;
-    else if (language == 'hi') labelText = organ.nameHi;
-    else if (language == 'kn') labelText = organ.nameKn;
-    else if (language == 'ta') labelText = organ.nameTa;
-    else if (language == 'mr') labelText = organ.nameMr;
-    else if (language == 'bn') labelText = organ.nameBn;
+    String labelText = loc.getClinicalEntry(organ.name);
     
     _drawLabel(canvas, labelText, x, y - 40);
   }
@@ -545,18 +584,20 @@ class _MechanismPainter extends CustomPainter {
   }
 
   void _drawLabel(Canvas canvas, String text, double x, double y) {
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          shadows: [Shadow(color: Colors.black87, blurRadius: 4)],
+    final textPainter = textCache.putIfAbsent(text, () {
+      return TextPainter(
+        text: TextSpan(
+          text: text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            shadows: [Shadow(color: Colors.black87, blurRadius: 4)],
+          ),
         ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
+        textDirection: TextDirection.ltr,
+      )..layout();
+    });
     
     final bgRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(x - (textPainter.width / 2) - 4, y - 2, textPainter.width + 8, textPainter.height + 4),
@@ -567,24 +608,27 @@ class _MechanismPainter extends CustomPainter {
   }
 
   void _drawBenefit(Canvas canvas, String text, double x, double y, Color textColor) {
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 18,
-          fontWeight: FontWeight.w900,
-          shadows: const [Shadow(color: Colors.white, blurRadius: 6)],
+    final key = "benefit_$text";
+    final textPainter = textCache.putIfAbsent(key, () {
+      return TextPainter(
+        text: TextSpan(
+          text: text,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w900,
+            shadows: const [Shadow(color: Colors.white, blurRadius: 6)],
+          ),
         ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
+        textDirection: TextDirection.ltr,
+      )..layout();
+    });
     
     textPainter.paint(canvas, Offset(x - (textPainter.width / 2) + 30, y));
   }
 
   @override
   bool shouldRepaint(covariant _MechanismPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.activeStep != activeStep || oldDelegate.config != config;
+    return oldDelegate.config != config || oldDelegate.language != language;
   }
 }

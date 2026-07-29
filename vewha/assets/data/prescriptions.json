@@ -1,0 +1,1043 @@
+[
+  {
+    "drugId": "metformin_01",
+    "bodySystem": "endocrine",
+    "plainLanguageKey": "metformin_01",
+    "isNonObvious": false,
+    "nameKey": "metformin_01_name",
+    "doseKey": "metformin_01_dose",
+    "routeKey": "metformin_01_route",
+    "frequencyKey": "metformin_01_freq",
+    "purposeKey": "metformin_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "stomach",
+          "name": "Stomach",
+          "nameTe": "కడుపు",
+          "nameHi": "पेट",
+          "normalizedPosition": {
+            "dx": 0.55,
+            "dy": 0.4
+          },
+          "highlightColor": 4294940672,
+          "effectType": "pulse"
+        },
+        {
+          "id": "liver",
+          "name": "Liver",
+          "nameTe": "కాలేయం",
+          "nameHi": "यकृत",
+          "normalizedPosition": {
+            "dx": 0.45,
+            "dy": 0.35
+          },
+          "highlightColor": 4294198070,
+          "effectType": "pulse"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.5,
+            "dy": 0.1
+          },
+          "endNormalized": {
+            "dx": 0.55,
+            "dy": 0.4
+          },
+          "color": 4280391411,
+          "style": "particles"
+        },
+        {
+          "id": "path2",
+          "startNormalized": {
+            "dx": 0.55,
+            "dy": 0.4
+          },
+          "endNormalized": {
+            "dx": 0.45,
+            "dy": 0.35
+          },
+          "color": 4294198070,
+          "style": "particles"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "stomach",
+          "path1"
+        ],
+        "1": [
+          "liver",
+          "path2"
+        ],
+        "2": [
+          "liver"
+        ],
+        "3": [
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4283215696,
+      "outcomeTextKey": "metformin_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 58329,
+          "organTargetId": "stomach",
+          "animationTrigger": "start",
+          "titleKey": "metformin_01_step_0"
+        },
+        {
+          "icon": 57571,
+          "organTargetId": "liver",
+          "animationTrigger": "move",
+          "titleKey": "metformin_01_step_1"
+        },
+        {
+          "icon": 57582,
+          "organTargetId": "liver",
+          "animationTrigger": "effect",
+          "titleKey": "metformin_01_step_2"
+        },
+        {
+          "icon": 59005,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "metformin_01_step_3"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose",
+        "questionKey": "metformin_01_q_q_purpose",
+        "optionsKey": "metformin_01_q_q_purpose_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_freq",
+        "questionKey": "metformin_01_q_q_freq",
+        "optionsKey": "metformin_01_q_q_freq_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_use",
+        "questionKey": "metformin_01_q_q_use",
+        "optionsKey": "metformin_01_q_q_use_opts",
+        "correctIndex": 2
+      },
+      {
+        "id": "q_body",
+        "questionKey": "metformin_01_q_q_body",
+        "optionsKey": "metformin_01_q_q_body_opts",
+        "correctIndex": 2
+      },
+      {
+        "id": "q_safety",
+        "questionKey": "metformin_01_q_q_safety",
+        "optionsKey": "metformin_01_q_q_safety_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_verify",
+        "questionKey": "metformin_01_q_q_verify",
+        "optionsKey": "metformin_01_q_q_verify_opts",
+        "correctIndex": 0
+      }
+    ]
+  },
+  {
+    "drugId": "salbutamol_01",
+    "bodySystem": "respiratory",
+    "plainLanguageKey": "salbutamol_01",
+    "isNonObvious": false,
+    "nameKey": "salbutamol_01_name",
+    "doseKey": "salbutamol_01_dose",
+    "routeKey": "salbutamol_01_route",
+    "frequencyKey": "salbutamol_01_freq",
+    "purposeKey": "salbutamol_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "mouth",
+          "name": "Mouth",
+          "nameTe": "నోరు",
+          "nameHi": "मुंह",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.15
+          },
+          "highlightColor": 4278430196,
+          "effectType": "pulse"
+        },
+        {
+          "id": "lungs",
+          "name": "Lungs",
+          "nameTe": "ఊపిరితిత్తులు",
+          "nameHi": "फेफड़े",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.35
+          },
+          "highlightColor": 4280391411,
+          "effectType": "air_flow"
+        },
+        {
+          "id": "airways",
+          "name": "Airways",
+          "nameTe": "శ్వాసనాళాలు",
+          "nameHi": "वायुमार्ग",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.35
+          },
+          "highlightColor": 4278238420,
+          "effectType": "bronchi_cascade"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.5,
+            "dy": 0.15
+          },
+          "endNormalized": {
+            "dx": 0.5,
+            "dy": 0.35
+          },
+          "color": 4278430196,
+          "style": "particles"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "mouth"
+        ],
+        "1": [
+          "lungs",
+          "path1"
+        ],
+        "2": [
+          "airways"
+        ],
+        "3": [
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4282682111,
+      "outcomeTextKey": "salbutamol_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 57444,
+          "organTargetId": "mouth",
+          "animationTrigger": "start",
+          "titleKey": "salbutamol_01_step_0"
+        },
+        {
+          "icon": 58323,
+          "organTargetId": "lungs",
+          "animationTrigger": "move",
+          "titleKey": "salbutamol_01_step_1"
+        },
+        {
+          "icon": 57620,
+          "organTargetId": "airways",
+          "animationTrigger": "effect",
+          "titleKey": "salbutamol_01_step_2"
+        },
+        {
+          "icon": 58749,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "salbutamol_01_step_3"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose",
+        "questionKey": "salbutamol_01_q_q_purpose",
+        "optionsKey": "salbutamol_01_q_q_purpose_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_freq",
+        "questionKey": "salbutamol_01_q_q_freq",
+        "optionsKey": "salbutamol_01_q_q_freq_opts",
+        "correctIndex": 2
+      },
+      {
+        "id": "q_use",
+        "questionKey": "salbutamol_01_q_q_use",
+        "optionsKey": "salbutamol_01_q_q_use_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_body",
+        "questionKey": "salbutamol_01_q_q_body",
+        "optionsKey": "salbutamol_01_q_q_body_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_safety",
+        "questionKey": "salbutamol_01_q_q_safety",
+        "optionsKey": "salbutamol_01_q_q_safety_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_verify",
+        "questionKey": "salbutamol_01_q_q_verify",
+        "optionsKey": "salbutamol_01_q_q_verify_opts",
+        "correctIndex": 0
+      }
+    ]
+  },
+  {
+    "drugId": "betamethasone_01",
+    "bodySystem": "integumentary",
+    "plainLanguageKey": "betamethasone_01",
+    "isNonObvious": false,
+    "nameKey": "betamethasone_01_name",
+    "doseKey": "betamethasone_01_dose",
+    "routeKey": "betamethasone_01_route",
+    "frequencyKey": "betamethasone_01_freq",
+    "purposeKey": "betamethasone_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "skin_surface",
+          "name": "Skin",
+          "nameTe": "చర్మం",
+          "nameHi": "त्वचा",
+          "normalizedPosition": {
+            "dx": 0.7,
+            "dy": 0.5
+          },
+          "highlightColor": 4293467747,
+          "effectType": "skin_layers"
+        },
+        {
+          "id": "skin_deep",
+          "name": "Skin Layers",
+          "nameTe": "చర్మ పొరలు",
+          "nameHi": "त्वचा की परतें",
+          "normalizedPosition": {
+            "dx": 0.7,
+            "dy": 0.5
+          },
+          "highlightColor": 4293467747,
+          "effectType": "fade_inflammation"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.7,
+            "dy": 0.2
+          },
+          "endNormalized": {
+            "dx": 0.7,
+            "dy": 0.4
+          },
+          "color": 4294967295,
+          "style": "penetrate"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "skin_surface"
+        ],
+        "1": [
+          "skin_surface",
+          "path1"
+        ],
+        "2": [
+          "skin_deep"
+        ],
+        "3": [
+          "skin_surface",
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4294918273,
+      "outcomeTextKey": "betamethasone_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 57702,
+          "organTargetId": "skin_surface",
+          "animationTrigger": "start",
+          "titleKey": "betamethasone_01_step_0"
+        },
+        {
+          "icon": 984261,
+          "organTargetId": "skin_surface",
+          "animationTrigger": "move",
+          "titleKey": "betamethasone_01_step_1"
+        },
+        {
+          "icon": 58714,
+          "organTargetId": "skin_deep",
+          "animationTrigger": "effect",
+          "titleKey": "betamethasone_01_step_2"
+        },
+        {
+          "icon": 58117,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "betamethasone_01_step_3"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose",
+        "questionKey": "betamethasone_01_q_q_purpose",
+        "optionsKey": "betamethasone_01_q_q_purpose_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_freq",
+        "questionKey": "betamethasone_01_q_q_freq",
+        "optionsKey": "betamethasone_01_q_q_freq_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_use",
+        "questionKey": "betamethasone_01_q_q_use",
+        "optionsKey": "betamethasone_01_q_q_use_opts",
+        "correctIndex": 2
+      },
+      {
+        "id": "q_body",
+        "questionKey": "betamethasone_01_q_q_body",
+        "optionsKey": "betamethasone_01_q_q_body_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_safety",
+        "questionKey": "betamethasone_01_q_q_safety",
+        "optionsKey": "betamethasone_01_q_q_safety_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_verify",
+        "questionKey": "betamethasone_01_q_q_verify",
+        "optionsKey": "betamethasone_01_q_q_verify_opts",
+        "correctIndex": 0
+      }
+    ]
+  },
+  {
+    "drugId": "amlodipine_01",
+    "bodySystem": "cardiovascular",
+    "plainLanguageKey": "amlodipine_01",
+    "isNonObvious": false,
+    "nameKey": "amlodipine_01_name",
+    "doseKey": "amlodipine_01_dose",
+    "routeKey": "amlodipine_01_route",
+    "frequencyKey": "amlodipine_01_freq",
+    "purposeKey": "amlodipine_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "mouth",
+          "name": "Mouth",
+          "nameTe": "నోరు",
+          "nameHi": "मुंह",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.15
+          },
+          "highlightColor": 4288423856,
+          "effectType": "pulse"
+        },
+        {
+          "id": "stomach",
+          "name": "Stomach",
+          "nameTe": "కడుపు",
+          "nameHi": "पेट",
+          "normalizedPosition": {
+            "dx": 0.55,
+            "dy": 0.35
+          },
+          "highlightColor": 4294940672,
+          "effectType": "pulse"
+        },
+        {
+          "id": "bloodstream",
+          "name": "Bloodstream",
+          "nameTe": "రక్తప్రవాహం",
+          "nameHi": "रक्त प्रवाह",
+          "normalizedPosition": {
+            "dx": 0.4,
+            "dy": 0.5
+          },
+          "highlightColor": 4294922834,
+          "effectType": "pulse"
+        },
+        {
+          "id": "vessels",
+          "name": "Vessels",
+          "nameTe": "రక్తనాళాలు",
+          "nameHi": "रक्त वाहिकाएँ",
+          "normalizedPosition": {
+            "dx": 0.3,
+            "dy": 0.6
+          },
+          "highlightColor": 4294198070,
+          "effectType": "vessel_widen"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.5,
+            "dy": 0.15
+          },
+          "endNormalized": {
+            "dx": 0.55,
+            "dy": 0.35
+          },
+          "color": 4288423856,
+          "style": "particles"
+        },
+        {
+          "id": "path2",
+          "startNormalized": {
+            "dx": 0.55,
+            "dy": 0.35
+          },
+          "endNormalized": {
+            "dx": 0.4,
+            "dy": 0.5
+          },
+          "color": 4294940672,
+          "style": "particles"
+        },
+        {
+          "id": "path3",
+          "startNormalized": {
+            "dx": 0.4,
+            "dy": 0.5
+          },
+          "endNormalized": {
+            "dx": 0.3,
+            "dy": 0.6
+          },
+          "color": 4294922834,
+          "style": "particles"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "mouth",
+          "path1"
+        ],
+        "1": [
+          "stomach",
+          "path2",
+          "bloodstream",
+          "path3",
+          "vessels"
+        ],
+        "2": [
+          "vessels"
+        ],
+        "3": [
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4283215696,
+      "outcomeTextKey": "amlodipine_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 58329,
+          "organTargetId": "bloodstream",
+          "animationTrigger": "start",
+          "titleKey": "amlodipine_01_step_0"
+        },
+        {
+          "icon": 58239,
+          "organTargetId": "vessels",
+          "animationTrigger": "move",
+          "titleKey": "amlodipine_01_step_1"
+        },
+        {
+          "icon": 59135,
+          "organTargetId": "vessels",
+          "animationTrigger": "effect",
+          "titleKey": "amlodipine_01_step_2"
+        },
+        {
+          "icon": 59005,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "amlodipine_01_step_3"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose",
+        "questionKey": "amlodipine_01_q_q_purpose",
+        "optionsKey": "amlodipine_01_q_q_purpose_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_freq",
+        "questionKey": "amlodipine_01_q_q_freq",
+        "optionsKey": "amlodipine_01_q_q_freq_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_use",
+        "questionKey": "amlodipine_01_q_q_use",
+        "optionsKey": "amlodipine_01_q_q_use_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_body",
+        "questionKey": "amlodipine_01_q_q_body",
+        "optionsKey": "amlodipine_01_q_q_body_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_safety",
+        "questionKey": "amlodipine_01_q_q_safety",
+        "optionsKey": "amlodipine_01_q_q_safety_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_verify",
+        "questionKey": "amlodipine_01_q_q_verify",
+        "optionsKey": "amlodipine_01_q_q_verify_opts",
+        "correctIndex": 0
+      }
+    ]
+  },
+  {
+    "drugId": "prednisolone_01",
+    "bodySystem": "systemic",
+    "plainLanguageKey": "prednisolone_01",
+    "isNonObvious": true,
+    "nameKey": "prednisolone_01_name",
+    "doseKey": "prednisolone_01_dose",
+    "routeKey": "prednisolone_01_route",
+    "frequencyKey": "prednisolone_01_freq",
+    "purposeKey": "prednisolone_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "mouth",
+          "name": "Mouth",
+          "nameTe": "నోరు",
+          "nameHi": "मुंह",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.15
+          },
+          "highlightColor": 4288423856,
+          "effectType": "pulse"
+        },
+        {
+          "id": "stomach",
+          "name": "Stomach",
+          "nameTe": "కడుపు",
+          "nameHi": "पेट",
+          "normalizedPosition": {
+            "dx": 0.55,
+            "dy": 0.35
+          },
+          "highlightColor": 4294940672,
+          "effectType": "pulse"
+        },
+        {
+          "id": "bloodstream",
+          "name": "Bloodstream",
+          "nameTe": "రక్తప్రవాహం",
+          "nameHi": "रक्त प्रवाह",
+          "normalizedPosition": {
+            "dx": 0.4,
+            "dy": 0.5
+          },
+          "highlightColor": 4294922834,
+          "effectType": "pulse"
+        },
+        {
+          "id": "body",
+          "name": "Body",
+          "nameTe": "శరీరం",
+          "nameHi": "शरीर",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.4
+          },
+          "highlightColor": 4294940672,
+          "effectType": "circulate"
+        },
+        {
+          "id": "adrenal",
+          "name": "Adrenal Glands",
+          "nameTe": "అడ్రినల్ గ్రంథులు",
+          "nameHi": "अधिवृक्क ग्रंथियां",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.48
+          },
+          "highlightColor": 4294198070,
+          "effectType": "taper_warning"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.5,
+            "dy": 0.15
+          },
+          "endNormalized": {
+            "dx": 0.55,
+            "dy": 0.35
+          },
+          "color": 4288423856,
+          "style": "particles"
+        },
+        {
+          "id": "path2",
+          "startNormalized": {
+            "dx": 0.55,
+            "dy": 0.35
+          },
+          "endNormalized": {
+            "dx": 0.4,
+            "dy": 0.5
+          },
+          "color": 4294940672,
+          "style": "particles"
+        },
+        {
+          "id": "path3",
+          "startNormalized": {
+            "dx": 0.4,
+            "dy": 0.5
+          },
+          "endNormalized": {
+            "dx": 0.5,
+            "dy": 0.4
+          },
+          "color": 4294940672,
+          "style": "particles"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "mouth",
+          "path1"
+        ],
+        "1": [
+          "stomach",
+          "path2",
+          "bloodstream",
+          "path3",
+          "body"
+        ],
+        "2": [
+          "body"
+        ],
+        "3": [
+          "adrenal"
+        ],
+        "4": [
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4283215696,
+      "outcomeTextKey": "prednisolone_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 58329,
+          "organTargetId": "bloodstream",
+          "animationTrigger": "start",
+          "titleKey": "prednisolone_01_step_0"
+        },
+        {
+          "icon": 57405,
+          "organTargetId": "body",
+          "animationTrigger": "move",
+          "titleKey": "prednisolone_01_step_1"
+        },
+        {
+          "icon": 58774,
+          "organTargetId": "immune",
+          "animationTrigger": "effect",
+          "titleKey": "prednisolone_01_step_2"
+        },
+        {
+          "icon": 59083,
+          "organTargetId": "adrenal",
+          "animationTrigger": "warning",
+          "titleKey": "prednisolone_01_step_3"
+        },
+        {
+          "icon": 58116,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "prednisolone_01_step_4"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose",
+        "questionKey": "prednisolone_01_q_q_purpose",
+        "optionsKey": "prednisolone_01_q_q_purpose_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_freq",
+        "questionKey": "prednisolone_01_q_q_freq",
+        "optionsKey": "prednisolone_01_q_q_freq_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_use",
+        "questionKey": "prednisolone_01_q_q_use",
+        "optionsKey": "prednisolone_01_q_q_use_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_body",
+        "questionKey": "prednisolone_01_q_q_body",
+        "optionsKey": "prednisolone_01_q_q_body_opts",
+        "correctIndex": 0
+      },
+      {
+        "id": "q_safety",
+        "questionKey": "prednisolone_01_q_q_safety",
+        "optionsKey": "prednisolone_01_q_q_safety_opts",
+        "correctIndex": 1
+      },
+      {
+        "id": "q_verify",
+        "questionKey": "prednisolone_01_q_q_verify",
+        "optionsKey": "prednisolone_01_q_q_verify_opts",
+        "correctIndex": 0
+      }
+    ]
+  },
+  {
+    "drugId": "lisinopril_01",
+    "bodySystem": "cardiovascular",
+    "plainLanguageKey": "lisinopril_01",
+    "isNonObvious": false,
+    "nameKey": "lisinopril_01_name",
+    "doseKey": "lisinopril_01_dose",
+    "routeKey": "lisinopril_01_route",
+    "frequencyKey": "lisinopril_01_freq",
+    "purposeKey": "lisinopril_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "blood",
+          "name": "Blood",
+          "nameTe": "రక్తం",
+          "nameHi": "रक्त",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.2
+          },
+          "highlightColor": 4294922834,
+          "effectType": "pulse"
+        },
+        {
+          "id": "vessels",
+          "name": "Vessels",
+          "nameTe": "రక్త నాళాలు",
+          "nameHi": "रक्त वाहिकाएं",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.4
+          },
+          "highlightColor": 4294198070,
+          "effectType": "vessel_widen"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.5,
+            "dy": 0.2
+          },
+          "endNormalized": {
+            "dx": 0.5,
+            "dy": 0.4
+          },
+          "color": 4294922834,
+          "style": "particles"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "blood"
+        ],
+        "1": [
+          "vessels",
+          "path1"
+        ],
+        "2": [
+          "vessels"
+        ],
+        "3": [
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4283215696,
+      "outcomeTextKey": "lisinopril_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 58329,
+          "organTargetId": "blood",
+          "animationTrigger": "start",
+          "titleKey": "lisinopril_01_step_0"
+        },
+        {
+          "icon": 59091,
+          "organTargetId": "vessels",
+          "animationTrigger": "move",
+          "titleKey": "lisinopril_01_step_1"
+        },
+        {
+          "icon": 58462,
+          "organTargetId": "vessels",
+          "animationTrigger": "effect",
+          "titleKey": "lisinopril_01_step_2"
+        },
+        {
+          "icon": 57495,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "lisinopril_01_step_3"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose_lis",
+        "questionKey": "lisinopril_01_q_q_purpose_lis",
+        "optionsKey": "lisinopril_01_q_q_purpose_lis_opts",
+        "correctIndex": 1
+      }
+    ]
+  },
+  {
+    "drugId": "atorvastatin_01",
+    "bodySystem": "endocrine",
+    "plainLanguageKey": "atorvastatin_01",
+    "isNonObvious": false,
+    "nameKey": "atorvastatin_01_name",
+    "doseKey": "atorvastatin_01_dose",
+    "routeKey": "atorvastatin_01_route",
+    "frequencyKey": "atorvastatin_01_freq",
+    "purposeKey": "atorvastatin_01_purpose",
+    "anatomyConfig": {
+      "organTargets": [
+        {
+          "id": "stomach",
+          "name": "Stomach",
+          "nameTe": "కడుపు",
+          "nameHi": "पेट",
+          "normalizedPosition": {
+            "dx": 0.5,
+            "dy": 0.4
+          },
+          "highlightColor": 4294940672,
+          "effectType": "pulse"
+        },
+        {
+          "id": "liver",
+          "name": "Liver",
+          "nameTe": "కాలేయం",
+          "nameHi": "यकृत",
+          "normalizedPosition": {
+            "dx": 0.4,
+            "dy": 0.35
+          },
+          "highlightColor": 4294198070,
+          "effectType": "hepatocytes"
+        }
+      ],
+      "animationPaths": [
+        {
+          "id": "path1",
+          "startNormalized": {
+            "dx": 0.5,
+            "dy": 0.4
+          },
+          "endNormalized": {
+            "dx": 0.4,
+            "dy": 0.35
+          },
+          "color": 4294940672,
+          "style": "particles"
+        }
+      ],
+      "narrationSyncPoints": {
+        "0": [
+          "stomach"
+        ],
+        "1": [
+          "liver",
+          "path1"
+        ],
+        "2": [
+          "liver"
+        ],
+        "3": [
+          "outcome"
+        ]
+      },
+      "outcomeColor": 4283215696,
+      "outcomeTextKey": "atorvastatin_01_outcome",
+      "storyboardSteps": [
+        {
+          "icon": 58329,
+          "organTargetId": "stomach",
+          "animationTrigger": "start",
+          "titleKey": "atorvastatin_01_step_0"
+        },
+        {
+          "icon": 57571,
+          "organTargetId": "liver",
+          "animationTrigger": "move",
+          "titleKey": "atorvastatin_01_step_1"
+        },
+        {
+          "icon": 57569,
+          "organTargetId": "liver",
+          "animationTrigger": "effect",
+          "titleKey": "atorvastatin_01_step_2"
+        },
+        {
+          "icon": 59005,
+          "organTargetId": "outcome",
+          "animationTrigger": "outcome",
+          "titleKey": "atorvastatin_01_step_3"
+        }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q_purpose_ator",
+        "questionKey": "atorvastatin_01_q_q_purpose_ator",
+        "optionsKey": "atorvastatin_01_q_q_purpose_ator_opts",
+        "correctIndex": 0
+      }
+    ]
+  }
+]

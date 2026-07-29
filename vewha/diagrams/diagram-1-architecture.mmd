@@ -1,0 +1,100 @@
+```mermaid
+graph TB
+    subgraph App["VEWHA Application (Single Binary)"]
+        direction TB
+        main["main.dart"]
+
+        subgraph ClinicianMode["Clinician Mode (Default)"]
+            direction TB
+            authService["AuthService (Firebase)"]
+            dbService["DatabaseService (Firestore)"]
+            loginScreen["LoginScreen (Route: /)"]
+            clinicianScreens["HomeScreen, DoctorProfile, PatientManagement, EHRScreen, ChatbotScreen"]
+            
+            main -- "MODE=clinician flag" --> loginScreen
+            loginScreen --> authService
+            authService --> clinicianScreens
+            clinicianScreens --> dbService
+            
+            note1["Production Firebase Flow<br>Network-dependent"]
+        end
+
+        subgraph PatientMode["Patient Mode (Opt-In) - NO FIREBASE"]
+            direction TB
+            patientEntry["PatientEntryScreen (Route: /patient)<br>Enrollment"]
+            
+            subgraph DataLayer["Data Layer (Static, No Network)"]
+                direction TB
+                prescriptions["prescriptions.dart (~50KB)"]
+                translationService["TranslationService (JSON Lazy Loader)"]
+                medicalGlossary["MedicalGlossary (Interceptor)"]
+                strings["strings.dart (~50KB)"]
+                animConfig["Animation Configs"]
+                noteData["Language JSONs loaded on-demand<br>Memory baseline: ~10MB peak"]
+            end
+
+            subgraph ScreenLayer["Screen Layer"]
+                direction TB
+                medList["MedicationListScreen<br>ProgressStepper"]
+                medDetail["MedicationDetailScreen<br>(Condition A)"]
+                plainText["PlainTextConditionScreen<br>(Condition B)"]
+                compScreen["ComprehensionScreen<br>MCQ Quiz"]
+                
+                patientEntry --> medList
+                medList -- "Condition A" --> medDetail
+                medList -- "Condition B" --> plainText
+                medDetail --> compScreen
+                plainText --> compScreen
+            end
+
+            subgraph ComponentLayer["Component Layer"]
+                direction TB
+                anatomyViewer["AnatomyViewer<br>(CustomPainter, SVG, RepaintBoundary)"]
+                mechanismAnimator["MechanismAnimator<br>(Step-by-step reveal)"]
+                pictogramRow["PictogramRow<br>(Icons + labels)"]
+                audioNarration["AudioNarration<br>(flutter_tts)"]
+                medCard["MedicationCard"]
+                progStepper["ProgressStepper"]
+                
+                noteAnatomy["CustomPainter loop<br>Synced to Audio Clock via ValueListenableBuilder"]
+                noteMech["Audio position driven<br>Frame-synced to chunked speech"]
+                noteAudio["TTS prewarmed singleton<br>0ms latency, provides Master Clock (Stopwatch)"]
+                noteStepper["Minimal redraws<br>O(1) state update"]
+            end
+
+            subgraph i18n["i18n Layer (7 Languages)"]
+                langs["assets/i18n/*.json (en, te, hi, kn, ta, mr, bn)"]
+            end
+
+            subgraph LoggingLayer["Logging Layer (Local Only)"]
+                direction TB
+                studyLogger["study_logger.dart"]
+                perfTracker["performance_tracker.dart"]
+                exportCsv["Export: CSV to documents dir"]
+            end
+
+            subgraph AnimationAssets["Animation Assets"]
+                direction TB
+                svgs["assets/anatomy/*.svg"]
+                lotties["assets/animations/*.json"]
+            end
+            
+            main -- "MODE=patient flag" --> patientEntry
+        end
+    end
+
+    %% Styles
+    classDef blueBox fill:#e6f3ff,stroke:#0066cc,stroke-width:2px,color:#003366;
+    classDef greenBox fill:#e6ffe6,stroke:#00cc66,stroke-width:2px,color:#006633;
+    classDef alertBox fill:#ffcccc,stroke:#ff0000,stroke-width:4px,stroke-dasharray: 5 5;
+    
+    class ClinicianMode blueBox;
+    class PatientMode greenBox;
+    
+    %% Annotations
+    noteData -.-> DataLayer
+    noteAnatomy -.-> anatomyViewer
+    noteMech -.-> mechanismAnimator
+    noteAudio -.-> audioNarration
+    noteStepper -.-> progStepper
+```
