@@ -13,6 +13,7 @@
   "study_setup": "Study Setup",
   "export_study_data": "Export study data",
   "participant_code": "Participant code",
+  "participant_code_hint": "(Ex: p01)",
   "eg_p01": "e.g. P01",
   "select_instructions_style": "Select study instructions style",
   "pictures_voice": "Pictures + Voice",
