@@ -76,7 +76,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          loc.translate('medication_progress', params: {'current': '${_current + 1}', 'total': '${studyDrugs.length}'}),
+          loc.getUiString('medication_progress', params: {'current': '${_current + 1}', 'total': '${studyDrugs.length}'}),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,
@@ -111,7 +111,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        loc.translate(drug.nameKey),
+                        loc.getClinicalEntry(drug.nameKey),
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        loc.translate(drug.purposeKey),
+                        loc.getClinicalEntry(drug.purposeKey),
                         style: const TextStyle(
                           fontSize: 16,
                           height: 1.5,
@@ -132,7 +132,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            loc.translate('tap_to_view_details'),
+                            loc.getUiString('tap_to_view_details'),
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1D9E75),
@@ -161,7 +161,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        loc.translate('previous'),
+                        loc.getUiString('previous'),
                         style: const TextStyle(
                           color: Color(0xFF1D9E75),
                           fontWeight: FontWeight.bold,
@@ -182,7 +182,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        loc.translate('next'),
+                        loc.getUiString('next'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
@@ -198,7 +198,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                       child: Text(
-                        loc.translate('done'),
+                        loc.getUiString('done'),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),

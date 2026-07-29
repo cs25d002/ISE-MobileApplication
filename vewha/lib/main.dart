@@ -37,7 +37,7 @@ void main() async {
   await dataRepo.init();
 
   final locRepo = LocalizationRepository();
-  await locRepo.loadLanguage('en'); // Default to english
+  await locRepo.init();
 
   //Run the app
   runApp(

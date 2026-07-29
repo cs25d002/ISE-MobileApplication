@@ -34,7 +34,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            loc.translate('enter_participant_code'),
+            loc.getUiString('enter_participant_code'),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.redAccent,
@@ -61,7 +61,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              loc.translate('export_success'),
+              loc.getUiString('export_success'),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             backgroundColor: const Color(0xFF1D9E75),
@@ -90,7 +90,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          loc.translate('study_setup'),
+          loc.getUiString('study_setup'),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,
@@ -122,7 +122,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
           const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.download, color: Color(0xFF888888)),
-            tooltip: loc.translate('export_study_data'),
+            tooltip: loc.getUiString('export_study_data'),
             onPressed: _export,
           ),
           const SizedBox(width: 8),
@@ -135,7 +135,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                loc.translate('participant_code'),
+                loc.getUiString('participant_code'),
                 style: const TextStyle(fontSize: 16, color: Color(0xFF555555), fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
@@ -143,7 +143,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
                 controller: _codeController,
                 style: const TextStyle(fontSize: 18),
                 decoration: InputDecoration(
-                  hintText: loc.translate('participant_code_hint'),
+                  hintText: loc.getUiString('participant_code_hint'),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                   focusedBorder: OutlineInputBorder(
@@ -154,7 +154,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
               ),
               const SizedBox(height: 32),
               Text(
-                loc.translate('select_instruction_style'),
+                loc.getUiString('select_instruction_style'),
                 style: const TextStyle(fontSize: 16, color: Color(0xFF555555), fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 14),
@@ -162,8 +162,8 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
                 children: [
                   _conditionButton(
                     'A',
-                    loc.translate('style_a_title'),
-                    loc.translate('style_a_subtitle'),
+                    loc.getUiString('style_a_title'),
+                    loc.getUiString('style_a_subtitle'),
                     Icons.image,
                     Icons.volume_up,
                     const Color(0xFF1D9E75),
@@ -172,8 +172,8 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
                   const SizedBox(width: 16),
                   _conditionButton(
                     'B',
-                    loc.translate('style_b_title'),
-                    loc.translate('style_b_subtitle'),
+                    loc.getUiString('style_b_title'),
+                    loc.getUiString('style_b_subtitle'),
                     Icons.description,
                     Icons.table_chart,
                     const Color(0xFF455A64),
@@ -194,7 +194,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
                     elevation: 2,
                   ),
                   child: Text(
-                    loc.translate('launch_study'),
+                    loc.getUiString('launch_study'),
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),

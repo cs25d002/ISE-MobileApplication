@@ -34,6 +34,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
   late final DateTime _screenOpenTime;
   final ValueNotifier<int> _activeStepNotifier = ValueNotifier<int>(-1);
   Timer? _autoPlayTimer;
+  final GlobalKey<AnatomyViewerState> _anatomyKey = GlobalKey<AnatomyViewerState>();
 
   PlainLangEntry? _entry;
   bool _isLoading = true;
@@ -125,7 +126,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          loc.translate(widget.drug.nameKey),
+          loc.getClinicalEntry(widget.drug.nameKey),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -151,12 +152,12 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             },
             items: const [
               DropdownMenuItem(value: 'en', child: Text('English')),
-              DropdownMenuItem(value: 'te', child: Text('తెలుగు')),
-              DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
-              DropdownMenuItem(value: 'kn', child: Text('ಕನ್ನಡ')),
-              DropdownMenuItem(value: 'ta', child: Text('தமிழ்')),
-              DropdownMenuItem(value: 'mr', child: Text('मराठी')),
-              DropdownMenuItem(value: 'bn', child: Text('বাংলা')),
+              DropdownMenuItem(value: 'te', child: Text('鈰戈�鈰耜�鈰鉮�')),
+              DropdownMenuItem(value: 'hi', child: Text('鄐嫩凶鄐兒�鄐舟�')),
+              DropdownMenuItem(value: 'kn', child: Text('鉦𨫼疏鈳温疏鉦�')),
+              DropdownMenuItem(value: 'ta', child: Text('鉈戈悅鉈賴捎鉒�')),
+              DropdownMenuItem(value: 'mr', child: Text('鄐桌什鄐擒�鄍�')),
+              DropdownMenuItem(value: 'bn', child: Text('鄏眇汙鄏�曳鄏�')),
             ],
           ),
           const SizedBox(width: 8),
@@ -170,6 +171,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             // Anatomy viewer with visual storyboard overlays integrated
             Center(
               child: AnatomyViewer(
+                key: _anatomyKey,
                 bodySystem: widget.drug.bodySystem.toString(),
                 height: MediaQuery.of(context).size.height * 0.40,
                 config: widget.drug.anatomyConfig,
@@ -187,7 +189,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             ),
             const SizedBox(height: 24),
 
-            // ── Pictogram row for illiterate users ───────────────────────
+            // ���� Pictogram row for illiterate users ����������������������������������������������
             PictogramRow(
               codes: _entry!.pictograms,
               language: _lang,
@@ -195,9 +197,9 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             const SizedBox(height: 28),
             
             // Plain language what it's for
-            _section(loc.translate('what_is_this_for'), _entry!.whatItIsFor),
+            _section(loc.getUiString('what_is_this_for'), _entry!.whatItIsFor),
             const SizedBox(height: 20),
-            _section(loc.translate('how_to_take_it'), _entry!.howToTake),
+            _section(loc.getUiString('how_to_take_it'), _entry!.howToTake),
             const SizedBox(height: 28),
             
             // Audio button
@@ -207,7 +209,10 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                 languageCode: _ttsLang,
                 activeStepNotifier: _activeStepNotifier,
                 onPlayStateChanged: (playing) {
-                  if (playing) setState(() => _audioPlayed = true);
+                  if (playing) {
+                    setState(() => _audioPlayed = true);
+                    _anatomyKey.currentState?.restartAnimation();
+                  }
                 },
               ),
             ),
@@ -215,7 +220,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             
             // Clinical summary card
             Text(
-              loc.translate('clinical_details'),
+              loc.getUiString('clinical_details'),
               style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -233,7 +238,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                   elevation: 2,
                 ),
                 child: Text(
-                  loc.translate('answer_questions'),
+                  loc.getUiString('answer_questions'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
@@ -260,7 +265,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
       ],
     );
   }
-}��್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ', 'இந்த மருந்து பற்றிய கேள்விகளுக்கு பதிலளிக்கவும்', 'या औषधाबद्दल प्रश्नांची उत्तरे द्या', 'এই ওষুধ সম্পর্কে প্রশ্নের উত্তর দিন'),
+}痕鈳温盒鉦嗣�鉦兒�鉦鉮眾鉦賴�鈳� 鉦凼略鈳温略鉦啤窒鉦詮窒', '鉈�悄鉒温恕 鉈桌扇鉒�悄鉒温恕鉒� 鉈芹拳鉒温拳鉈賴悖 鉈𨫼�鉈喪�鉈菽挪鉈𨫼拿鉒��鉒温�鉒� 鉈芹恕鉈賴挈鉈喪挪鉈𨫼�鉈𨫼挾鉒�悅鉒�', '鄐能冗 鄐𠰍仄鄐抉冗鄐眇丹鄍温丹鄐� 鄐芹�鄐啤介鄍温尹鄐擒�鄐𠼭� 鄐凼中鄍温中鄐啤� 鄐舟�鄐能冗', '鄏𥐰� 鄏㮙朵鄑�戍 鄏詮旨鄑温扛鄏啤�鄏𨫼� 鄏芹�鄏啤朱鄑温成鄑�旭 鄏凼忖鄑温忖鄏� 鄏舟江鄏�'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),

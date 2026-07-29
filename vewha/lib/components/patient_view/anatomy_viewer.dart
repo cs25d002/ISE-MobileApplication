@@ -29,10 +29,32 @@ class AnatomyViewer extends StatefulWidget {
   });
 
   @override
-  State<AnatomyViewer> createState() => _AnatomyViewerState();
+  State<AnatomyViewer> createState() => AnatomyViewerState();
 }
 
-class _AnatomyViewerState extends State<AnatomyViewer> {
+class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderStateMixin {
+  late AnimationController _loopController;
+
+  @override
+  void initState() {
+    super.initState();
+    _loopController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    )..repeat();
+  }
+
+  void restartAnimation() {
+    _loopController.forward(from: 0.0).then((_) {
+      _loopController.repeat();
+    });
+  }
+
+  @override
+  void dispose() {
+    _loopController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +85,10 @@ class _AnatomyViewerState extends State<AnatomyViewer> {
           ),
           
           if (widget.config != null)
-            // Listen directly to the Audio Clock and activeStepNotifier
-            ValueListenableBuilder<Duration>(
-              valueListenable: PatientTtsService().currentChunkPosition,
-              builder: (context, duration, _) {
-                final t = (duration.inMilliseconds % 2500) / 2500.0;
+            AnimatedBuilder(
+              animation: _loopController,
+              builder: (context, _) {
+                final t = _loopController.value;
                 
                 return ValueListenableBuilder<int>(
                   valueListenable: widget.activeStepNotifier ?? ValueNotifier(-1),

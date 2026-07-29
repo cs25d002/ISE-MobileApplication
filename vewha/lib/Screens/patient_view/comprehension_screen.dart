@@ -120,14 +120,14 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
     final q = _currentQuestion;
     final loc = context.read<LocalizationRepository>();
 
-    List<String> options = loc.translateList(q.optionsKey);
+    List<String> options = loc.getQuizStringList(q.optionsKey);
     final isSpeaking = _ttsService.stateNotifier.value == PatientTtsState.playing;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          loc.translate('study_eval_quiz'),
+          loc.getUiString('study_eval_quiz'),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontSize: 16, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -155,7 +155,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
               ),
               const SizedBox(height: 18),
               Text(
-                loc.translate('question_progress', params: {'current': '${_currentQ + 1}', 'total': '${widget.drug.questions.length}'}),
+                loc.getUiString('question_progress', params: {'current': '${_currentQ + 1}', 'total': '${widget.drug.questions.length}'}),
                 style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 28),
@@ -177,7 +177,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              loc.translate('lets_review'),
+                              loc.getUiString('lets_review'),
                               style: const TextStyle(color: Color(0xFF856404), fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),
@@ -205,8 +205,8 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                             const SizedBox(width: 8),
                             Text(
                               isSpeaking 
-                                ? loc.translate('playing_explanation') 
-                                : loc.translate('explanation_finished'),
+                                ? loc.getUiString('playing_explanation') 
+                                : loc.getUiString('explanation_finished'),
                               style: TextStyle(
                                 color: isSpeaking ? const Color(0xFF1D9E75) : Colors.grey,
                                 fontStyle: FontStyle.italic,
@@ -217,11 +217,11 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                       ],
                       const SizedBox(height: 16),
                       Text(
-                        loc.translate('medicine_helps_with'),
+                        loc.getUiString('medicine_helps_with'),
                         style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF856404)),
                       ),
                       Text(
-                        loc.translate(widget.drug.purposeKey),
+                        loc.getClinicalEntry(widget.drug.purposeKey),
                         style: const TextStyle(color: Color(0xFF856404)),
                       ),
                     ],
@@ -231,7 +231,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
               ],
 
               Text(
-                loc.translate(q.questionKey),
+                loc.getQuizString(q.questionKey),
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,

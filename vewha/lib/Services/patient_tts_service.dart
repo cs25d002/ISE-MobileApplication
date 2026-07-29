@@ -28,13 +28,13 @@ class PatientTtsService {
   Timer? _ticker;
 
   /// Prewarms and initializes the TTS engine early during study setup flows.
-  Future<void> prewarm() {
+  Future<void> prewarm() async {
     if (_isInitialized) {
       PatientModuleRegistry.isTtsInitialized = true;
-      return Future.value();
+      return;
     }
     try {
-      _tts.awaitSpeakCompletion(true);
+      await _tts.awaitSpeakCompletion(true);
       _tts.setCompletionHandler(() {
         _stopClock();
         stateNotifier.value = PatientTtsState.idle;
@@ -62,13 +62,18 @@ class PatientTtsService {
           _chunkCompleter!.completeError(msg);
         }
       });
+      
+      // Synthesize a silent audio frame to force OS memory load
+      await _tts.setVolume(0.0);
+      await _tts.speak("<speak><break time=\"1ms\"/></speak>");
+      await _tts.setVolume(1.0);
+      
       _isInitialized = true;
       PatientModuleRegistry.isTtsInitialized = true;
       debugPrint("[TTS SERVICE] Prewarmed and singular bindings initialized successfully.");
     } catch (e) {
       debugPrint("[TTS SERVICE INIT ERROR] $e");
     }
-    return Future.value();
   }
 
   void _startClock() {

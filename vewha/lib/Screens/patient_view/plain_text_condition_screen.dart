@@ -52,7 +52,7 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          loc.translate('prescription'),
+          loc.getUiString('prescription'),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,
@@ -98,12 +98,12 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
               border: TableBorder.all(color: const Color(0xFFE0E0E0), width: 1.5, borderRadius: BorderRadius.circular(8)),
               columnWidths: const {0: FixedColumnWidth(110), 1: FlexColumnWidth()},
               children: [
-                _headerRow(loc.translate('field'), loc.translate('details')),
-                _dataRow(loc.translate('medicine'), loc.translate(d.nameKey)),
-                _dataRow(loc.translate('dose'), loc.translate(d.doseKey)),
-                _dataRow(loc.translate('route'), loc.translate(d.routeKey)),
-                _dataRow(loc.translate('frequency'), loc.translate(d.frequencyKey)),
-                _dataRow(loc.translate('purpose'), loc.translate(d.purposeKey)),
+                _headerRow(loc.getUiString('field'), loc.getUiString('details')),
+                _dataRow(loc.getUiString('medicine'), loc.getClinicalEntry(d.nameKey)),
+                _dataRow(loc.getUiString('dose'), loc.getClinicalEntry(d.doseKey)),
+                _dataRow(loc.getUiString('route'), loc.getClinicalEntry(d.routeKey)),
+                _dataRow(loc.getUiString('frequency'), loc.getClinicalEntry(d.frequencyKey)),
+                _dataRow(loc.getUiString('purpose'), loc.getClinicalEntry(d.purposeKey)),
               ],
             ),
             const Spacer(),
@@ -119,7 +119,7 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
                   elevation: 2,
                 ),
                 child: Text(
-                  loc.translate('answer_questions'),
+                  loc.getUiString('answer_questions'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
