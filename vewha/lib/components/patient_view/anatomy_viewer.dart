@@ -81,43 +81,33 @@ class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderS
         alignment: Alignment.center,
         children: [
           // Background Anatomy
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Opacity(
-              opacity: 0.8,
-              child: SvgPicture.asset(
-                'assets/anatomy/${widget.bodySystem}.svg',
-                height: widget.height * 0.9,
-                colorFilter: const ColorFilter.mode(Color(0xFFE0E0E0), BlendMode.srcIn),
+          RepaintBoundary(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Opacity(
+                opacity: 0.8,
+                child: SvgPicture.asset(
+                  'assets/anatomy/${widget.bodySystem}.svg',
+                  height: widget.height * 0.9,
+                  colorFilter: const ColorFilter.mode(Color(0xFFE0E0E0), BlendMode.srcIn),
+                ),
               ),
             ),
           ),
           
           if (widget.config != null)
-            AnimatedBuilder(
-              animation: _loopController,
-              builder: (context, _) {
-                final t = _loopController.value;
-                
-                return ValueListenableBuilder<int>(
-                  valueListenable: widget.activeStepNotifier ?? ValueNotifier(-1),
-                  builder: (context, step, _) {
-                    return RepaintBoundary(
-                      child: CustomPaint(
-                        size: Size(widget.height * 0.9, widget.height * 0.9),
-                        painter: _MechanismPainter(
-                          config: widget.config!,
-                          progress: t,
-                          activeStep: step,
-                          language: widget.language,
-                          loc: loc,
-                          textCache: _textCache,
-                        ),
-                      ),
-                    );
-                  }
-                );
-              },
+            RepaintBoundary(
+              child: CustomPaint(
+                size: Size(widget.height * 0.9, widget.height * 0.9),
+                painter: _MechanismPainter(
+                  config: widget.config!,
+                  loopController: _loopController,
+                  activeStepNotifier: widget.activeStepNotifier,
+                  language: widget.language,
+                  loc: loc,
+                  textCache: _textCache,
+                ),
+              ),
             ),
         ],
       ),
@@ -127,20 +117,28 @@ class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderS
 
 class _MechanismPainter extends CustomPainter {
   final AnatomyAnimationConfig config;
-  final double progress;
-  final int activeStep;
+  final AnimationController loopController;
+  final ValueNotifier<int>? activeStepNotifier;
   final String language;
   final LocalizationRepository loc;
   final Map<String, TextPainter> textCache;
 
   _MechanismPainter({
     required this.config,
-    required this.progress,
-    required this.activeStep,
+    required this.loopController,
+    this.activeStepNotifier,
     required this.language,
     required this.loc,
     required this.textCache,
-  });
+  }) : super(
+          repaint: Listenable.merge([
+            loopController,
+            if (activeStepNotifier != null) activeStepNotifier
+          ]),
+        );
+
+  double get progress => loopController.value;
+  int get activeStep => activeStepNotifier?.value ?? -1;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -614,6 +612,6 @@ class _MechanismPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _MechanismPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.activeStep != activeStep || oldDelegate.config != config;
+    return oldDelegate.config != config || oldDelegate.language != language;
   }
 }
