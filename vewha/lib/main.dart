@@ -9,6 +9,10 @@ import 'package:Vewha/screens/patient_view/patient_entry_screen.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 // Import Calendar Page
 
+import 'package:Vewha/repositories/data_repository.dart';
+import 'package:Vewha/repositories/localization_repository.dart';
+import 'package:provider/provider.dart';
+
 // wait till firebase is inittialized before rendering front end
 void main() async {
   // try finding dynamic fet app details instead of manually setting
@@ -29,8 +33,22 @@ void main() async {
   // Initialize Timezones (Required for scheduling notifications)
   tz.initializeTimeZones();
 
+  final dataRepo = DataRepository();
+  await dataRepo.init();
+
+  final locRepo = LocalizationRepository();
+  await locRepo.loadLanguage('en'); // Default to english
+
   //Run the app
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<DataRepository>.value(value: dataRepo),
+        Provider<LocalizationRepository>.value(value: locRepo),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

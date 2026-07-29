@@ -1,6 +1,8 @@
 // Condition B control screen — plain clinical table, no visuals, no audio.
 import 'package:flutter/material.dart';
-import 'package:Vewha/data/prescriptions.dart' hide Colors;
+import 'package:provider/provider.dart';
+import 'package:Vewha/models/study_drug.dart';
+import '../../repositories/localization_repository.dart';
 import 'comprehension_screen.dart';
 
 class PlainTextConditionScreen extends StatefulWidget {
@@ -20,16 +22,6 @@ class PlainTextConditionScreen extends StatefulWidget {
 class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
   late final DateTime _screenOpenTime;
   String _lang = 'en';
-
-  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
-    if (_lang == 'hi') return hi;
-    if (_lang == 'te') return te;
-    if (_lang == 'kn') return kn;
-    if (_lang == 'ta') return ta;
-    if (_lang == 'mr') return mr;
-    if (_lang == 'bn') return bn;
-    return en;
-  }
 
   @override
   void initState() {
@@ -54,13 +46,13 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
   @override
   Widget build(BuildContext context) {
     final d = widget.drug;
-    final isTe = _lang == 'te';
+    final loc = context.read<LocalizationRepository>();
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t('Prescription', 'ప్రిస్క్రిప్షన్', 'नुस्खा', 'ಪ್ರಿಸ್ಕ್ರಿಪ್ಷನ್', 'பரிந்துரை', 'प्रिस्क्रिप्शन', 'প্রেসক্রিপশন'),
+          loc.translate('prescription'),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,
@@ -78,6 +70,10 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
             onChanged: (String? newValue) {
               if (newValue != null) {
                 setState(() => _lang = newValue);
+                // Also update the repository
+                loc.loadLanguage(newValue).then((_) {
+                  if (mounted) setState(() {});
+                });
               }
             },
             items: const [
@@ -102,12 +98,12 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
               border: TableBorder.all(color: const Color(0xFFE0E0E0), width: 1.5, borderRadius: BorderRadius.circular(8)),
               columnWidths: const {0: FixedColumnWidth(110), 1: FlexColumnWidth()},
               children: [
-                _headerRow(_t('Field', 'ఫీల్డ్', 'क्षेत्र', 'ಕ್ಷೇತ್ರ', 'களம்', 'क्षेत्र', 'ক্ষেত্র'), _t('Details', 'వివరాలు', 'विवरण', 'ವಿವರಗಳು', 'விவரங்கள்', 'तपशील', 'বিবরণ')),
-                _dataRow(_t('Medicine', 'మందు', 'दवा', 'ಔಷಧಿ', 'மருந்து', 'औषध', 'ওষুধ'), _t(d.name, d.nameTe, d.nameHi, d.nameKn, d.nameTa, d.nameMr, d.nameBn)),
-                _dataRow(_t('Dose', 'మోతాదు', 'खुराक', 'ಡೋಸ್', 'அளவு', 'डोस', 'ডোজ'), _t(d.dose, d.doseTe, d.doseHi, d.doseKn, d.doseTa, d.doseMr, d.doseBn)),
-                _dataRow(_t('Route', 'ఎలా వాడాలి', 'उपयोग का तरीका', 'ಬಳಸುವ ವಿಧಾನ', 'எப்படி பயன்படுத்துவது', 'वापरण्याची पद्धत', 'কীভাবে ব্যবহার করবেন'), _t(d.route, d.routeTe, d.routeHi, d.routeKn, d.routeTa, d.routeMr, d.routeBn)),
-                _dataRow(_t('Frequency', 'ఎంత తరచుగా', 'कितनी बार', 'ಎಷ್ಟು ಬಾರಿ', 'எவ்வளவு அடிக்கடி', 'किती वेळा', 'কত ঘন ঘন'), _t(d.frequency, d.frequencyTe, d.frequencyHi, d.frequencyKn, d.frequencyTa, d.frequencyMr, d.frequencyBn)),
-                _dataRow(_t('Purpose', 'దేనికి వాడతారు', 'उद्देश्य', 'ಉದ್ದೇಶ', 'நோக்கம்', 'उद्देश्य', 'উদ্দেশ্য'), _t(d.purpose, d.purposeTe, d.purposeHi, d.purposeKn, d.purposeTa, d.purposeMr, d.purposeBn)),
+                _headerRow(loc.translate('field'), loc.translate('details')),
+                _dataRow(loc.translate('medicine'), loc.translate(d.nameKey)),
+                _dataRow(loc.translate('dose'), loc.translate(d.doseKey)),
+                _dataRow(loc.translate('route'), loc.translate(d.routeKey)),
+                _dataRow(loc.translate('frequency'), loc.translate(d.frequencyKey)),
+                _dataRow(loc.translate('purpose'), loc.translate(d.purposeKey)),
               ],
             ),
             const Spacer(),
@@ -123,7 +119,7 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
                   elevation: 2,
                 ),
                 child: Text(
-                  _t('Answer questions', 'ప్రశ్నలకు సమాధానం ఇవ్వండి', 'सवालों के जवाब दें', 'ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ', 'கேள்விகளுக்கு பதிலளிக்கவும்', 'प्रश्नांची उत्तरे द्या', 'প্রশ্নগুলোর উত্তর দিন'),
+                  loc.translate('answer_questions'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),

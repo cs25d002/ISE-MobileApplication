@@ -5,17 +5,18 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Vewha/data/prescriptions.dart';
-import 'package:Vewha/data/anatomy_config.dart';
-
+import 'package:provider/provider.dart';
+import 'package:Vewha/models/study_drug.dart';
+import '../../repositories/localization_repository.dart';
 import '../../services/patient_tts_service.dart';
 
 class AnatomyViewer extends StatefulWidget {
-  final BodySystem bodySystem;
+  final String bodySystem;
   final double height;
   final AnatomyAnimationConfig? config;
   final ValueNotifier<int>? activeStepNotifier;
   final String language;
+  final bool isRecoveryMode;
 
   const AnatomyViewer({
     super.key,
@@ -24,6 +25,7 @@ class AnatomyViewer extends StatefulWidget {
     this.config,
     this.activeStepNotifier,
     this.language = 'en',
+    this.isRecoveryMode = false,
   });
 
   @override
@@ -34,6 +36,8 @@ class _AnatomyViewerState extends State<AnatomyViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.read<LocalizationRepository>();
+
     return Container(
       width: double.infinity,
       height: widget.height,
@@ -51,7 +55,7 @@ class _AnatomyViewerState extends State<AnatomyViewer> {
             child: Opacity(
               opacity: 0.8,
               child: SvgPicture.asset(
-                'assets/anatomy/${widget.bodySystem.name}.svg',
+                'assets/anatomy/${widget.bodySystem}.svg',
                 height: widget.height * 0.9,
                 colorFilter: const ColorFilter.mode(Color(0xFFE0E0E0), BlendMode.srcIn),
               ),
@@ -76,6 +80,7 @@ class _AnatomyViewerState extends State<AnatomyViewer> {
                           progress: t,
                           activeStep: step,
                           language: widget.language,
+                          loc: loc,
                         ),
                       ),
                     );
@@ -94,12 +99,14 @@ class _MechanismPainter extends CustomPainter {
   final double progress;
   final int activeStep;
   final String language;
+  final LocalizationRepository loc;
 
   _MechanismPainter({
     required this.config,
     required this.progress,
     required this.activeStep,
     required this.language,
+    required this.loc,
   });
 
   @override
@@ -128,14 +135,10 @@ class _MechanismPainter extends CustomPainter {
     }
     
     // 3. Draw Outcome if active
-    String currentOutcomeText = config.outcomeText;
-    if (language == 'te' && config.outcomeTextTe.isNotEmpty) {
-      currentOutcomeText = config.outcomeTextTe;
-    } else if (language == 'hi' && config.outcomeTextHi.isNotEmpty) currentOutcomeText = config.outcomeTextHi;
-    else if (language == 'kn' && config.outcomeTextKn.isNotEmpty) currentOutcomeText = config.outcomeTextKn;
-    else if (language == 'ta' && config.outcomeTextTa.isNotEmpty) currentOutcomeText = config.outcomeTextTa;
-    else if (language == 'mr' && config.outcomeTextMr.isNotEmpty) currentOutcomeText = config.outcomeTextMr;
-    else if (language == 'bn' && config.outcomeTextBn.isNotEmpty) currentOutcomeText = config.outcomeTextBn;
+    String currentOutcomeText = '';
+    if (config.outcomeTextKey.isNotEmpty) {
+      currentOutcomeText = loc.translate(config.outcomeTextKey);
+    }
 
     if (activeIds.contains('outcome') && currentOutcomeText.isNotEmpty) {
       // Find outcome position (usually bottom center of the active region, or default)
@@ -479,14 +482,7 @@ class _MechanismPainter extends CustomPainter {
       canvas.drawCircle(Offset(x, y), 25, paint);
     }
     
-    String labelText = organ.name;
-    if (language == 'te') {
-      labelText = organ.nameTe;
-    } else if (language == 'hi') labelText = organ.nameHi;
-    else if (language == 'kn') labelText = organ.nameKn;
-    else if (language == 'ta') labelText = organ.nameTa;
-    else if (language == 'mr') labelText = organ.nameMr;
-    else if (language == 'bn') labelText = organ.nameBn;
+    String labelText = loc.translate(organ.name);
     
     _drawLabel(canvas, labelText, x, y - 40);
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:Vewha/data/prescriptions.dart' hide Colors;
+import 'package:provider/provider.dart';
+import 'package:Vewha/models/study_drug.dart';
 import '../../data/plain_lang_entry.dart';
 import '../../Services/translation_service.dart';
+import '../../repositories/localization_repository.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../components/patient_view/mechanism_animator.dart';
 import '../../components/patient_view/audio_narration.dart';
@@ -33,16 +35,6 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
   final ValueNotifier<int> _activeStepNotifier = ValueNotifier<int>(-1);
   Timer? _autoPlayTimer;
 
-  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
-    if (_lang == 'hi') return hi;
-    if (_lang == 'te') return te;
-    if (_lang == 'kn') return kn;
-    if (_lang == 'ta') return ta;
-    if (_lang == 'mr') return mr;
-    if (_lang == 'bn') return bn;
-    return en;
-  }
-
   PlainLangEntry? _entry;
   bool _isLoading = true;
 
@@ -59,7 +51,16 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
   Future<void> _loadLanguage(String lang) async {
     if (!mounted) return;
     setState(() => _isLoading = true);
+    
+    // Load clinical entry
     await TranslationService().loadLanguage(lang);
+    
+    // Load UI localization
+    final loc = context.read<LocalizationRepository>();
+    if (loc.currentLanguage != lang) {
+      await loc.loadLanguage(lang);
+    }
+    
     if (mounted) {
       setState(() {
         _entry = TranslationService().getEntry(widget.drug.plainLanguageKey, lang) ?? 
@@ -114,11 +115,17 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator(color: Color(0xFF1D9E75))));
+    }
+    
+    final loc = context.read<LocalizationRepository>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t(widget.drug.name, widget.drug.nameTe, widget.drug.nameHi, widget.drug.nameKn, widget.drug.nameTa, widget.drug.nameMr, widget.drug.nameBn),
+          loc.translate(widget.drug.nameKey),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -155,9 +162,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      body: _isLoading 
-        ? const Center(child: CircularProgressIndicator(color: Color(0xFF1D9E75)))
-        : SingleChildScrollView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +170,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             // Anatomy viewer with visual storyboard overlays integrated
             Center(
               child: AnatomyViewer(
-                bodySystem: widget.drug.bodySystem,
+                bodySystem: widget.drug.bodySystem.toString(),
                 height: MediaQuery.of(context).size.height * 0.40,
                 config: widget.drug.anatomyConfig,
                 activeStepNotifier: _activeStepNotifier,
@@ -190,9 +195,9 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             const SizedBox(height: 28),
             
             // Plain language what it's for
-            _section(_t('What this medicine is for', 'ఈ మందు దేనికి వాడతారు', 'यह दवा किसलिए है', 'ಈ ಔಷಧಿಯನ್ನು ಯಾವುದಕ್ಕಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ', 'இந்த மருந்து எதற்காக', 'हे औषध कशासाठी आहे', 'এই ওষুধটি কিসের জন্য'), _entry!.whatItIsFor),
+            _section(loc.translate('what_is_this_for'), _entry!.whatItIsFor),
             const SizedBox(height: 20),
-            _section(_t('How to take it', 'ఎలా వాడాలి', 'इसे कैसे लेना है', 'ಅದನ್ನು ಹೇಗೆ ತೆಗೆದುಕೊಳ್ಳುವುದು', 'எப்படி எடுத்துக்கொள்வது', 'ते कसे घ्यावे', 'কীভাবে খাবেন'), _entry!.howToTake),
+            _section(loc.translate('how_to_take_it'), _entry!.howToTake),
             const SizedBox(height: 28),
             
             // Audio button
@@ -210,7 +215,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             
             // Clinical summary card
             Text(
-              _t('Clinical details', 'క్లినికల్ వివరాలు', 'नैदानिक विवरण', 'ಕ್ಲಿನಿಕಲ್ ವಿವರಗಳು', 'மருத்துவ விவரங்கள்', 'क्लिनिकल तपशील', 'ক্লিনিক্যাল বিবরণ'),
+              loc.translate('clinical_details'),
               style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -228,7 +233,34 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                   elevation: 2,
                 ),
                 child: Text(
-                  _t('Answer questions about this medicine', 'ప్రశ్నలకు సమాధానం ఇవ్వండి', 'इस दवा के बारे में सवालों के जवाब दें', 'ಈ ಔಷಧಿಯ ಬಗ್ಗೆ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ', 'இந்த மருந்து பற்றிய கேள்விகளுக்கு பதிலளிக்கவும்', 'या औषधाबद्दल प्रश्नांची उत्तरे द्या', 'এই ওষুধ সম্পর্কে প্রশ্নের উত্তর দিন'),
+                  loc.translate('answer_questions'),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _section(String title, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1D9E75)),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          content,
+          style: const TextStyle(fontSize: 16, color: Color(0xFF333333), height: 1.5),
+        ),
+      ],
+    );
+  }
+}��್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ', 'இந்த மருந்து பற்றிய கேள்விகளுக்கு பதிலளிக்கவும்', 'या औषधाबद्दल प्रश्नांची उत्तरे द्या', 'এই ওষুধ সম্পর্কে প্রশ্নের উত্তর দিন'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),

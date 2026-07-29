@@ -1,1 +1,369 @@
-{"metformin_01":{"whatItIsFor":"This medicine helps control the amount of sugar in your blood.","howToTake":"Take one tablet twice a day. Always take it with your meals.","audioText":"Metformin. This medicine helps control the amount of sugar in your blood. Take one tablet twice a day. Always take it with your meals.","mechanismSteps":["You swallow the tablet and it enters your stomach.","It travels through your blood to your liver.","It tells your liver to make less sugar.","Your blood sugar level goes down and stays more steady."],"pictograms":["take_with_food","twice_daily","morning_and_night"]},"salbutamol_01":{"whatItIsFor":"This inhaler opens up your airways and helps you breathe more easily when you feel short of breath.","howToTake":"Use 1 or 2 puffs when you need it. Shake the inhaler first. Do not use it more than 4 times in one day.","audioText":"Salbutamol inhaler. This inhaler opens up your airways and helps you breathe more easily. Use 1 or 2 puffs when you need it. Shake the inhaler first. Do not use it more than 4 times in one day.","mechanismSteps":["You press the inhaler and the medicine goes into your mouth.","You breathe it deep into your lungs.","It relaxes the tight muscles around your breathing tubes.","Your breathing tubes open wider and air flows in more easily."],"pictograms":["inhale","as_needed","wash_hands"]},"betamethasone_01":{"whatItIsFor":"This cream reduces redness, itching, and swelling on your skin.","howToTake":"Apply a thin layer to the affected area of skin twice a day. Wash your hands before and after applying.","audioText":"Betamethasone cream. This cream reduces redness, itching, and swelling on your skin. Apply a thin layer to the affected area twice a day. Wash your hands before and after applying.","mechanismSteps":["You apply a thin layer of cream to the red or itchy skin.","The cream soaks into the top layers of your skin.","It reduces the chemicals in your skin that cause swelling and itching.","The redness and itch calm down over the next few hours."],"pictograms":["apply_to_skin","twice_daily","wash_hands"]},"amlodipine_01":{"whatItIsFor":"This medicine helps lower your blood pressure and keeps your heart working smoothly.","howToTake":"Take one tablet once a day. You can take it at any time of day but try to take it at the same time each day.","audioText":"Amlodipine. This medicine helps lower your blood pressure. Take one tablet once a day, at the same time each day.","mechanismSteps":["You swallow the tablet and it enters your bloodstream.","It travels to the walls of your blood vessels.","It relaxes and widens the blood vessel walls.","Your blood flows more easily and your blood pressure goes down."],"pictograms":["once_daily","take_without_food","morning_and_night"]},"prednisolone_01":{"whatItIsFor":"This medicine calms down your immune system and reduces swelling and inflammation inside your body.","howToTake":"Take the tablets as shown in your tapering schedule. Start with 4 tablets a day and reduce as instructed. Always take with food. Do not stop suddenly.","audioText":"Prednisolone. This medicine calms down your immune system and reduces inflammation. Follow your tapering schedule carefully. Start with 4 tablets a day and reduce as instructed. Always take with food. Do not stop suddenly.","mechanismSteps":["You swallow the tablet and it enters your bloodstream.","It travels throughout your whole body — not just one part.","It reduces the activity of your immune system, which is overreacting and causing swelling.","Swelling and pain go down — but do not stop taking it suddenly, your body needs to adjust slowly."],"pictograms":["take_with_food","follow_schedule","do_not_stop"]},"lisinopril_01":{"whatItIsFor":"This medicine treats high blood pressure and helps your heart pump blood better.","howToTake":"Take one tablet a day. You can take it with or without food.","audioText":"Lisinopril. This medicine treats high blood pressure. Take one tablet a day.","mechanismSteps":["You swallow the tablet and it enters your blood.","It stops a chemical in your lungs and kidneys from making blood vessels tight.","Your blood vessels relax and open up wide.","Your blood pressure drops and your heart works easier."],"pictograms":["once_daily","morning_and_night"]},"atorvastatin_01":{"whatItIsFor":"This medicine lowers bad cholesterol in your blood to protect your heart.","howToTake":"Take one tablet daily, usually at night. You can take it with or without food.","audioText":"Atorvastatin. This medicine lowers bad cholesterol. Take one tablet daily at night.","mechanismSteps":["You swallow the tablet and it goes to your liver.","It blocks the enzyme in your liver that makes cholesterol.","Your liver removes bad cholesterol from your blood.","Your arteries stay clear and your heart is protected."],"pictograms":["once_daily","morning_and_night"]}}
+{
+  "metformin_01": {
+    "whatItIsFor": "This medicine helps control the amount of sugar in your blood.",
+    "howToTake": "Take one tablet twice a day. Always take it with your meals.",
+    "audioText": "Metformin. This medicine helps control the amount of sugar in your blood. Take one tablet twice a day. Always take it with your meals.",
+    "mechanismSteps": [
+      "You swallow the tablet and it enters your stomach.",
+      "It travels through your blood to your liver.",
+      "It tells your liver to make less sugar.",
+      "Your blood sugar level goes down and stays more steady."
+    ],
+    "pictograms": [
+      "take_with_food",
+      "twice_daily",
+      "morning_and_night"
+    ]
+  },
+  "salbutamol_01": {
+    "whatItIsFor": "This inhaler opens up your airways and helps you breathe more easily when you feel short of breath.",
+    "howToTake": "Use 1 or 2 puffs when you need it. Shake the inhaler first. Do not use it more than 4 times in one day.",
+    "audioText": "Salbutamol inhaler. This inhaler opens up your airways and helps you breathe more easily. Use 1 or 2 puffs when you need it. Shake the inhaler first. Do not use it more than 4 times in one day.",
+    "mechanismSteps": [
+      "You press the inhaler and the medicine goes into your mouth.",
+      "You breathe it deep into your lungs.",
+      "It relaxes the tight muscles around your breathing tubes.",
+      "Your breathing tubes open wider and air flows in more easily."
+    ],
+    "pictograms": [
+      "inhale",
+      "as_needed",
+      "wash_hands"
+    ]
+  },
+  "betamethasone_01": {
+    "whatItIsFor": "This cream reduces redness, itching, and swelling on your skin.",
+    "howToTake": "Apply a thin layer to the affected area of skin twice a day. Wash your hands before and after applying.",
+    "audioText": "Betamethasone cream. This cream reduces redness, itching, and swelling on your skin. Apply a thin layer to the affected area twice a day. Wash your hands before and after applying.",
+    "mechanismSteps": [
+      "You apply a thin layer of cream to the red or itchy skin.",
+      "The cream soaks into the top layers of your skin.",
+      "It reduces the chemicals in your skin that cause swelling and itching.",
+      "The redness and itch calm down over the next few hours."
+    ],
+    "pictograms": [
+      "apply_to_skin",
+      "twice_daily",
+      "wash_hands"
+    ]
+  },
+  "amlodipine_01": {
+    "whatItIsFor": "This medicine helps lower your blood pressure and keeps your heart working smoothly.",
+    "howToTake": "Take one tablet once a day. You can take it at any time of day but try to take it at the same time each day.",
+    "audioText": "Amlodipine. This medicine helps lower your blood pressure. Take one tablet once a day, at the same time each day.",
+    "mechanismSteps": [
+      "You swallow the tablet and it enters your bloodstream.",
+      "It travels to the walls of your blood vessels.",
+      "It relaxes and widens the blood vessel walls.",
+      "Your blood flows more easily and your blood pressure goes down."
+    ],
+    "pictograms": [
+      "once_daily",
+      "take_without_food",
+      "morning_and_night"
+    ]
+  },
+  "prednisolone_01": {
+    "whatItIsFor": "This medicine calms down your immune system and reduces swelling and inflammation inside your body.",
+    "howToTake": "Take the tablets as shown in your tapering schedule. Start with 4 tablets a day and reduce as instructed. Always take with food. Do not stop suddenly.",
+    "audioText": "Prednisolone. This medicine calms down your immune system and reduces inflammation. Follow your tapering schedule carefully. Start with 4 tablets a day and reduce as instructed. Always take with food. Do not stop suddenly.",
+    "mechanismSteps": [
+      "You swallow the tablet and it enters your bloodstream.",
+      "It travels throughout your whole body — not just one part.",
+      "It reduces the activity of your immune system, which is overreacting and causing swelling.",
+      "Swelling and pain go down — but do not stop taking it suddenly, your body needs to adjust slowly."
+    ],
+    "pictograms": [
+      "take_with_food",
+      "follow_schedule",
+      "do_not_stop"
+    ]
+  },
+  "lisinopril_01": {
+    "whatItIsFor": "This medicine treats high blood pressure and helps your heart pump blood better.",
+    "howToTake": "Take one tablet a day. You can take it with or without food.",
+    "audioText": "Lisinopril. This medicine treats high blood pressure. Take one tablet a day.",
+    "mechanismSteps": [
+      "You swallow the tablet and it enters your blood.",
+      "It stops a chemical in your lungs and kidneys from making blood vessels tight.",
+      "Your blood vessels relax and open up wide.",
+      "Your blood pressure drops and your heart works easier."
+    ],
+    "pictograms": [
+      "once_daily",
+      "morning_and_night"
+    ]
+  },
+  "atorvastatin_01": {
+    "whatItIsFor": "This medicine lowers bad cholesterol in your blood to protect your heart.",
+    "howToTake": "Take one tablet daily, usually at night. You can take it with or without food.",
+    "audioText": "Atorvastatin. This medicine lowers bad cholesterol. Take one tablet daily at night.",
+    "mechanismSteps": [
+      "You swallow the tablet and it goes to your liver.",
+      "It blocks the enzyme in your liver that makes cholesterol.",
+      "Your liver removes bad cholesterol from your blood.",
+      "Your arteries stay clear and your heart is protected."
+    ],
+    "pictograms": [
+      "once_daily",
+      "morning_and_night"
+    ]
+  },
+  "metformin_01_name": "Metformin 500mg",
+  "metformin_01_dose": "500mg",
+  "metformin_01_route": "Oral (swallow)",
+  "metformin_01_freq": "Twice daily with meals",
+  "metformin_01_purpose": "Type 2 diabetes mellitus — blood glucose control",
+  "metformin_01_outcome": "Diabetes Controlled",
+  "metformin_01_step_0": "Tablet",
+  "metformin_01_step_1": "Liver",
+  "metformin_01_step_2": "Action",
+  "metformin_01_step_3": "Better Blood Sugar Control",
+  "metformin_01_q_q_purpose": "What problem does this medicine help with?",
+  "metformin_01_q_q_purpose_opts": [
+    "High blood pressure",
+    "Type 2 diabetes / Blood sugar",
+    "Asthma"
+  ],
+  "metformin_01_q_q_freq": "When or how often should you take this medicine?",
+  "metformin_01_q_q_freq_opts": [
+    "Once a day",
+    "Twice daily with meals",
+    "Only when needed"
+  ],
+  "metformin_01_q_q_use": "How should you use or take this medicine?",
+  "metformin_01_q_q_use_opts": [
+    "Apply on skin",
+    "Inhale it",
+    "Swallow by mouth"
+  ],
+  "metformin_01_q_q_body": "Which part of the body does this medicine help?",
+  "metformin_01_q_q_body_opts": [
+    "Lungs",
+    "Heart",
+    "Pancreas / Liver"
+  ],
+  "metformin_01_q_q_safety": "Should this medicine be taken with food?",
+  "metformin_01_q_q_safety_opts": [
+    "Yes, with meals",
+    "No, on an empty stomach",
+    "It does not matter"
+  ],
+  "metformin_01_q_q_verify": "Did you understand the instructions for this medicine?",
+  "metformin_01_q_q_verify_opts": [
+    "Yes, I understood",
+    "No, I did not understand"
+  ],
+  "salbutamol_01_name": "Salbutamol Inhaler 100mcg",
+  "salbutamol_01_dose": "100mcg per puff, 1–2 puffs",
+  "salbutamol_01_route": "Inhaled",
+  "salbutamol_01_freq": "As needed (maximum 4 times daily)",
+  "salbutamol_01_purpose": "Asthma / bronchospasm — opens the airways",
+  "salbutamol_01_outcome": "Asthma Controlled",
+  "salbutamol_01_step_0": "Inhaler",
+  "salbutamol_01_step_1": "Lungs",
+  "salbutamol_01_step_2": "Airways Open Up",
+  "salbutamol_01_step_3": "Breathing Becomes Easier",
+  "salbutamol_01_q_q_purpose": "What problem does this medicine help with?",
+  "salbutamol_01_q_q_purpose_opts": [
+    "Skin rash",
+    "Asthma / Breathing difficulty",
+    "Heart pain"
+  ],
+  "salbutamol_01_q_q_freq": "When or how often should you take this medicine?",
+  "salbutamol_01_q_q_freq_opts": [
+    "Every 4 hours strictly",
+    "Once daily",
+    "As needed (max 4 times daily)"
+  ],
+  "salbutamol_01_q_q_use": "How should you use or take this medicine?",
+  "salbutamol_01_q_q_use_opts": [
+    "Inhale it",
+    "Swallow it",
+    "Rub on chest"
+  ],
+  "salbutamol_01_q_q_body": "Which part of the body does this medicine help?",
+  "salbutamol_01_q_q_body_opts": [
+    "Heart",
+    "Lungs / Airways",
+    "Stomach"
+  ],
+  "salbutamol_01_q_q_safety": "What is the maximum number of times you can use this inhaler in one day?",
+  "salbutamol_01_q_q_safety_opts": [
+    "2 times",
+    "4 times",
+    "As many times as I want"
+  ],
+  "salbutamol_01_q_q_verify": "Did you understand the instructions for this medicine?",
+  "salbutamol_01_q_q_verify_opts": [
+    "Yes, I understood",
+    "No, I did not understand"
+  ],
+  "betamethasone_01_name": "Betamethasone Cream 0.1%",
+  "betamethasone_01_dose": "Thin layer",
+  "betamethasone_01_route": "Topical (apply to skin)",
+  "betamethasone_01_freq": "Twice daily to affected area",
+  "betamethasone_01_purpose": "Eczema / skin inflammation — reduces redness and itch",
+  "betamethasone_01_outcome": "Inflammation Reduced",
+  "betamethasone_01_step_0": "Apply Ointment",
+  "betamethasone_01_step_1": "Enters Skin",
+  "betamethasone_01_step_2": "Reduces Inflammation",
+  "betamethasone_01_step_3": "Skin Recovers",
+  "betamethasone_01_q_q_purpose": "What problem does this medicine help with?",
+  "betamethasone_01_q_q_purpose_opts": [
+    "Eczema / Skin itch",
+    "Muscle pain",
+    "Headache"
+  ],
+  "betamethasone_01_q_q_freq": "When or how often should you apply this medicine?",
+  "betamethasone_01_q_q_freq_opts": [
+    "Once a day",
+    "Twice daily",
+    "Only at night"
+  ],
+  "betamethasone_01_q_q_use": "How should you use or take this medicine?",
+  "betamethasone_01_q_q_use_opts": [
+    "Swallow it",
+    "Apply a thick layer on skin",
+    "Apply a thin layer on skin"
+  ],
+  "betamethasone_01_q_q_body": "Which part of the body does this medicine help?",
+  "betamethasone_01_q_q_body_opts": [
+    "Blood vessels",
+    "Skin",
+    "Lungs"
+  ],
+  "betamethasone_01_q_q_safety": "Should you wash your hands before and after applying this cream?",
+  "betamethasone_01_q_q_safety_opts": [
+    "Yes",
+    "No",
+    "Only before"
+  ],
+  "betamethasone_01_q_q_verify": "Did you understand the instructions for this medicine?",
+  "betamethasone_01_q_q_verify_opts": [
+    "Yes, I understood",
+    "No, I did not understand"
+  ],
+  "amlodipine_01_name": "Amlodipine 5mg",
+  "amlodipine_01_dose": "5mg",
+  "amlodipine_01_route": "Oral (swallow)",
+  "amlodipine_01_freq": "Once daily",
+  "amlodipine_01_purpose": "High blood pressure / angina — relaxes blood vessels",
+  "amlodipine_01_outcome": "Blood Pressure Controlled",
+  "amlodipine_01_step_0": "Tablet",
+  "amlodipine_01_step_1": "Bloodstream",
+  "amlodipine_01_step_2": "Blood Vessels Relax",
+  "amlodipine_01_step_3": "Blood Pressure Comes Under Control",
+  "amlodipine_01_q_q_purpose": "What problem does this medicine help with?",
+  "amlodipine_01_q_q_purpose_opts": [
+    "High blood pressure",
+    "Diabetes",
+    "Fever"
+  ],
+  "amlodipine_01_q_q_freq": "When or how often should you take this medicine?",
+  "amlodipine_01_q_q_freq_opts": [
+    "Twice daily",
+    "Once daily",
+    "With every meal"
+  ],
+  "amlodipine_01_q_q_use": "How should you use or take this medicine?",
+  "amlodipine_01_q_q_use_opts": [
+    "Dissolve in water",
+    "Swallow it",
+    "Chew it"
+  ],
+  "amlodipine_01_q_q_body": "Which part of the body does this medicine help?",
+  "amlodipine_01_q_q_body_opts": [
+    "Heart and blood vessels",
+    "Kidneys",
+    "Liver"
+  ],
+  "amlodipine_01_q_q_safety": "Should you try to take this medicine at the same time each day?",
+  "amlodipine_01_q_q_safety_opts": [
+    "Yes, same time each day",
+    "No, whenever I remember",
+    "Only in the morning"
+  ],
+  "amlodipine_01_q_q_verify": "Did you understand the instructions for this medicine?",
+  "amlodipine_01_q_q_verify_opts": [
+    "Yes, I understood",
+    "No, I did not understand"
+  ],
+  "prednisolone_01_name": "Prednisolone 5mg (Tapering)",
+  "prednisolone_01_dose": "5mg (reducing dose — see schedule)",
+  "prednisolone_01_route": "Oral (swallow)",
+  "prednisolone_01_freq": "As per tapering schedule — start 4 tablets daily",
+  "prednisolone_01_purpose": "Inflammation / immune suppression — reduces immune response",
+  "prednisolone_01_outcome": "Immune System Regulated",
+  "prednisolone_01_step_0": "Tablet",
+  "prednisolone_01_step_1": "Bloodstream",
+  "prednisolone_01_step_2": "Calms Immune System",
+  "prednisolone_01_step_3": "Do Not Stop Abruptly",
+  "prednisolone_01_step_4": "Inflammation Is Reduced",
+  "prednisolone_01_q_q_purpose": "What problem does this medicine help with?",
+  "prednisolone_01_q_q_purpose_opts": [
+    "Bacterial infection",
+    "Inflammation / Allergy",
+    "Cough"
+  ],
+  "prednisolone_01_q_q_freq": "When or how often should you take this medicine?",
+  "prednisolone_01_q_q_freq_opts": [
+    "Take the same amount every day",
+    "Follow the tapering (reducing) schedule",
+    "Only when I feel sick"
+  ],
+  "prednisolone_01_q_q_use": "How should you use or take this medicine?",
+  "prednisolone_01_q_q_use_opts": [
+    "Dissolve under tongue",
+    "Swallow with food",
+    "Crush and mix with water"
+  ],
+  "prednisolone_01_q_q_body": "Which part of the body does this medicine help?",
+  "prednisolone_01_q_q_body_opts": [
+    "Whole body (immune system)",
+    "Only the stomach",
+    "Only the brain"
+  ],
+  "prednisolone_01_q_q_safety": "Can you stop taking this medicine suddenly without tapering?",
+  "prednisolone_01_q_q_safety_opts": [
+    "Yes, if I feel better",
+    "No, it must not be stopped suddenly"
+  ],
+  "prednisolone_01_q_q_verify": "Did you understand the instructions for this medicine?",
+  "prednisolone_01_q_q_verify_opts": [
+    "Yes, I understood",
+    "No, I did not understand"
+  ],
+  "lisinopril_01_name": "Lisinopril 10mg",
+  "lisinopril_01_dose": "10mg",
+  "lisinopril_01_route": "Oral (swallow)",
+  "lisinopril_01_freq": "Once daily",
+  "lisinopril_01_purpose": "High blood pressure",
+  "lisinopril_01_outcome": "Blood Pressure Lowered",
+  "lisinopril_01_step_0": "Tablet",
+  "lisinopril_01_step_1": "Blood Vessels",
+  "lisinopril_01_step_2": "Vessels Widen",
+  "lisinopril_01_step_3": "Blood Pressure Drops",
+  "lisinopril_01_q_q_purpose_lis": "What problem does this medicine help with?",
+  "lisinopril_01_q_q_purpose_lis_opts": [
+    "Asthma",
+    "High blood pressure",
+    "Diabetes"
+  ],
+  "atorvastatin_01_name": "Atorvastatin 20mg",
+  "atorvastatin_01_dose": "20mg",
+  "atorvastatin_01_route": "Oral (swallow)",
+  "atorvastatin_01_freq": "Once daily at night",
+  "atorvastatin_01_purpose": "High cholesterol",
+  "atorvastatin_01_outcome": "Cholesterol Lowered",
+  "atorvastatin_01_step_0": "Tablet",
+  "atorvastatin_01_step_1": "Liver",
+  "atorvastatin_01_step_2": "Blocks Cholesterol",
+  "atorvastatin_01_step_3": "Lower Cholesterol",
+  "atorvastatin_01_q_q_purpose_ator": "What problem does this medicine help with?",
+  "atorvastatin_01_q_q_purpose_ator_opts": [
+    "High cholesterol",
+    "Pain",
+    "Asthma"
+  ]
+}

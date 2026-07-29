@@ -1,13 +1,11 @@
-// lib/Screens/patient_view/comprehension_screen.dart
-// Interactive MCQ evaluation quizzes with hardened multi-line text wrapping buttons.
-// Utilizes prewarmed PatientTtsService singleton for recovery explanation audio guidance.
-
 import 'package:flutter/material.dart';
-import 'package:Vewha/data/prescriptions.dart' hide Colors;
+import 'package:provider/provider.dart';
+import 'package:Vewha/models/study_drug.dart';
 import '../../logging/study_logger.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../services/patient_tts_service.dart';
 import '../../Services/translation_service.dart';
+import '../../repositories/localization_repository.dart';
 
 class ComprehensionScreen extends StatefulWidget {
   final StudyDrug drug;
@@ -35,16 +33,6 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
   final PatientTtsService _ttsService = PatientTtsService();
 
   McqQuestion get _currentQuestion => widget.drug.questions[_currentQ];
-
-  String _t(String en, String te, String hi, String kn, String ta, String mr, String bn) {
-    if (widget.language == 'hi') return hi;
-    if (widget.language == 'te') return te;
-    if (widget.language == 'kn') return kn;
-    if (widget.language == 'ta') return ta;
-    if (widget.language == 'mr') return mr;
-    if (widget.language == 'bn') return bn;
-    return en;
-  }
 
   @override
   void initState() {
@@ -106,15 +94,14 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
     );
 
     if (correct) {
-      _ttsService.stop();
       if (_currentQ < widget.drug.questions.length - 1) {
         setState(() {
           _currentQ++;
           _recoveryMode = false;
         });
       } else {
-        Navigator.of(context).pop(); // Pops ComprehensionScreen
-        Navigator.of(context).pop(); // Pops MedicationDetailScreen or PlainTextConditionScreen
+        Navigator.of(context).pop(); 
+        Navigator.of(context).pop(); 
       }
     } else {
       if (!_recoveryMode) {
@@ -131,22 +118,16 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
   @override
   Widget build(BuildContext context) {
     final q = _currentQuestion;
+    final loc = context.read<LocalizationRepository>();
 
-    List<String> options = q.optionsEn;
-    if (widget.language == 'te') options = q.optionsTe;
-    if (widget.language == 'hi') options = q.optionsHi;
-    if (widget.language == 'kn') options = q.optionsKn;
-    if (widget.language == 'ta') options = q.optionsTa;
-    if (widget.language == 'mr') options = q.optionsMr;
-    if (widget.language == 'bn') options = q.optionsBn;
-
+    List<String> options = loc.translateList(q.optionsKey);
     final isSpeaking = _ttsService.stateNotifier.value == PatientTtsState.playing;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          _t('Study Evaluation Quiz', 'ప్రశ్నలకు సమాధానం ఇవ్వండి', 'अध्ययन मूल्यांकन प्रश्नोत्तरी', 'ಅಧ್ಯಯನ ಮೌಲ್ಯಮಾಪನ ರಸಪ್ರಶ್ನೆ', 'ஆய்வு மதிப்பீடு வினாடி வினா', 'अभ्यास मूल्यमापन प्रश्नमंजुषा', 'অধ্যয়ন মূল্যায়ন কুইজ'),
+          loc.translate('study_eval_quiz'),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontSize: 16, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -174,7 +155,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
               ),
               const SizedBox(height: 18),
               Text(
-                _t('Question ${_currentQ + 1} of ${widget.drug.questions.length}', 'ప్రశ్న ${_currentQ + 1} / ${widget.drug.questions.length}', 'प्रश्न ${_currentQ + 1} / ${widget.drug.questions.length}', 'ಪ್ರಶ್ನೆ ${_currentQ + 1} / ${widget.drug.questions.length}', 'கேள்வி ${_currentQ + 1} / ${widget.drug.questions.length}', 'प्रश्न ${_currentQ + 1} / ${widget.drug.questions.length}', 'প্রশ্ন ${_currentQ + 1} / ${widget.drug.questions.length}'),
+                loc.translate('question_progress', params: {'current': '${_currentQ + 1}', 'total': '${widget.drug.questions.length}'}),
                 style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 28),
@@ -196,7 +177,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              _t('Let\'s review the information:', 'సమాచారాన్ని మళ్లీ చూద్దాం:', 'आइए जानकारी की समीक्षा करें:', 'ಮಾಹಿತಿಯನ್ನು ಪರಿಶೀಲಿಸೋಣ:', 'தகவலை மதிப்பாய்வு செய்வோம்:', 'माहितीचे पुनरावलोकन करूया:', 'তথ্যটি পর্যালোচনা করা যাক:'),
+                              loc.translate('lets_review'),
                               style: const TextStyle(color: Color(0xFF856404), fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),
@@ -206,34 +187,41 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                       if (widget.showVisuals) ...[
                         Center(
                           child: AnatomyViewer(
-                            bodySystem: widget.drug.bodySystem,
+                            bodySystem: widget.drug.bodySystem.toString(),
                             height: 180,
                             config: widget.drug.anatomyConfig,
                             language: widget.language,
+                            isRecoveryMode: true,
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Center(
-                          child: ElevatedButton.icon(
-                            onPressed: _playRecoveryAudio,
-                            icon: Icon(isSpeaking ? Icons.volume_up : Icons.replay),
-                            label: Text(isSpeaking 
-                                ? _t('Playing...', 'ప్లే అవుతోంది...', 'बज रहा है...', 'ಪ್ಲೇ ಆಗುತ್ತಿದೆ...', 'இயங்குகிறது...', 'वाजत आहे...', 'বাজছে...')
-                                : _t('Listen Again', 'మళ్లీ వినండి', 'फिर से सुनें', 'ಮತ್ತೆ ಆಲಿಸಿ', 'மீண்டும் கேள்', 'पुन्हा ऐका', 'আবার শুনুন')),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1D9E75),
-                              foregroundColor: Colors.white,
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              isSpeaking ? Icons.volume_up : Icons.volume_mute, 
+                              color: isSpeaking ? const Color(0xFF1D9E75) : Colors.grey,
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Text(
+                              isSpeaking 
+                                ? loc.translate('playing_explanation') 
+                                : loc.translate('explanation_finished'),
+                              style: TextStyle(
+                                color: isSpeaking ? const Color(0xFF1D9E75) : Colors.grey,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            )
+                          ],
                         ),
-                        const SizedBox(height: 16),
                       ],
+                      const SizedBox(height: 16),
                       Text(
-                        _t('This medicine helps with:', 'ఈ మందు దీనికి సహాయపడుతుంది:', 'यह दवा इसमें मदद करती है:', 'ಈ ಔಷಧಿಯು ಇದಕ್ಕೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ:', 'இந்த மருந்து இதற்கு உதவுகிறது:', 'हे औषध यासाठी मदत करते:', 'এই ওষুধটি সাহায্য করে:'),
+                        loc.translate('medicine_helps_with'),
                         style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF856404)),
                       ),
                       Text(
-                        _t(widget.drug.purpose, widget.drug.purposeTe, widget.drug.purposeHi, widget.drug.purposeKn, widget.drug.purposeTa, widget.drug.purposeMr, widget.drug.purposeBn),
+                        loc.translate(widget.drug.purposeKey),
                         style: const TextStyle(color: Color(0xFF856404)),
                       ),
                     ],
@@ -243,7 +231,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
               ],
 
               Text(
-                _t(q.questionEn, q.questionTe, q.questionHi, q.questionKn, q.questionTa, q.questionMr, q.questionBn),
+                loc.translate(q.questionKey),
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
