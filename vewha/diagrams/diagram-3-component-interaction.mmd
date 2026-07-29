@@ -1,0 +1,68 @@
+```mermaid
+graph LR
+    subgraph State Management
+        sessionProv["PatientSessionProvider<br>(sessionId, condition, med)"]
+        medScreen["MedicationDetailScreen<br>_lang, _audioPlayed, _screenOpenTime"]
+    end
+
+    subgraph Data Input
+        drugBodySys["drug.bodySystem"]
+        animConfig["Animation Config"]
+        mechSteps["mechanismSteps[]"]
+        pictoData["pictograms[] & language"]
+        audioData["audioText & languageCode"]
+        plainTextData["whatItIsFor, howToTake"]
+    end
+
+    subgraph Rendering Components
+        anatomy["AnatomyViewer<br>Performance: ~5-10ms/frame<br>60fps target"]
+        mechAnim["MechanismAnimator<br>Timer: 1800ms<br>Build: <3ms"]
+        pictoRow["PictogramRow<br>Build: <5ms"]
+        audioPlay["AudioNarration<br>Init: 200-500ms"]
+        plainText["PlainLanguageText<br>Build: <1ms"]
+    end
+
+    subgraph Logging
+        logger["StudyLogger<br>In-memory append<br><1ms"]
+    end
+    
+    %% Connections
+    sessionProv --> medScreen
+    
+    drugBodySys --> anatomy
+    animConfig --> anatomy
+    medScreen -- "frame render (60fps)" --> anatomy
+    
+    mechSteps --> mechAnim
+    medScreen -- "timer tick (1.8s)" --> mechAnim
+    
+    pictoData --> pictoRow
+    medScreen -- "language toggle" --> pictoRow
+    
+    audioData --> audioPlay
+    medScreen -- "audio button tap" --> audioPlay
+    audioPlay -- "audioPlayed callback" --> logger
+    
+    plainTextData --> plainText
+    medScreen -- "language toggle" --> plainText
+    
+    %% Styles
+    classDef optimal fill:#e6ffe6,stroke:#00cc66,stroke-width:2px;
+    classDef caution fill:#ffffe6,stroke:#cccc00,stroke-width:2px;
+    classDef warning fill:#ffcccc,stroke:#ff0000,stroke-width:2px;
+    
+    class plainText,logger,sessionProv optimal;
+    class anatomy,pictoRow,mechAnim caution;
+    class audioPlay warning;
+
+    %% Annotations
+    noteSVG["Opt: Cache SVG parsing"]
+    noteLazy["Opt: Lazy text rendering"]
+    noteMemo["Opt: Memoize labels"]
+    noteTTS["Opt: Pre-warm TTS"]
+    
+    anatomy -.-> noteSVG
+    mechAnim -.-> noteLazy
+    pictoRow -.-> noteMemo
+    audioPlay -.-> noteTTS
+```

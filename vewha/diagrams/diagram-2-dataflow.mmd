@@ -1,0 +1,57 @@
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App as Application Init
+    participant Entry as PatientEntryScreen
+    participant List as MedicationListScreen
+    participant DetailA as MedDetail (Cond A)
+    participant DetailB as PlainText (Cond B)
+    participant Comp as ComprehensionScreen
+    participant Logger as StudyLogger
+
+    Note over App,Logger: Phase 1: Initialization (<1 second)
+    App->>App: Check MODE=patient flag
+    App->>App: Load prescriptions (~50KB), i18n (~550KB), SVGs (~200KB)
+    
+    Note over Entry,Logger: Phase 2: Patient Entry
+    App->>Entry: Navigate to /patient
+    Entry->>Entry: Input code & select condition
+    Entry->>Logger: startSession(code, condition) [Time: <1ms]
+    Entry->>List: Navigate
+    
+    Note over List,Logger: Phase 3: Medication List (Loop 5x)
+    List->>List: Display Progress (e.g. 1 of 5)
+    List->>DetailA: Tap Drug (if Cond A)
+    List->>DetailB: Tap Drug (if Cond B)
+    
+    Note over DetailA,Logger: Phase 4A: Condition A (Rich Detail)
+    DetailA->>DetailA: Load Language Map [Time: <1ms]
+    par Animation
+        DetailA->>DetailA: Load SVG & AnatomyViewer loop [60fps target]
+        DetailA->>DetailA: MechanismAnimator periodic reveal [1.8s steps]
+    and Audio
+        DetailA->>DetailA: TTS lazy init (first time: ~200-500ms)
+        DetailA->>DetailA: TTS playback (15-30s)
+        DetailA->>Logger: Record audioPlayed = true
+    end
+    DetailA->>Comp: Tap "Answer Questions"
+    
+    Note over DetailB,Logger: Phase 4B: Condition B (Control)
+    DetailB->>DetailB: Display Static Table [Render: <5ms]
+    DetailB->>Logger: Record audioPlayed = false
+    DetailB->>Comp: Tap "Answer Questions"
+    
+    Note over Comp,Logger: Phase 5: Comprehension Quiz (6 Qs)
+    Comp->>Comp: Display Question 1
+    Comp->>Comp: User selects answer (Compute correct)
+    Comp->>Logger: logAnswer() [Time: <1ms, In-memory list]
+    Note right of Logger: Log entry added
+    Comp->>Comp: Next Question (Loop to Q6)
+    Comp->>List: Return to List (Next drug or finish)
+    
+    Note over Entry,Logger: Phase 6: Export (After 5 drugs)
+    Entry->>Logger: Action: exportToCsv()
+    Logger->>Logger: Collect 30 rows from memory
+    Logger->>Logger: Format & Write to CSV [Time: <100ms]
+    Logger-->>Entry: Show SnackBar with file path
+```
