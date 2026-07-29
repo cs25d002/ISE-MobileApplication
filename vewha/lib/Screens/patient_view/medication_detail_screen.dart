@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:Vewha/models/study_drug.dart';
 import '../../data/plain_lang_entry.dart';
-import '../../Services/translation_service.dart';
+import '../../services/translation_service.dart';
 import '../../repositories/localization_repository.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../components/patient_view/mechanism_animator.dart';
@@ -50,25 +50,34 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
   }
 
   Future<void> _loadLanguage(String lang) async {
+    print('MED_DETAIL: _loadLanguage start for $lang. mounted: $mounted');
     if (!mounted) return;
     setState(() => _isLoading = true);
     
     // Load clinical entry
+    print('MED_DETAIL: before TranslationService load');
     await TranslationService().loadLanguage(lang);
+    print('MED_DETAIL: after TranslationService load. mounted: $mounted');
     
+    if (!mounted) return;
+
     // Load UI localization
     final loc = context.read<LocalizationRepository>();
+    print('MED_DETAIL: got loc. current: ${loc.currentLanguage}');
     if (loc.currentLanguage != lang) {
       await loc.loadLanguage(lang);
     }
     
+    print('MED_DETAIL: before setState. mounted: $mounted');
     if (mounted) {
       setState(() {
         _entry = TranslationService().getEntry(widget.drug.plainLanguageKey, lang) ?? 
                  TranslationService().getEntry(widget.drug.plainLanguageKey, 'en');
+        print('MED_DETAIL: got entry: ${_entry != null}');
         _isLoading = false;
       });
       _startAutoPlay();
+      print('MED_DETAIL: done');
     }
   }
 
@@ -119,8 +128,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator(color: Color(0xFF1D9E75))));
     }
-    
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -152,12 +160,12 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             },
             items: const [
               DropdownMenuItem(value: 'en', child: Text('English')),
-              DropdownMenuItem(value: 'te', child: Text('鈰戈�鈰耜�鈰鉮�')),
-              DropdownMenuItem(value: 'hi', child: Text('鄐嫩凶鄐兒�鄐舟�')),
-              DropdownMenuItem(value: 'kn', child: Text('鉦𨫼疏鈳温疏鉦�')),
-              DropdownMenuItem(value: 'ta', child: Text('鉈戈悅鉈賴捎鉒�')),
-              DropdownMenuItem(value: 'mr', child: Text('鄐桌什鄐擒�鄍�')),
-              DropdownMenuItem(value: 'bn', child: Text('鄏眇汙鄏�曳鄏�')),
+              DropdownMenuItem(value: 'te', child: Text('తెలుగు')),
+              DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
+              DropdownMenuItem(value: 'kn', child: Text('ಕನ್ನಡ')),
+              DropdownMenuItem(value: 'ta', child: Text('தமிழ்')),
+              DropdownMenuItem(value: 'mr', child: Text('मराठी')),
+              DropdownMenuItem(value: 'bn', child: Text('বাংলা')),
             ],
           ),
           const SizedBox(width: 8),
@@ -189,7 +197,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
             ),
             const SizedBox(height: 24),
 
-            // ���� Pictogram row for illiterate users ����������������������������������������������
+            //  Pictogram row for illiterate users 
             PictogramRow(
               codes: _entry!.pictograms,
               language: _lang,
@@ -210,7 +218,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                 activeStepNotifier: _activeStepNotifier,
                 onPlayStateChanged: (playing) {
                   if (playing) {
-                    setState(() => _audioPlayed = true);
+                    _audioPlayed = true;
                     _anatomyKey.currentState?.restartAnimation();
                   }
                 },
@@ -261,33 +269,6 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
         Text(
           content,
           style: const TextStyle(fontSize: 16, color: Color(0xFF333333), height: 1.5),
-        ),
-      ],
-    );
-  }
-}痕鈳温盒鉦嗣�鉦兒�鉦鉮眾鉦賴�鈳� 鉦凼略鈳温略鉦啤窒鉦詮窒', '鉈�悄鉒温恕 鉈桌扇鉒�悄鉒温恕鉒� 鉈芹拳鉒温拳鉈賴悖 鉈𨫼�鉈喪�鉈菽挪鉈𨫼拿鉒��鉒温�鉒� 鉈芹恕鉈賴挈鉈喪挪鉈𨫼�鉈𨫼挾鉒�悅鉒�', '鄐能冗 鄐𠰍仄鄐抉冗鄐眇丹鄍温丹鄐� 鄐芹�鄐啤介鄍温尹鄐擒�鄐𠼭� 鄐凼中鄍温中鄐啤� 鄐舟�鄐能冗', '鄏𥐰� 鄏㮙朵鄑�戍 鄏詮旨鄑温扛鄏啤�鄏𨫼� 鄏芹�鄏啤朱鄑温成鄑�旭 鄏凼忖鄑温忖鄏� 鄏舟江鄏�'),
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _section(String title, String content) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1D9E75)),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          content,
-          style: const TextStyle(fontSize: 18, color: Color(0xFF333333), height: 1.6),
         ),
       ],
     );

@@ -45,15 +45,21 @@ class TranslationService {
   };
 
   Future<void> loadLanguage(String lang) async {
+    print('TRANS: loadLanguage($lang) called. cache contains? ${_cache.containsKey(lang)}');
     if (_cache.containsKey(lang)) return;
 
     try {
+      print('TRANS: loading from rootBundle...');
       final jsonString = await rootBundle.loadString('assets/i18n/$lang.json');
+      print('TRANS: decode json...');
       final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
 
       final Map<String, PlainLangEntry> entries = {};
       for (var key in jsonMap.keys) {
-        entries[key] = PlainLangEntry.fromJson(jsonMap[key]);
+        final val = jsonMap[key];
+        if (val is Map<String, dynamic> && val.containsKey('whatItIsFor')) {
+          entries[key] = PlainLangEntry.fromJson(val);
+        }
       }
       
       _cache[lang] = entries;

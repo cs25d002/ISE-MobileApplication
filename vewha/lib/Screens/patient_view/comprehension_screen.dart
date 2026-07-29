@@ -4,7 +4,7 @@ import 'package:Vewha/models/study_drug.dart';
 import '../../logging/study_logger.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../services/patient_tts_service.dart';
-import '../../Services/translation_service.dart';
+import '../../services/translation_service.dart';
 import '../../repositories/localization_repository.dart';
 
 class ComprehensionScreen extends StatefulWidget {
@@ -118,7 +118,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
   @override
   Widget build(BuildContext context) {
     final q = _currentQuestion;
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
 
     List<String> options = loc.getQuizStringList(q.optionsKey);
     final isSpeaking = _ttsService.stateNotifier.value == PatientTtsState.playing;
@@ -155,7 +155,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
               ),
               const SizedBox(height: 18),
               Text(
-                loc.getUiString('question_progress', params: {'current': '${_currentQ + 1}', 'total': '${widget.drug.questions.length}'}),
+                loc.getUiString('question_count', params: {'0': '${_currentQ + 1}', '1': '${widget.drug.questions.length}'}),
                 style: const TextStyle(fontSize: 14, color: Color(0xFF888888), fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 28),
@@ -177,7 +177,7 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              loc.getUiString('lets_review'),
+                              loc.getUiString('lets_review_info'),
                               style: const TextStyle(color: Color(0xFF856404), fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),

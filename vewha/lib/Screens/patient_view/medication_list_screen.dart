@@ -67,8 +67,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final dataRepo = context.read<DataRepository>();
-    final loc = context.read<LocalizationRepository>();
+    final dataRepo = context.watch<DataRepository>();
+    final loc = context.watch<LocalizationRepository>();
     final studyDrugs = dataRepo.studyDrugs;
     final drug = studyDrugs[_current];
 
@@ -76,7 +76,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          loc.getUiString('medication_progress', params: {'current': '${_current + 1}', 'total': '${studyDrugs.length}'}),
+          loc.getUiString('medication_count', params: {'0': '${_current + 1}', '1': '${studyDrugs.length}'}),
           style: const TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.white,

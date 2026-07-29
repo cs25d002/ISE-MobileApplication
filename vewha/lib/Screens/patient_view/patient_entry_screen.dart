@@ -26,7 +26,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
     PatientTtsService().prewarm();
   }
 
-  void _launch() {
+  Future<void> _launch() async {
     final code = _codeController.text.trim();
     final loc = context.read<LocalizationRepository>();
 
@@ -42,6 +42,13 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
       );
       return;
     }
+    
+    // Hide keyboard and wait for animation to avoid janking the transition
+    FocusScope.of(context).unfocus();
+    await Future.delayed(const Duration(milliseconds: 150));
+    
+    if (!mounted) return;
+
     StudyLogger().startSession(code, _condition);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (_) => MedicationListScreen(
@@ -84,7 +91,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -154,7 +161,7 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
               ),
               const SizedBox(height: 32),
               Text(
-                loc.getUiString('select_instruction_style'),
+                loc.getUiString('select_instructions_style'),
                 style: const TextStyle(fontSize: 16, color: Color(0xFF555555), fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 14),
@@ -162,8 +169,8 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
                 children: [
                   _conditionButton(
                     'A',
-                    loc.getUiString('style_a_title'),
-                    loc.getUiString('style_a_subtitle'),
+                    loc.getUiString('pictures_voice'),
+                    loc.getUiString('pictures_voice_desc'),
                     Icons.image,
                     Icons.volume_up,
                     const Color(0xFF1D9E75),
@@ -172,8 +179,8 @@ class _PatientEntryScreenState extends State<PatientEntryScreen> {
                   const SizedBox(width: 16),
                   _conditionButton(
                     'B',
-                    loc.getUiString('style_b_title'),
-                    loc.getUiString('style_b_subtitle'),
+                    loc.getUiString('basic_text_table'),
+                    loc.getUiString('basic_text_table_desc'),
                     Icons.description,
                     Icons.table_chart,
                     const Color(0xFF455A64),

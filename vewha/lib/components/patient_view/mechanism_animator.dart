@@ -109,12 +109,12 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
   }
 
   String _tStep(MechanismStep step, LocalizationRepository loc) {
-    return loc.translate(step.titleKey);
+    return loc.getClinicalEntry(step.titleKey);
   }
 
   @override
   Widget build(BuildContext context) {
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +126,7 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                loc.translate('how_medicine_works'),
+                loc.getUiString('how_medicine_works'),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -143,7 +143,7 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
                     Icon(Icons.replay, size: 16, color: widget.accentColor),
                     const SizedBox(width: 4),
                     Text(
-                      loc.translate('replay'),
+                      loc.getUiString('replay'),
                       style: TextStyle(
                         fontSize: 13,
                         color: widget.accentColor,

@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:provider/provider.dart';
 
-import 'package:Vewha/data/prescriptions.dart';
-import 'package:Vewha/data/plain_lang_entry.dart';
+import 'package:Vewha/repositories/data_repository.dart';
+import 'package:Vewha/repositories/localization_repository.dart';
 import 'package:Vewha/logging/study_logger.dart';
 import 'package:Vewha/components/patient_view/anatomy_viewer.dart';
 import 'package:Vewha/components/patient_view/audio_narration.dart';
@@ -19,6 +20,9 @@ import 'package:Vewha/Screens/patient_view/medication_list_screen.dart';
 import 'package:Vewha/Screens/patient_view/medication_detail_screen.dart';
 import 'package:Vewha/Screens/patient_view/plain_text_condition_screen.dart';
 import 'package:Vewha/Screens/patient_view/comprehension_screen.dart';
+import 'package:Vewha/data/plain_lang_entry.dart';
+import 'package:Vewha/services/patient_tts_service.dart';
+import 'package:Vewha/services/translation_service.dart';
 
 class MockPathProviderPlatform extends PathProviderPlatform
     with MockPlatformInterfaceMixin {
@@ -29,18 +33,39 @@ class MockPathProviderPlatform extends PathProviderPlatform
 }
 
 void main() {
-  setUpAll(() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late DataRepository dataRepo;
+  late LocalizationRepository locRepo;
+
+  setUpAll(() async {
     PathProviderPlatform.instance = MockPathProviderPlatform();
+    dataRepo = DataRepository();
+    await dataRepo.init();
+    locRepo = LocalizationRepository();
+    await locRepo.init();
+    await TranslationService().loadLanguage('en');
+    await locRepo.loadLanguage('en');
   });
 
-  // Mock methods for system bindings
+  tearDown(() async {
+    await PatientTtsService().stop();
+  });
+
+  Widget wrap(Widget child) {
+    return MultiProvider(
+      providers: [
+        Provider<DataRepository>.value(value: dataRepo),
+        Provider<LocalizationRepository>.value(value: locRepo),
+      ],
+      child: MaterialApp(home: child),
+    );
+  }
+
   void setupMockChannels(WidgetTester tester) {
-    // Mock flutter_tts method channel
     tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
       const MethodChannel('flutter_tts'),
       (MethodCall methodCall) async {
         if (methodCall.method == 'speak') {
-          // Trigger speak start asynchronously to mimic native latency
           tester.binding.defaultBinaryMessenger.handlePlatformMessage(
             'flutter_tts',
             const StandardMethodCodec().encodeMethodCall(
@@ -68,21 +93,6 @@ void main() {
         return 1;
       },
     );
-
-    // Mock asset loader binary message handler
-    tester.binding.defaultBinaryMessenger.setMockMessageHandler(
-      'flutter/assets',
-      (ByteData? message) async {
-        if (message == null) return null;
-        final String key = utf8.decode(message.buffer.asUint8List(message.offsetInBytes, message.lengthInBytes));
-        if (key.startsWith('assets/anatomy/')) {
-          final String svg = '<svg viewBox="0 0 200 400"><rect width="200" height="400" fill="gray"/></svg>';
-          final Uint8List bytes = Uint8List.fromList(utf8.encode(svg));
-          return ByteData.view(bytes.buffer);
-        }
-        return null;
-      },
-    );
   }
 
   group('Patient-View Reusable Components Tests', () {
@@ -98,11 +108,9 @@ void main() {
         ),
       ));
 
-      // Verify progress dots exist
       expect(find.byType(ProgressStepper), findsOneWidget);
       expect(find.byType(GestureDetector), findsNWidgets(5));
 
-      // Tap on dot 3 (index 2)
       await tester.tap(find.byType(GestureDetector).at(2));
       await tester.pump();
 
@@ -111,25 +119,21 @@ void main() {
 
     testWidgets('AnatomyViewer loads SVG schematically', (WidgetTester tester) async {
       setupMockChannels(tester);
-      await tester.pumpWidget(const MaterialApp(
-        home: Scaffold(
-          body: AnatomyViewer(bodySystem: BodySystem.respiratory),
-        ),
-      ));
+      await tester.pumpWidget(wrap(const Scaffold(
+        body: AnatomyViewer(bodySystem: 'BodySystem.respiratory'),
+      )));
       expect(find.byType(AnatomyViewer), findsOneWidget);
     });
 
     testWidgets('MedicationCard renders prescription values', (WidgetTester tester) async {
-      final drug = studyDrugs[0]; // Metformin
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: MedicationCard(drug: drug, language: 'en'),
-        ),
-      ));
+      final drug = dataRepo.studyDrugs[0]; 
+      await tester.pumpWidget(wrap(Scaffold(
+        body: MedicationCard(drug: drug, language: 'en'),
+      )));
 
-      expect(find.text(drug.name), findsOneWidget);
-      expect(find.text(drug.dose), findsOneWidget);
-      expect(find.text(drug.route), findsOneWidget);
+      expect(find.text(locRepo.getClinicalEntry(drug.nameKey)), findsOneWidget);
+      expect(find.text(locRepo.getClinicalEntry(drug.doseKey)), findsOneWidget);
+      expect(find.text(locRepo.getClinicalEntry(drug.routeKey)), findsOneWidget);
     });
 
     testWidgets('AudioNarration renders play button and toggles state', (WidgetTester tester) async {
@@ -142,130 +146,126 @@ void main() {
         mechanismSteps: ['Step 1', 'Step 2'],
         pictograms: ['inhale'],
       );
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: AudioNarration(
-            entry: dummyEntry,
-            languageCode: 'en-IN',
-            onPlayStateChanged: (p) => isPlaying = p,
-          ),
+      await tester.pumpWidget(wrap(Scaffold(
+        body: AudioNarration(
+          entry: dummyEntry,
+          languageCode: 'en-IN',
+          onPlayStateChanged: (p) => isPlaying = p,
         ),
-      ));
+      )));
 
-      // Button exists with volume icon and 'Listen' text
       expect(find.text('Listen'), findsOneWidget);
       expect(find.byIcon(Icons.volume_up), findsOneWidget);
 
-      // Tap to speak
       await tester.tap(find.byType(AudioNarration));
       await tester.pumpAndSettle();
 
-      // Audio state should change
       expect(isPlaying, isTrue);
+      
+      await PatientTtsService().stop();
     });
   });
 
   group('Patient-View Screens Tests', () {
     testWidgets('PatientEntryScreen interactive options', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(
-        home: PatientEntryScreen(),
-      ));
+      await tester.pumpWidget(wrap(const PatientEntryScreen()));
 
-      expect(find.text('Study Setup'), findsOneWidget);
-      expect(find.text('Participant code'), findsOneWidget);
-      expect(find.text('Pictures + Voice'), findsOneWidget);
-      expect(find.text('Basic Text Table'), findsOneWidget);
+      expect(find.text(locRepo.getUiString('study_setup')), findsOneWidget);
+      expect(find.text(locRepo.getUiString('participant_code')), findsOneWidget);
+      expect(find.text(locRepo.getUiString('pictures_voice')), findsOneWidget);
+      expect(find.text(locRepo.getUiString('basic_text_table')), findsOneWidget);
 
-      // Toggle Condition B
-      await tester.tap(find.text('Basic Text Table'));
+      await tester.tap(find.text(locRepo.getUiString('basic_text_table')));
       await tester.pump();
 
-      // Select Launch with blank code shows SnackBar
-      await tester.tap(find.text('Launch Study'));
+      await tester.tap(find.text(locRepo.getUiString('launch_study')));
       await tester.pump();
-      expect(find.text('Please enter a participant code'), findsOneWidget);
+      expect(find.text(locRepo.getUiString('enter_participant_code')), findsOneWidget);
     });
 
     testWidgets('MedicationListScreen disclosure list next/previous operations', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(
-        home: MedicationListScreen(condition: 'A', language: 'en'),
-      ));
+      await tester.pumpWidget(wrap(const MedicationListScreen(condition: 'A', language: 'en')));
 
-      // Medication 1 is visible
-      expect(find.text('Medication 1 of 7'), findsOneWidget);
-      expect(find.text('Previous'), findsNothing); // First item, no previous button
-      expect(find.text('Next'), findsOneWidget);
+      expect(find.text(locRepo.getUiString('medication_count', params: {'0': '1', '1': '7'})), findsOneWidget);
+      expect(find.text(locRepo.getUiString('previous')), findsNothing);
+      expect(find.text(locRepo.getUiString('next')), findsOneWidget);
 
-      // Navigate to Medication 2
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text(locRepo.getUiString('next')));
       await tester.pump();
 
-      expect(find.text('Medication 2 of 7'), findsOneWidget);
-      expect(find.text('Previous'), findsOneWidget);
+      expect(find.text(locRepo.getUiString('medication_count', params: {'0': '2', '1': '7'})), findsOneWidget);
+      expect(find.text(locRepo.getUiString('previous')), findsOneWidget);
     });
 
     testWidgets('MedicationDetailScreen renders Enhancement View components', (WidgetTester tester) async {
       setupMockChannels(tester);
-      final drug = studyDrugs[1]; // Salbutamol
-      await tester.pumpWidget(MaterialApp(
-        home: TickerMode(
-          enabled: false,
-          child: MedicationDetailScreen(drug: drug, initialLanguage: 'en'),
-        ),
-      ));
+      final drug = dataRepo.studyDrugs[1]; 
+      await tester.pumpWidget(wrap(TickerMode(
+        enabled: false,
+        child: MedicationDetailScreen(drug: drug, initialLanguage: 'en'),
+      )));
+      
+      int pumps = 0;
+      while (find.byType(CircularProgressIndicator).evaluate().isNotEmpty && pumps < 50) {
+        await tester.pump(const Duration(milliseconds: 100));
+        pumps++;
+      }
 
+      debugDumpApp();
       expect(find.byType(AnatomyViewer), findsOneWidget);
       expect(find.byType(AudioNarration), findsOneWidget);
       expect(find.byType(MedicationCard), findsOneWidget);
       expect(find.text('English'), findsWidgets);
 
-      // Open Dropdown
       await tester.tap(find.byType(DropdownButton<String>));
       await tester.pumpAndSettle();
 
-      // Toggle Language to Telugu
       await tester.tap(find.text('తెలుగు').last);
-      await tester.pumpAndSettle();
+      
+      pumps = 0;
+      while (find.byType(CircularProgressIndicator).evaluate().isNotEmpty && pumps < 50) {
+        await tester.pump(const Duration(milliseconds: 100));
+        pumps++;
+      }
       
       expect(find.text('తెలుగు'), findsWidgets);
+
+      // Cleanup to cancel pending timers
+      await tester.pumpWidget(Container());
+      await PatientTtsService().stop();
     });
 
     testWidgets('PlainTextConditionScreen renders simple data table', (WidgetTester tester) async {
-      final drug = studyDrugs[3]; // Amlodipine
-      await tester.pumpWidget(MaterialApp(
-        home: PlainTextConditionScreen(drug: drug, initialLanguage: 'en'),
-      ));
+      final drug = dataRepo.studyDrugs[3]; 
+      await tester.pumpWidget(wrap(PlainTextConditionScreen(drug: drug, initialLanguage: 'en')));
 
       expect(find.byType(Table), findsOneWidget);
-      expect(find.text('Field'), findsOneWidget);
-      expect(find.text('Details'), findsOneWidget);
-      expect(find.text('Medicine'), findsOneWidget);
-      expect(find.text(drug.name), findsOneWidget);
-      expect(find.byType(AnatomyViewer), findsNothing); // Decoupled: NO anatomy visualization
+      expect(find.text(locRepo.getUiString('field')), findsOneWidget);
+      expect(find.text(locRepo.getUiString('details')), findsOneWidget);
+      expect(find.text(locRepo.getUiString('medicine')), findsOneWidget);
+      expect(find.text(locRepo.getClinicalEntry(drug.nameKey)), findsOneWidget);
+      expect(find.byType(AnatomyViewer), findsNothing); 
     });
 
     testWidgets('ComprehensionScreen progression flow', (WidgetTester tester) async {
-      final drug = studyDrugs[0]; // Metformin
+      final drug = dataRepo.studyDrugs[0]; 
       StudyLogger().startSession('P22', 'A');
-      await tester.pumpWidget(MaterialApp(
-        home: ComprehensionScreen(
-          drug: drug,
-          timeOnScreenMs: 3000,
-          audioPlayed: false,
-          language: 'en',
-          showVisuals: true,
-        ),
-      ));
+      await tester.pumpWidget(wrap(ComprehensionScreen(
+        drug: drug,
+        timeOnScreenMs: 3000,
+        audioPlayed: false,
+        language: 'en',
+        showVisuals: true,
+      )));
 
-      expect(find.text(drug.questions[0].questionEn), findsOneWidget);
+      expect(find.text(locRepo.getClinicalEntry(drug.questions[0].questionKey)), findsOneWidget);
       
-      // Submit correct answer
       final correctIndex = drug.questions[0].correctIndex;
-      await tester.tap(find.text(drug.questions[0].optionsEn[correctIndex]));
+      final options = locRepo.getQuizStringList(drug.questions[0].optionsKey);
+      await tester.tap(find.text(options[correctIndex]));
       await tester.pumpAndSettle();
 
-      // Progresses to next question
-      expect(find.text(drug.questions[1].questionEn), findsOneWidget);
+      expect(find.text(locRepo.getClinicalEntry(drug.questions[1].questionKey)), findsOneWidget);
     });
   });
 }

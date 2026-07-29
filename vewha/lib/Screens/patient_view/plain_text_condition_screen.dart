@@ -46,7 +46,7 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
   @override
   Widget build(BuildContext context) {
     final d = widget.drug;
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -94,19 +94,23 @@ class _PlainTextConditionScreenState extends State<PlainTextConditionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Table(
-              border: TableBorder.all(color: const Color(0xFFE0E0E0), width: 1.5, borderRadius: BorderRadius.circular(8)),
-              columnWidths: const {0: FixedColumnWidth(110), 1: FlexColumnWidth()},
-              children: [
-                _headerRow(loc.getUiString('field'), loc.getUiString('details')),
-                _dataRow(loc.getUiString('medicine'), loc.getClinicalEntry(d.nameKey)),
-                _dataRow(loc.getUiString('dose'), loc.getClinicalEntry(d.doseKey)),
-                _dataRow(loc.getUiString('route'), loc.getClinicalEntry(d.routeKey)),
-                _dataRow(loc.getUiString('frequency'), loc.getClinicalEntry(d.frequencyKey)),
-                _dataRow(loc.getUiString('purpose'), loc.getClinicalEntry(d.purposeKey)),
-              ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Table(
+                  border: TableBorder.all(color: const Color(0xFFE0E0E0), width: 1.5, borderRadius: BorderRadius.circular(8)),
+                  columnWidths: const {0: FixedColumnWidth(110), 1: FlexColumnWidth()},
+                  children: [
+                    _headerRow(loc.getUiString('field'), loc.getUiString('details')),
+                    _dataRow(loc.getUiString('medicine'), loc.getClinicalEntry(d.nameKey)),
+                    _dataRow(loc.getUiString('dose'), loc.getClinicalEntry(d.doseKey)),
+                    _dataRow(loc.getUiString('route'), loc.getClinicalEntry(d.routeKey)),
+                    _dataRow(loc.getUiString('frequency'), loc.getClinicalEntry(d.frequencyKey)),
+                    _dataRow(loc.getUiString('purpose'), loc.getClinicalEntry(d.purposeKey)),
+                  ],
+                ),
+              ),
             ),
-            const Spacer(),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

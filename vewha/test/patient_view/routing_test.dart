@@ -5,7 +5,35 @@ import 'package:Vewha/Screens/Welcome/splash_screen.dart';
 import 'package:Vewha/Screens/patient_view/patient_entry_screen.dart';
 import 'package:Vewha/Screens/patient_view/medication_list_screen.dart';
 
+import 'package:provider/provider.dart';
+import 'package:Vewha/repositories/data_repository.dart';
+import 'package:Vewha/repositories/localization_repository.dart';
+import 'package:Vewha/services/translation_service.dart';
+
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late DataRepository dataRepo;
+  late LocalizationRepository locRepo;
+
+  setUpAll(() async {
+    dataRepo = DataRepository();
+    await dataRepo.init();
+    locRepo = LocalizationRepository();
+    await locRepo.init();
+    await TranslationService().loadLanguage('en');
+    await locRepo.loadLanguage('en');
+  });
+
+  Widget wrap(Widget child) {
+    return MultiProvider(
+      providers: [
+        Provider<DataRepository>.value(value: dataRepo),
+        Provider<LocalizationRepository>.value(value: locRepo),
+      ],
+      child: MaterialApp(home: child),
+    );
+  }
+
   group('Routing & Startup Bypass Tests', () {
     testWidgets('Clinician mode renders SplashScreen by default', (WidgetTester tester) async {
       // Avoid RenderFlex overflow on SplashScreen due to high logo dimensions (550px height) in 600px default test viewport
@@ -29,9 +57,7 @@ void main() {
 
     testWidgets('PatientEntryScreen launches directly without Welcome/Login gate', (WidgetTester tester) async {
       // Pump PatientEntryScreen directly as the home screen to verify isolation
-      await tester.pumpWidget(const MaterialApp(
-        home: PatientEntryScreen(),
-      ));
+      await tester.pumpWidget(wrap(const PatientEntryScreen()));
 
       // Verify that PatientEntryScreen is rendered and fully operational
       expect(find.byType(PatientEntryScreen), findsOneWidget);
@@ -45,9 +71,7 @@ void main() {
     });
 
     testWidgets('Route stack isolation: Patient Entry leads cleanly to Medication List', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(
-        home: PatientEntryScreen(),
-      ));
+      await tester.pumpWidget(wrap(const PatientEntryScreen()));
 
       // Enter participant code
       await tester.enterText(find.byType(TextField), 'P99');

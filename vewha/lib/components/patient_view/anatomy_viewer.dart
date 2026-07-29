@@ -34,6 +34,7 @@ class AnatomyViewer extends StatefulWidget {
 
 class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderStateMixin {
   late AnimationController _loopController;
+  final Map<String, TextPainter> _textCache = {};
 
   @override
   void initState() {
@@ -42,6 +43,14 @@ class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderS
       vsync: this,
       duration: const Duration(milliseconds: 2500),
     )..repeat();
+  }
+
+  @override
+  void didUpdateWidget(AnatomyViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.language != widget.language) {
+      _textCache.clear();
+    }
   }
 
   void restartAnimation() {
@@ -58,7 +67,7 @@ class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
 
     return Container(
       width: double.infinity,
@@ -102,6 +111,7 @@ class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderS
                           activeStep: step,
                           language: widget.language,
                           loc: loc,
+                          textCache: _textCache,
                         ),
                       ),
                     );
@@ -121,6 +131,7 @@ class _MechanismPainter extends CustomPainter {
   final int activeStep;
   final String language;
   final LocalizationRepository loc;
+  final Map<String, TextPainter> textCache;
 
   _MechanismPainter({
     required this.config,
@@ -128,6 +139,7 @@ class _MechanismPainter extends CustomPainter {
     required this.activeStep,
     required this.language,
     required this.loc,
+    required this.textCache,
   });
 
   @override
@@ -158,7 +170,7 @@ class _MechanismPainter extends CustomPainter {
     // 3. Draw Outcome if active
     String currentOutcomeText = '';
     if (config.outcomeTextKey.isNotEmpty) {
-      currentOutcomeText = loc.translate(config.outcomeTextKey);
+      currentOutcomeText = loc.getClinicalEntry(config.outcomeTextKey);
     }
 
     if (activeIds.contains('outcome') && currentOutcomeText.isNotEmpty) {
@@ -503,7 +515,7 @@ class _MechanismPainter extends CustomPainter {
       canvas.drawCircle(Offset(x, y), 25, paint);
     }
     
-    String labelText = loc.translate(organ.name);
+    String labelText = loc.getClinicalEntry(organ.name);
     
     _drawLabel(canvas, labelText, x, y - 40);
   }
@@ -557,18 +569,20 @@ class _MechanismPainter extends CustomPainter {
   }
 
   void _drawLabel(Canvas canvas, String text, double x, double y) {
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          shadows: [Shadow(color: Colors.black87, blurRadius: 4)],
+    final textPainter = textCache.putIfAbsent(text, () {
+      return TextPainter(
+        text: TextSpan(
+          text: text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            shadows: [Shadow(color: Colors.black87, blurRadius: 4)],
+          ),
         ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
+        textDirection: TextDirection.ltr,
+      )..layout();
+    });
     
     final bgRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(x - (textPainter.width / 2) - 4, y - 2, textPainter.width + 8, textPainter.height + 4),
@@ -579,18 +593,21 @@ class _MechanismPainter extends CustomPainter {
   }
 
   void _drawBenefit(Canvas canvas, String text, double x, double y, Color textColor) {
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 18,
-          fontWeight: FontWeight.w900,
-          shadows: const [Shadow(color: Colors.white, blurRadius: 6)],
+    final key = "benefit_$text";
+    final textPainter = textCache.putIfAbsent(key, () {
+      return TextPainter(
+        text: TextSpan(
+          text: text,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w900,
+            shadows: const [Shadow(color: Colors.white, blurRadius: 6)],
+          ),
         ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
+        textDirection: TextDirection.ltr,
+      )..layout();
+    });
     
     textPainter.paint(canvas, Offset(x - (textPainter.width / 2) + 30, y));
   }

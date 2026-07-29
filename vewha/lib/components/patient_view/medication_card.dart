@@ -15,7 +15,7 @@ class MedicationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = context.read<LocalizationRepository>();
+    final loc = context.watch<LocalizationRepository>();
 
     return Card(
       elevation: 0,
@@ -28,13 +28,13 @@ class MedicationCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(loc.translate(drug.nameKey),
+            Text(loc.getClinicalEntry(drug.nameKey),
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1A1A2E))),
             const SizedBox(height: 12),
-            _row(loc.translate('dose'), loc.translate(drug.doseKey)),
-            _row(loc.translate('route'), loc.translate(drug.routeKey)),
-            _row(loc.translate('frequency'), loc.translate(drug.frequencyKey)),
-            _row(loc.translate('purpose'), loc.translate(drug.purposeKey)),
+            _row(loc.getUiString('dose'), loc.getClinicalEntry(drug.doseKey)),
+            _row(loc.getUiString('route'), loc.getClinicalEntry(drug.routeKey)),
+            _row(loc.getUiString('frequency'), loc.getClinicalEntry(drug.frequencyKey)),
+            _row(loc.getUiString('purpose'), loc.getClinicalEntry(drug.purposeKey)),
           ],
         ),
       ),

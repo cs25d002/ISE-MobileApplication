@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/study_drug.dart';
 
+import 'package:flutter/foundation.dart';
+
+List<dynamic> _parseJson(String jsonString) {
+  return jsonDecode(jsonString) as List<dynamic>;
+}
+
 class DataRepository {
   List<StudyDrug> _studyDrugs = [];
   bool _isLoaded = false;
@@ -10,7 +16,7 @@ class DataRepository {
     if (_isLoaded) return;
     
     final jsonString = await rootBundle.loadString('assets/data/prescriptions.json');
-    final List<dynamic> jsonList = jsonDecode(jsonString);
+    final List<dynamic> jsonList = await compute(_parseJson, jsonString);
     
     _studyDrugs = jsonList.map((e) => StudyDrug.fromJson(e as Map<String, dynamic>)).toList();
     _isLoaded = true;
