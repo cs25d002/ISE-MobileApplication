@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:Vewha/models/study_drug.dart';
 import '../../repositories/localization_repository.dart';
-import '../../services/patient_tts_service.dart';
+
 
 class AnatomyViewer extends StatefulWidget {
   final String bodySystem;
@@ -53,11 +53,24 @@ class AnatomyViewerState extends State<AnatomyViewer> with SingleTickerProviderS
     }
   }
 
-  void restartAnimation() {
-    _loopController.forward(from: 0.0).then((_) {
-      _loopController.repeat();
-    });
+  /// Called when narration starts — resets the loop to t=0 so the painter
+  /// follows activeStepNotifier for synchronised rendering.
+  void startSyncMode() {
+    _loopController.stop();
+    _loopController.value = 0.0;
+    _loopController.repeat();          // keep ticking so pulse effects animate
   }
+
+  /// Called when narration finishes — continues looping so the idle painter
+  /// cycles through steps using progress-based interpolation.
+  void startReplayMode() {
+    if (!_loopController.isAnimating) {
+      _loopController.repeat();
+    }
+  }
+
+  /// Legacy alias – kept for any external callers.
+  void restartAnimation() => startReplayMode();
 
   @override
   void dispose() {
@@ -138,11 +151,15 @@ class _MechanismPainter extends CustomPainter {
         );
 
   double get progress => loopController.value;
-  int get activeStep => activeStepNotifier?.value ?? -1;
+  int get activeStep {
+    final val = activeStepNotifier?.value ?? -1;
+    if (val >= 0) return val;
+    if (config.storyboardSteps.isEmpty) return 0;
+    return (progress * config.storyboardSteps.length).floor() % config.storyboardSteps.length;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    // If no active step yet, don't draw overlays
     if (activeStep < 0) return;
 
     // Collect active items to draw

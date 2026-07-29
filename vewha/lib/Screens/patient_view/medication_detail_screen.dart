@@ -184,6 +184,7 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                 height: MediaQuery.of(context).size.height * 0.40,
                 config: widget.drug.anatomyConfig,
                 activeStepNotifier: _activeStepNotifier,
+                language: _lang,
               ),
             ),
             const SizedBox(height: 16),
@@ -219,7 +220,11 @@ class _MedicationDetailScreenState extends State<MedicationDetailScreen> {
                 onPlayStateChanged: (playing) {
                   if (playing) {
                     _audioPlayed = true;
-                    _anatomyKey.currentState?.restartAnimation();
+                    _autoPlayTimer?.cancel();        // stop the idle auto-step timer
+                    _anatomyKey.currentState?.startSyncMode();
+                  } else {
+                    // Narration finished → resume visual replay loop
+                    _anatomyKey.currentState?.startReplayMode();
                   }
                 },
               ),

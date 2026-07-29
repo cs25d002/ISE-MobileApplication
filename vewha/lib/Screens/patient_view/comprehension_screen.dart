@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:Vewha/models/study_drug.dart';
+import '../../data/plain_lang_entry.dart';
 import '../../logging/study_logger.dart';
 import '../../components/patient_view/anatomy_viewer.dart';
 import '../../services/patient_tts_service.dart';
@@ -31,16 +32,27 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
   int _currentQ = 0;
   bool _recoveryMode = false;
   final PatientTtsService _ttsService = PatientTtsService();
+  PlainLangEntry? _entry;
 
   McqQuestion get _currentQuestion => widget.drug.questions[_currentQ];
 
   @override
   void initState() {
     super.initState();
+    _loadEntry();
     if (widget.showVisuals) {
       _ttsService.prewarm();
       _ttsService.stateNotifier.addListener(_onTtsStateChange);
     }
+  }
+
+  Future<void> _loadEntry() async {
+    await TranslationService().loadLanguage(widget.language);
+    if (!mounted) return;
+    setState(() {
+      _entry = TranslationService().getEntry(widget.drug.plainLanguageKey, widget.language) ??
+               TranslationService().getEntry(widget.drug.plainLanguageKey, 'en');
+    });
   }
 
   @override
@@ -217,13 +229,25 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
                       ],
                       const SizedBox(height: 16),
                       Text(
-                        loc.getUiString('medicine_helps_with'),
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF856404)),
+                        loc.getUiString('medicine_recall'),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF856404), fontSize: 16),
                       ),
-                      Text(
-                        loc.getClinicalEntry(widget.drug.purposeKey),
-                        style: const TextStyle(color: Color(0xFF856404)),
-                      ),
+                      const SizedBox(height: 12),
+                      if (_entry != null)
+                        Table(
+                          border: TableBorder.all(color: const Color(0xFFE0E0E0), width: 1, borderRadius: BorderRadius.circular(6)),
+                          columnWidths: const {0: FixedColumnWidth(110), 1: FlexColumnWidth()},
+                          children: [
+                            _summaryRow(loc.getUiString('purpose'), _entry!.whatItIsFor),
+                            _summaryRow(loc.getUiString('how_to_take_it'), _entry!.howToTake),
+                            _summaryRow(loc.getUiString('mechanism'), _entry!.mechanismSteps.join(' ')),
+                          ],
+                        )
+                      else
+                        Text(
+                          loc.getClinicalEntry(widget.drug.purposeKey),
+                          style: const TextStyle(color: Color(0xFF856404)),
+                        ),
                     ],
                   ),
                 ),
@@ -276,4 +300,23 @@ class _ComprehensionScreenState extends State<ComprehensionScreen> {
       ),
     );
   }
+
+  TableRow _summaryRow(String label, String value) => TableRow(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 13, color: Color(0xFF856404), fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 13, color: Color(0xFF856404), height: 1.4),
+            ),
+          ),
+        ],
+      );
 }

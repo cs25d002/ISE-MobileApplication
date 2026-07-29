@@ -44,8 +44,16 @@ class LocalizationRepository {
     }
   }
 
+  String _formatKey(String key) {
+    if (key.isEmpty) return key;
+    return key.split('_').map((word) {
+      if (word.isEmpty) return word;
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).join(' ');
+  }
+
   String getUiString(String key, {Map<String, String>? params}) {
-    String text = _uiData[key]?.toString() ?? _fallbackUiData[key]?.toString() ?? key;
+    String text = _uiData[key]?.toString() ?? _fallbackUiData[key]?.toString() ?? _formatKey(key);
     if (params != null) {
       params.forEach((paramKey, paramValue) {
         text = text.replaceAll('{$paramKey}', paramValue);
@@ -55,11 +63,11 @@ class LocalizationRepository {
   }
 
   String getClinicalEntry(String drugKey) {
-    return _clinicalData[drugKey]?.toString() ?? _fallbackClinicalData[drugKey]?.toString() ?? drugKey;
+    return _clinicalData[drugKey]?.toString() ?? _fallbackClinicalData[drugKey]?.toString() ?? _formatKey(drugKey);
   }
 
   String getQuizString(String questionKey) {
-    return _clinicalData[questionKey]?.toString() ?? _fallbackClinicalData[questionKey]?.toString() ?? questionKey;
+    return _clinicalData[questionKey]?.toString() ?? _fallbackClinicalData[questionKey]?.toString() ?? _formatKey(questionKey);
   }
   
   List<String> getQuizStringList(String key) {

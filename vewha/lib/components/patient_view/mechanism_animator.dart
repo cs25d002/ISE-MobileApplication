@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../repositories/localization_repository.dart';
-import '../../services/patient_tts_service.dart';
 import 'package:Vewha/models/study_drug.dart';
 
 class MechanismAnimator extends StatefulWidget {
@@ -53,12 +52,11 @@ class _MechanismAnimatorState extends State<MechanismAnimator> with SingleTicker
   void _onStepNotifierChanged() {
     final step = widget.activeStepNotifier!.value;
     if (step < 0) {
-      setState(() {
-        _visibleCount = 0;
-        _completed = false;
-        _progressController.reset();
-      });
+      if (_timer == null || !_timer!.isActive) {
+        _startAnimation();
+      }
     } else {
+      _timer?.cancel();
       setState(() {
         _visibleCount = step + 1; // 0-based step, 1-based visible count
         if (_visibleCount >= widget.steps.length) {
